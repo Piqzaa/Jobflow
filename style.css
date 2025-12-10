@@ -1,0 +1,545 @@
+/* ========================================
+   RESET - Réinitialisation des styles
+======================================== */
+
+/* Applique à TOUS les éléments */
+* {
+    margin: 0;              /* Enlève les marges par défaut */
+    padding: 0;             /* Enlève les espacements internes par défaut */
+    box-sizing: border-box; /* Inclut padding/border dans la taille totale */
+}
+
+/* Style général de la page */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  /* Police moderne */
+    background-color: #f0f2f5;  /* Fond gris clair */
+    color: #333;                /* Texte gris foncé */
+}
+
+
+/* ========================================
+   SIDEBAR - Menu latéral gauche
+======================================== */
+
+.sidebar {
+    position: fixed;        /* Reste collé même quand on scroll */
+    left: 0;                /* Collé à gauche */
+    top: 0;                 /* Collé en haut */
+    width: 250px;           /* Largeur fixe de 250 pixels */
+    height: 100vh;          /* Hauteur = 100% de la fenêtre (vh = viewport height) */
+    background-color: #2c3e50;  /* Fond bleu-gris foncé */
+    color: white;           /* Texte blanc */
+    padding: 20px;          /* Espace intérieur de 20px */
+}
+
+
+/* ========================================
+   LOGO - Zone du logo en haut du menu
+======================================== */
+
+.logo {
+    margin-bottom: 30px;    /* Espace de 30px en dessous du logo */
+    padding-bottom: 20px;   /* Espace intérieur de 20px en bas */
+    border-bottom: 1px solid #34495e;  /* Ligne de séparation */
+}
+
+.logo img {
+    width: 100%;            /* Largeur = 100% du conteneur parent */
+    max-width: 160px;       /* Largeur maximale : 180px */
+    height: auto;           /* Hauteur automatique (garde les proportions) */
+    display: block;         /* Enlève l'espace en dessous de l'image */
+    margin: 0 auto;         /* Centre l'image horizontalement (0 = haut/bas, auto = gauche/droite) */
+}
+
+/* ========================================
+   MENU - Liste des liens de navigation
+======================================== */
+
+.menu {
+    display: flex;          /* Mode flexbox pour aligner les éléments */
+    flex-direction: column; /* Aligne en colonne (vertical) */
+    gap: 5px;               /* Espace de 5px entre chaque lien */
+}
+
+
+/* ========================================
+   MENU ITEMS - Liens du menu
+======================================== */
+
+.menu-item {
+    display: block;         /* Prend toute la largeur disponible */
+    padding: 12px 15px;     /* Espace intérieur : 12px haut/bas, 15px gauche/droite */
+    color: #ecf0f1;         /* Couleur du texte : blanc cassé */
+    text-decoration: none;  /* Enlève le soulignement des liens */
+    border-radius: 8px;     /* Coins arrondis de 8px */
+    background-color: rgba(52, 73, 94, 0.384);  /* AJOUTE : Fond semi-transparent */
+    transition: all 0.3s ease;  /* Anime tous les changements en 0.3 secondes */
+}
+
+/* Quand on passe la souris dessus */
+.menu-item:hover {
+    background-color: #34495e;      /* Fond plus clair */
+    transform: translateX(5px);     /* Décale de 5px vers la droite */
+}
+
+/* Lien de la page actuelle */
+.menu-item.active {
+    background-color: #3498db;  /* Fond bleu */
+    font-weight: bold;          /* Texte en gras */
+}
+
+
+/* ========================================
+   MAIN CONTENT - Contenu principal
+======================================== */
+
+.main-content {
+    margin-left: 250px;     /* Décale de 250px (largeur du menu) */
+    min-height: 100vh;      /* Hauteur minimale = 100% de la fenêtre */
+}
+
+
+/* ========================================
+   HEADER - En-tête de chaque page
+======================================== */
+
+.header {
+    background-color: white;        /* Fond blanc */
+    padding: 25px 30px;             /* Espace intérieur : 25px haut/bas, 30px gauche/droite */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);  /* Ombre légère en dessous */
+}
+
+.header h1 {
+    color: #2c3e50;         /* Couleur du titre : bleu foncé */
+    font-size: 28px;        /* Taille du texte : 28 pixels */
+}
+
+
+/* ========================================
+   CONTENT - Contenu de la page
+======================================== */
+
+.content {
+    padding: 30px;          /* Espace intérieur de 30px */
+}
+
+.content p {
+    font-size: 16px;        /* Taille du texte : 16 pixels */
+    line-height: 1.6;       /* Espace entre les lignes (1.6x la hauteur du texte) */
+    margin-bottom: 10px;    /* Espace de 10px sous chaque paragraphe */
+}
+/* ========================================
+   STATS GRID - Grille de cartes stats
+======================================== */
+
+/* Message de bienvenue */
+.content p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+/* Conteneur de la grille */
+.stats-grid {
+    display: grid;                      /* Mode grille pour organiser les cartes */
+    grid-template-columns: repeat(3, 1fr);  /* 3 colonnes égales (1fr = 1 fraction) */
+    gap: 20px;                          /* Espace de 20px entre les cartes */
+    margin-top: 30px;                   /* Espace de 30px au-dessus de la grille */
+}
+
+
+/* ========================================
+   STAT CARD - Carte individuelle
+======================================== */
+
+.stat-card {
+    background-color: white;            /* Fond blanc */
+    padding: 30px;                      /* Espace intérieur de 30px */
+    border-radius: 12px;                /* Coins arrondis de 12px */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);  /* Ombre légère */
+    text-align: center;                 /* Centre tout le contenu */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;  /* Animation au survol */
+}
+
+/* Animation au survol */
+.stat-card:hover {
+    transform: translateY(-5px);        /* Monte de 5px */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);  /* Ombre plus prononcée */
+}
+
+
+/* ========================================
+   CONTENU DES CARTES
+======================================== */
+
+/* Icône emoji */
+.stat-icon {
+    font-size: 48px;                    /* Taille de l'emoji : 48px */
+    margin-bottom: 15px;                /* Espace de 15px en dessous */
+}
+
+/* Chiffre principal */
+.stat-number {
+    font-size: 36px;                    /* Très gros : 36px */
+    font-weight: bold;                  /* En gras */
+    color: #3498db;                     /* Couleur bleue */
+    margin-bottom: 10px;                /* Espace de 10px en dessous */
+}
+
+/* Label (texte descriptif) */
+.stat-label {
+    font-size: 14px;                    /* Petit : 14px */
+    color: #7f8c8d;                     /* Gris */
+    text-transform: uppercase;          /* Tout en majuscules */
+    letter-spacing: 1px;                /* Espacement entre les lettres : 1px */
+}
+/* ========================================
+   PAGE HEADER - En-tête de page avec bouton
+======================================== */
+
+.page-header {
+    display: flex;                      /* Mode flexbox */
+    justify-content: space-between;     /* Espace entre titre et bouton */
+    align-items: center;                /* Aligne verticalement au centre */
+    margin-bottom: 30px;                /* Espace en dessous */
+}
+
+.page-header h2 {
+    font-size: 24px;                    /* Taille du sous-titre */
+    color: #2c3e50;                     /* Couleur bleu foncé */
+}
+
+
+/* ========================================
+   BOUTONS
+======================================== */
+
+/* Bouton principal (gros, bleu) */
+.btn-primary {
+    background-color: #3498db;          /* Fond bleu */
+    color: white;                       /* Texte blanc */
+    border: none;                       /* Pas de bordure */
+    padding: 12px 24px;                 /* Espace intérieur : 12px haut/bas, 24px gauche/droite */
+    border-radius: 8px;                 /* Coins arrondis */
+    font-size: 16px;                    /* Taille du texte */
+    cursor: pointer;                    /* Curseur en forme de main */
+    transition: background-color 0.3s ease;  /* Animation de couleur */
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;          /* Bleu plus foncé au survol */
+}
+
+/* Petits boutons (dans le tableau) */
+.btn-small {
+    padding: 6px 12px;                  /* Plus petit padding */
+    font-size: 14px;                    /* Texte plus petit */
+    border: none;                       /* Pas de bordure */
+    border-radius: 6px;                 /* Coins arrondis */
+    cursor: pointer;                    /* Curseur main */
+    margin-right: 5px;                  /* Espace de 5px à droite */
+    transition: opacity 0.3s ease;      /* Animation d'opacité */
+}
+
+.btn-small:hover {
+    opacity: 0.8;                       /* Légèrement transparent au survol */
+}
+
+/* Bouton Modifier (vert) */
+.btn-edit {
+    background-color: #27ae60;          /* Vert */
+    color: white;
+}
+
+/* Bouton Supprimer (rouge) */
+.btn-delete {
+    background-color: #e74c3c;          /* Rouge */
+    color: white;
+}
+
+
+/* ========================================
+   TABLEAU
+======================================== */
+
+/* Conteneur du tableau */
+.table-container {
+    background-color: white;            /* Fond blanc */
+    border-radius: 12px;                /* Coins arrondis */
+    padding: 20px;                      /* Espace intérieur */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);  /* Ombre légère */
+    overflow-x: auto;                   /* Scroll horizontal si trop large */
+}
+
+/* Le tableau lui-même */
+.data-table {
+    width: 100%;                        /* Prend toute la largeur */
+    border-collapse: collapse;          /* Colle les bordures entre elles */
+}
+
+/* En-tête du tableau */
+.data-table thead {
+    background-color: #f8f9fa;          /* Fond gris clair */
+}
+
+/* Cellules de l'en-tête */
+.data-table th {
+    padding: 15px;                      /* Espace intérieur */
+    text-align: left;                   /* Texte aligné à gauche */
+    font-weight: bold;                  /* Texte en gras */
+    color: #2c3e50;                     /* Couleur bleu foncé */
+    border-bottom: 2px solid #e0e0e0;   /* Bordure en bas */
+}
+
+/* Cellules du corps */
+.data-table td {
+    padding: 15px;                      /* Espace intérieur */
+    border-bottom: 1px solid #e0e0e0;   /* Bordure fine en bas */
+    color: #555;                        /* Couleur gris moyen */
+}
+
+/* Lignes du tableau (survol) */
+.data-table tbody tr:hover {
+    background-color: #f8f9fa;          /* Fond gris clair au survol */
+}
+
+/* Dernière ligne (pas de bordure en bas) */
+.data-table tbody tr:last-child td {
+    border-bottom: none;
+}
+/* ========================================
+   BADGES - Pastilles de statut
+======================================== */
+
+.badge {
+    display: inline-block;              /* En ligne mais avec padding/margin */
+    padding: 6px 12px;                  /* Espace intérieur */
+    border-radius: 20px;                /* Très arrondi (forme de pilule) */
+    font-size: 13px;                    /* Petit texte */
+    font-weight: bold;                  /* En gras */
+}
+
+/* Badge vert (Accepté) */
+.badge-success {
+    background-color: #d4edda;          /* Fond vert clair */
+    color: #155724;                     /* Texte vert foncé */
+}
+
+/* Badge orange (En attente) */
+.badge-warning {
+    background-color: #fff3cd;          /* Fond orange clair */
+    color: #856404;                     /* Texte orange foncé */
+}
+
+/* Badge rouge (Refusé) */
+.badge-danger {
+    background-color: #f8d7da;          /* Fond rouge clair */
+    color: #721c24;                     /* Texte rouge foncé */
+}
+
+/* Bouton Voir (bleu) */
+.btn-view {
+    background-color: #3498db;          /* Bleu */
+    color: white;
+}
+/* Bouton Télécharger PDF (violet) */
+.btn-download {
+    background-color: #9b59b6;          /* Violet */
+    color: white;
+}
+/* ========================================
+   SETTINGS SECTIONS - Sections de paramètres
+======================================== */
+
+.settings-section {
+    background-color: white;            /* Fond blanc */
+    padding: 30px;                      /* Espace intérieur */
+    border-radius: 12px;                /* Coins arrondis */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);  /* Ombre légère */
+    margin-bottom: 25px;                /* Espace entre les sections */
+}
+
+.settings-section h3 {
+    font-size: 20px;                    /* Taille du sous-titre */
+    color: #2c3e50;                     /* Couleur bleu foncé */
+    margin-bottom: 25px;                /* Espace en dessous */
+    padding-bottom: 15px;               /* Espace intérieur en bas */
+    border-bottom: 2px solid #f0f0f0;   /* Ligne de séparation */
+}
+
+
+/* ========================================
+   FORMULAIRES - Champs de saisie
+======================================== */
+
+/* Groupe de champ (label + input) */
+.form-group {
+    margin-bottom: 20px;                /* Espace entre chaque champ */
+}
+
+/* Labels des champs */
+.form-group label {
+    display: block;                     /* Prend toute la largeur */
+    font-weight: bold;                  /* En gras */
+    color: #555;                        /* Gris moyen */
+    margin-bottom: 8px;                 /* Espace sous le label */
+    font-size: 14px;                    /* Taille du texte */
+}
+
+/* Champs de saisie (input, textarea, select) */
+.form-input {
+    width: 100%;                        /* Prend toute la largeur */
+    padding: 12px 15px;                 /* Espace intérieur */
+    border: 1px solid #ddd;             /* Bordure grise claire */
+    border-radius: 8px;                 /* Coins arrondis */
+    font-size: 15px;                    /* Taille du texte */
+    color: #333;                        /* Couleur du texte */
+    transition: border-color 0.3s ease; /* Animation sur la bordure */
+}
+
+/* Quand on clique dans le champ (focus) */
+.form-input:focus {
+    outline: none;                      /* Enlève le contour par défaut */
+    border-color: #3498db;              /* Bordure bleue */
+}
+
+/* Placeholder (texte d'exemple) */
+.form-input::placeholder {
+    color: #999;                        /* Gris clair */
+}
+
+/* Textarea (champ multiligne) */
+textarea.form-input {
+    resize: vertical;                   /* Permet de redimensionner verticalement uniquement */
+    font-family: inherit;               /* Garde la même police que le reste */
+}
+
+/* Checkbox */
+input[type="checkbox"] {
+    margin-right: 8px;                  /* Espace à droite du checkbox */
+    cursor: pointer;                    /* Curseur main */
+}
+
+
+/* ========================================
+   BOUTON DANGER - Bouton rouge (supprimer)
+======================================== */
+
+.btn-danger {
+    background-color: #e74c3c;          /* Rouge */
+    color: white;                       /* Texte blanc */
+    border: none;                       /* Pas de bordure */
+    padding: 12px 24px;                 /* Espace intérieur */
+    border-radius: 8px;                 /* Coins arrondis */
+    font-size: 16px;                    /* Taille du texte */
+    cursor: pointer;                    /* Curseur main */
+    transition: background-color 0.3s ease;  /* Animation */
+}
+
+.btn-danger:hover {
+    background-color: #c0392b;          /* Rouge plus foncé au survol */
+}
+/* ========================================
+   MODAL - Fenêtre popup
+======================================== */
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 20px;
+    color: #2c3e50;
+}
+
+.modal-close {
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+/* Style spécifique pour le X */
+.modal-header .modal-close {
+    background: none;
+    font-size: 24px;
+    color: #999;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-header .modal-close:hover {
+    color: #333;
+}
+
+.modal-close:hover {
+    color: #333;
+}
+
+.modal-body {
+    padding: 25px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.modal-footer {
+    padding: 20px 25px;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.btn-secondary {
+    background-color: #95a5a6;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #7f8c8d;
+}

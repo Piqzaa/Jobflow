@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jobflow - Clients</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- ========== MENU LATÉRAL ========== -->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="logojobflow.png" alt="Logo Jobflow">
+        </div>
+        
+        <nav class="menu">
+            <a href="index.html" class="menu-item">
+                📊 Tableau de bord
+            </a>
+            <a href="clients.html" class="menu-item active">
+                👥 Clients
+            </a>
+            <a href="devis.html" class="menu-item">
+                📄 Devis
+            </a>
+            <a href="factures.html" class="menu-item">
+                🧾 Factures
+            </a>
+            <a href="parametres.html" class="menu-item">
+                ⚙️ Paramètres
+            </a>
+        </nav>
+    </div>
+
+    <!-- ========== CONTENU PRINCIPAL ========== -->
+    <div class="main-content">
+        
+        <!-- En-tête de la page -->
+        <div class="header">
+            <h1>Gestion des clients</h1>
+        </div>
+        
+        <div class="content">
+            
+            <!-- En-tête avec bouton -->
+            <div class="page-header">
+                <button id="btn-add-client" class="btn-primary">➕ Ajouter un client</button>
+            </div>
+            
+            <!-- Tableau des clients -->
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Email</th>
+                            <th>Téléphone</th>
+                            <th>Entreprise</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Jean Dupont</td>
+                            <td>jean.dupont@email.com</td>
+                            <td>06 12 34 56 78</td>
+                            <td>Tech Corp</td>
+                            <td>
+                                <button class="btn-small btn-edit">✏️ Modifier</button>
+                                <button class="btn-small btn-delete">🗑️ Supprimer</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Marie Martin</td>
+                            <td>marie.martin@email.com</td>
+                            <td>06 98 76 54 32</td>
+                            <td>Design Studio</td>
+                            <td>
+                                <button class="btn-small btn-edit">✏️ Modifier</button>
+                                <button class="btn-small btn-delete">🗑️ Supprimer</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Paul Bernard</td>
+                            <td>paul.bernard@email.com</td>
+                            <td>06 11 22 33 44</td>
+                            <td>StartupXYZ</td>
+                            <td>
+                                <button class="btn-small btn-edit">✏️ Modifier</button>
+                                <button class="btn-small btn-delete">🗑️ Supprimer</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Popup formulaire (caché par défaut) -->
+    <div id="modal-add-client" class="modal">
+        <div class="modal-overlay"></div>
+        
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Ajouter un client</h3>
+                <button class="modal-close">✖</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Nom complet *</label>
+                    <input type="text" class="form-input" placeholder="Ex: Jean Dupont">
+                </div>
+                
+                <div class="form-group">
+                    <label>Email *</label>
+                    <input type="email" class="form-input" placeholder="jean.dupont@email.com">
+                </div>
+                
+                <div class="form-group">
+                    <label>Téléphone</label>
+                    <input type="tel" class="form-input" placeholder="06 12 34 56 78">
+                </div>
+                
+                <div class="form-group">
+                    <label>Entreprise</label>
+                    <input type="text" class="form-input" placeholder="Ex: Tech Corp">
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn-secondary modal-close">Annuler</button>
+                <button class="btn-primary">✓ Ajouter</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

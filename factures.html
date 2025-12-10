@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jobflow - factures</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- ========== MENU LATÉRAL ========== -->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="logojobflow.png" alt="Logo Jobflow">
+        </div>
+        
+        <nav class="menu">
+            <a href="index.html" class="menu-item">
+                📊 Tableau de bord
+            </a>
+            <a href="clients.html" class="menu-item">
+                👥 Clients
+            </a>
+            <a href="devis.html" class="menu-item">
+                📄 Devis
+            </a>
+            <a href="factures.html" class="menu-item active">
+                🧾 Factures
+            </a>
+            <a href="parametres.html" class="menu-item">
+                ⚙️ Paramètres
+            </a>
+        </nav>
+    </div>
+
+    <!-- ======= CONTENU PRINCIPAL ========== -->
+<div class="main-content">
+    <!-- En-tête de la page -->
+        <div class="header">
+            <h1>Listes des factures</h1>
+        </div>
+        
+    <div class="content">
+    <!-- En-tête avec bouton -->
+    <div class="page-header">
+        <button class="btn-primary">➕ Créer une facture</button>
+    </div>
+    
+    <!-- Tableau des factures -->
+    <div class="table-container">
+        <table class="data-table">
+            
+            <!-- En-tête du tableau -->
+            <thead>
+                <tr>
+                    <th>Numéro</th>
+                    <th>Client</th>
+                    <th>Date</th>
+                    <th>Montant TTC</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            
+            <!-- Corps du tableau -->
+            <tbody>
+                <!-- Ligne 1 -->
+                <tr>
+                    <td><strong>#FAC-001</strong></td>
+                    <td>Jean Dupont</td>
+                    <td>10/11/2024</td>
+                    <td>1 800,00 €</td>
+                    <td><span class="badge badge-success">✓ Payée</span></td>
+                    <td>
+                        <button class="btn-small btn-view">👁️ Voir</button>
+                        <button class="btn-small btn-download">📥 PDF</button>
+                    </td>
+                </tr>
+                
+                <!-- Ligne 2 -->
+                <tr>
+                    <td><strong>#FAC-002</strong></td>
+                    <td>Marie Martin</td>
+                    <td>12/11/2024</td>
+                    <td>2 760,00 €</td>
+                    <td><span class="badge badge-warning">⏳ En attente</span></td>
+                    <td>
+                        <button class="btn-small btn-view">👁️ Voir</button>
+                        <button class="btn-small btn-download">📥 PDF</button>
+                    </td>
+                </tr>
+                
+                <!-- Ligne 3 -->
+                <tr>
+                    <td><strong>#FAC-003</strong></td>
+                    <td>Paul Bernard</td>
+                    <td>14/11/2024</td>
+                    <td>1 068,00 €</td>
+                    <td><span class="badge badge-danger">⚠️ En retard</span></td>
+                    <td>
+                        <button class="btn-small btn-view">👁️ Voir</button>
+                        <button class="btn-small btn-download">📥 PDF</button>
+                    </td>
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+    
+</div>
+</div>
+</body>
+</html>
