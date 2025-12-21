@@ -7,106 +7,80 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- ========== MENU LATÉRAL ========== -->
-    <div class="sidebar">
-        <div class="logo">
-            <img src="logojobflow.png" alt="Logo Jobflow">
-        </div>
-        
-        <nav class="menu">
-            <a href="index.html" class="menu-item">
-                📊 Tableau de bord
-            </a>
-            <a href="clients.html" class="menu-item">
-                👥 Clients
-            </a>
-            <a href="devis.html" class="menu-item active">
-                📄 Devis
-            </a>
-            <a href="factures.html" class="menu-item">
-                🧾 Factures
-            </a>
-            <a href="parametres.html" class="menu-item">
-                ⚙️ Paramètres
-            </a>
-        </nav>
-    </div>
+    <aside>
+        <figure class="logo">
+            <img src="Logojobflow.png" alt="Logo Jobflow">
+        </figure>
 
-    <!-- ======= CONTENU PRINCIPAL ========== -->
-<div class="main-content">
-    <!-- En-tête de la page -->
-        <div class="header">
+        <nav>
+            <a href="index.html" class="menu-item">📊 Tableau de bord</a>
+            <a href="clients.html" class="menu-item">👥 Clients</a>
+            <a href="devis.html" class="menu-item active">📄 Devis</a>
+            <a href="factures.html" class="menu-item">🧾 Factures</a>
+            <a href="parametres.html" class="menu-item">⚙️ Paramètres</a>
+        </nav>
+    </aside>
+
+    <main>
+        <header>
             <h1>Liste des devis</h1>
-        </div>
-        
-    <div class="content">
-    <!-- En-tête avec bouton -->
-    <div class="page-header">
-        <button class="btn-primary">➕ Créer un devis</button>
-    </div>
-    
-    <!-- Tableau des devis -->
-    <div class="table-container">
-        <table class="data-table">
-            
-            <!-- En-tête du tableau -->
-            <thead>
-                <tr>
-                    <th>Numéro</th>
-                    <th>Client</th>
-                    <th>Date</th>
-                    <th>Montant HT</th>
-                    <th>Statut</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            
-            <!-- Corps du tableau -->
-            <tbody>
-                <!-- Ligne 1 -->
-                <tr>
-                    <td><strong>#DEV-001</strong></td>
-                    <td>Jean Dupont</td>
-                    <td>15/11/2024</td>
-                    <td>1 500,00 €</td>
-                    <td><span class="badge badge-success">✓ Accepté</span></td>
-                    <td>
-                        <button class="btn-small btn-view">👁️ Voir</button>
-                        <button class="btn-small btn-edit">✏️ Modifier</button>
-                    </td>
-                </tr>
-                
-                <!-- Ligne 2 -->
-                <tr>
-                    <td><strong>#DEV-002</strong></td>
-                    <td>Marie Martin</td>
-                    <td>18/11/2024</td>
-                    <td>2 300,00 €</td>
-                    <td><span class="badge badge-warning">⏳ En attente</span></td>
-                    <td>
-                        <button class="btn-small btn-view">👁️ Voir</button>
-                        <button class="btn-small btn-edit">✏️ Modifier</button>
-                    </td>
-                </tr>
-                
-                <!-- Ligne 3 -->
-                <tr>
-                    <td><strong>#DEV-003</strong></td>
-                    <td>Paul Bernard</td>
-                    <td>20/11/2024</td>
-                    <td>890,00 €</td>
-                    <td><span class="badge badge-danger">✗ Refusé</span></td>
-                    <td>
-                        <button class="btn-small btn-view">👁️ Voir</button>
-                        <button class="btn-small btn-edit">✏️ Modifier</button>
-                    </td>
-                </tr>
-                
-            </tbody>
-        </table>
-    </div>
-</div>
-    
-</div>
+        </header>
+
+        <section class="content">
+            <div class="page-header">
+                <button class="btn-primary">➕ Créer un devis</button>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Numéro</th>
+                            <th>Client</th>
+                            <th>Date</th>
+                            <th>Montant HT</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>#DEV-001</strong></td>
+                            <td>Jean Dupont</td>
+                            <td>15/11/2024</td>
+                            <td>1 500,00 €</td>
+                            <td><span class="badge badge-success">✓ Accepté</span></td>
+                            <td>
+                                <button class="btn-small btn-view">👁️ Voir</button>
+                                <button class="btn-small btn-edit">✏️ Modifier</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>#DEV-002</strong></td>
+                            <td>Marie Martin</td>
+                            <td>18/11/2024</td>
+                            <td>2 300,00 €</td>
+                            <td><span class="badge badge-warning">⏳ En attente</span></td>
+                            <td>
+                                <button class="btn-small btn-view">👁️ Voir</button>
+                                <button class="btn-small btn-edit">✏️ Modifier</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>#DEV-003</strong></td>
+                            <td>Paul Bernard</td>
+                            <td>20/11/2024</td>
+                            <td>890,00 €</td>
+                            <td><span class="badge badge-danger">✗ Refusé</span></td>
+                            <td>
+                                <button class="btn-small btn-view">👁️ Voir</button>
+                                <button class="btn-small btn-edit">✏️ Modifier</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
 </body>
 </html>
