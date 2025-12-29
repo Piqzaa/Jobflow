@@ -37,13 +37,13 @@ body {
    LOGO - Zone du logo en haut du menu
 ======================================== */
 
-.logo {
+.sidebar__logo {
     margin-bottom: 30px;    /* Espace de 30px en dessous du logo */
     padding-bottom: 20px;   /* Espace intérieur de 20px en bas */
     border-bottom: 1px solid #34495e;  /* Ligne de séparation */
 }
 
-.logo img {
+.sidebar__logo img {
     width: 100%;            /* Largeur = 100% du conteneur parent */
     max-width: 160px;       /* Largeur maximale : 180px */
     height: auto;           /* Hauteur automatique (garde les proportions) */
@@ -55,12 +55,19 @@ body {
    MENU - Liste des liens de navigation
 ======================================== */
 
-.menu {
+.sidebar__menu ul {
     display: flex;          /* Mode flexbox pour aligner les éléments */
     flex-direction: column; /* Aligne en colonne (vertical) */
     gap: 5px;               /* Espace de 5px entre chaque lien */
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
+
+.sidebar__menu li {
+    margin: 0;
+}
 
 /* ========================================
    MENU ITEMS - Liens du menu
@@ -103,15 +110,18 @@ body {
    HEADER - En-tête de chaque page
 ======================================== */
 
-.header {
-    background-color: white;        /* Fond blanc */
+header {
+    background-color: #fff;       /* Fond jaune */
     padding: 25px 30px;             /* Espace intérieur : 25px haut/bas, 30px gauche/droite */
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);  /* Ombre légère en dessous */
+    margin-left: 250px;
+
 }
 
-.header h1 {
+header h1 {
     color: #2c3e50;         /* Couleur du titre : bleu foncé */
     font-size: 28px;        /* Taille du texte : 28 pixels */
+
 }
 
 
@@ -120,7 +130,7 @@ body {
 ======================================== */
 
 .content {
-    padding: 30px;          /* Espace intérieur de 30px */
+    padding: 30px; /* Espace intérieur de 30px */
 }
 
 .content p {
@@ -147,6 +157,16 @@ body {
     margin-top: 30px;                   /* Espace de 30px au-dessus de la grille */
 }
 
+/* Graphique dashboard */
+.chart-container {
+    width: 100%;
+    height: 300px;
+    margin: 2rem 0;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
 
 /* ========================================
    STAT CARD - Carte individuelle
@@ -542,4 +562,17 @@ input[type="checkbox"] {
 
 .btn-secondary:hover {
     background-color: #7f8c8d;
+}
+
+/* ========================================
+    ALERTE CA
+======================================== */
+
+.alert-warning {
+    background: #fef3c7;
+    border-left: 4px solid #f59e0b;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
 }

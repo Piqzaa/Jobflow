@@ -1,91 +1,73 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <!-- Encodage des caractères (permet les accents) -->
     <meta charset="UTF-8">
-    
-    <!-- Responsive : s'adapte aux mobiles/tablettes -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- Titre de l'onglet du navigateur -->
     <title>Jobflow - Accueil</title>
-    
-    <!-- Lien vers la feuille de style CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
-    <!-- ========== MENU LATÉRAL (SIDEBAR) ========== -->
-    <div class="sidebar">
+ 
+    <aside class="sidebar">
         
-        <!-- Zone du logo en haut -->
-        <div class="logo">
-           <img src="Logojobflow.png" alt="Logo Jobflow">
+        <div class="sidebar__logo">
+            <img src="Logojobflow.png" alt="Logo Jobflow">
         </div>
         
-        <!-- Menu de navigation -->
-        <nav class="menu">
-            <!-- Lien actif (page actuelle) -->
-            <a href="index.html" class="menu-item active">
-                📊 Tableau de bord
-            </a>
-            
-            <!-- Autres liens -->
-            <a href="clients.html" class="menu-item">
-                👥 Clients
-            </a>
-            <a href="devis.html" class="menu-item">
-                📄 Devis
-            </a>
-            <a href="factures.html" class="menu-item">
-                🧾 Factures
-            </a>
-            <a href="parametres.html" class="menu-item">
-                ⚙️ Paramètres
-            </a>
+        <nav class="sidebar__menu">
+            <ul>
+                <li><a href="index.html" class="menu-item active">📊 Tableau de bord</a></li>
+                <li><a href="clients.html" class="menu-item">👥 Clients</a></li>
+                <li><a href="devis.html" class="menu-item">📄 Devis</a></li>
+                <li><a href="factures.html" class="menu-item">🧾 Factures</a></li>
+                <li><a href="parametres.html" class="menu-item">⚙️ Paramètres</a></li>
+            </ul>
         </nav>
-    </div>
-
-    <!-- ========== CONTENU PRINCIPAL ========== -->
-    <div class="main-content">
-        
-        <!-- En-tête de la page -->
-        <div class="header">
+    </aside>
+    <header>
             <h1>Tableau de bord</h1>
-        </div>
-        
-        <!-- Contenu de la page -->
+    </header>
+    
+    <main class="main-content">
+    
+    <!-- Contenu de la page -->
         <div class="content">
-    <!-- Message de bienvenue -->
-    <p>Bienvenue sur Jobflow ! 🚀</p>
-    <p>Gérez vos clients, devis et factures en toute simplicité.</p>
-    
-    <!-- Grille de cartes statistiques -->
-    <div class="stats-grid">
+            <!-- Message de bienvenue -->
+            <p>Bienvenue sur Jobflow ! 🚀</p>
+            <p>Gérez vos clients, devis et factures en toute simplicité.</p>
+            <p>CA 2025 : <strong id="ca-annuel">0€</strong></p>
+            <div class="chart-container">
+                <canvas id="monGraphique"></canvas>
+            </div>
+            <!-- Grille de cartes statistiques -->
+            <div class="stats-grid">
+                <!-- Carte 1 : Clients -->
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Clients</div>
+                </div>
         
-        <!-- Carte 1 : Clients -->
-        <div class="stat-card">
-            <div class="stat-icon">👥</div>
-            <div class="stat-number">5</div>
-            <div class="stat-label">Clients</div>
+                <!-- Carte 2 : Devis -->
+                <div class="stat-card">
+                    <div class="stat-icon">📄</div>
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Devis</div>
+                </div>
+        
+                <!-- Carte 3 : Factures -->
+                <div class="stat-card">
+                    <div class="stat-icon">🧾</div>
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Factures</div>
+                </div>
+            </div>
         </div>
-        
-        <!-- Carte 2 : Devis -->
-        <div class="stat-card">
-            <div class="stat-icon">📄</div>
-            <div class="stat-number">12</div>
-            <div class="stat-label">Devis</div>
-        </div>
-        
-        <!-- Carte 3 : Factures -->
-        <div class="stat-card">
-            <div class="stat-icon">🧾</div>
-            <div class="stat-number">8</div>
-            <div class="stat-label">Factures</div>
-        </div>
-        
-    </div>
-</div>
-    
+    </main>
+
+<!-- CDN Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Ton fichier JS -->
+    <script src="script.js"></script>
 </body>
 </html>
