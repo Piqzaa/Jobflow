@@ -1,0 +1,21 @@
+# Environnement
+.env
+
+# Dépendances
+/vendor/
+
+# Stockage et Logs
+/storage/logs/*.log
+/storage/uploads/*
+!/storage/uploads/.gitkeep
+!/storage/logs/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Fichiers locaux
