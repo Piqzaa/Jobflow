@@ -1,0 +1,16 @@
+{
+    "name": "alexb/jobflow",
+    "description": "Application de gestion pour micro-entrepreneurs freelances",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Alex B"
+        }
+    ],
+    "require": {}
+}
