@@ -2,43 +2,54 @@
 
 /**
  * ARCHITECTURE JOBFLOW - ROUTER PRINCIPAL
- * 
- * Ce fichier est le point d'entrée unique de l'application (Front Controller).
- * Toutes les requêtes HTTP passent par ici grâce à la configuration du serveur (Apache/Nginx).
  */
 
-// 1. Inclusion de l'autoloader de Composer (pour charger nos classes automatiquement)
+// 1. Inclusion de l'autoloader de Composer
 require_once __DIR__ . '/../vendor/autoload.php';
 
-// 2. Chargement des variables d'environnement (si un package comme phpdotenv était installé)
-// Pour l'instant, on va créer un petit helper manuel pour lire le .env
+// 2. Sécurité : Headers HTTP
+header("X-Content-Type-Options: nosniff");
+header("X-Frame-Options: DENY");
+header("X-XSS-Protection: 1; mode=block");
+header("Referrer-Policy: strict-origin-when-cross-origin");
+header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;");
 
-/**
- * Charge les variables du fichier .env dans $_ENV
- */
+// 3. Inclusion manuelle de nos Helpers
+require_once __DIR__ . '/../src/Helpers/ViewHelper.php';
+
+// 3. Chargement des variables d'environnement
 function loadEnv($path) {
     if (!file_exists($path)) return;
     $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     foreach ($lines as $line) {
-        if (strpos(trim($line), '#') === 0) continue;
-        list($name, $value) = explode('=', $line, 2);
-        $_ENV[trim($name)] = trim($value);
+        if (empty(trim($line)) || strpos(trim($line), '#') === 0) continue;
+        $parts = explode('=', $line, 2);
+        if (count($parts) === 2) {
+            $_ENV[trim($parts[0])] = trim($parts[1]);
+        }
     }
 }
-
 loadEnv(__DIR__ . '/../.env');
 
-// 3. Initialisation de la session (sécurisée)
-ini_set('session.cookie_httponly', 1); // Empêche l'accès au cookie via JS (anti-XSS)
-ini_set('session.use_only_cookies', 1); // Force l'utilisation des cookies pour les sessions
+// 4. Initialisation de la session
 session_start();
 
-// 4. Système de routage très basique
+// 5. Système de routage
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-echo "<h1>Bienvenue sur Jobflow !</h1>";
-echo "<p>Le routeur est prêt. URI actuelle : " . htmlspecialchars($uri) . "</p>";
-echo "<p>Dossier racine du projet : " . __DIR__ . "</p>";
+// On simule un petit routeur
+switch ($uri) {
+    case '/':
+    case '/index.php':
+        render('home', ['title' => 'Accueil']);
+        break;
 
-// Debug pour vérifier le .env
-// echo "<pre>"; print_r($_ENV); echo "</pre>";
+    case '/login':
+        echo "Page de connexion (à venir)";
+        break;
+
+    default:
+        http_response_code(404);
+        render('home', ['title' => '404 Non Trouvé', 'content' => '<h1>404 - Page non trouvée</h1>']);
+        break;
+}
