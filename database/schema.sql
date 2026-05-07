@@ -147,4 +147,27 @@ CREATE TABLE factures (
     
     INDEX idx_user_id (user_id),
     INDEX idx_client_id (client_id),
-    INDEX idx_devis_id (devis_id)
+    INDEX idx_devis_id (devis_id),
+    INDEX idx_statut (statut),
+    INDEX idx_numero (numero),
+    INDEX idx_date_emission (date_emission),
+    INDEX idx_date_echeance (date_echeance)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- TABLE facture_items : Lignes de facture
+
+CREATE TABLE facture_items (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    facture_id INT UNSIGNED NOT NULL,
+    designation VARCHAR(255) NOT NULL,
+    quantite DECIMAL(10,2) NOT NULL,
+    prix_unitaire DECIMAL(10,2) NOT NULL,
+    tva DECIMAL(5,2) NOT NULL,
+    total_ht DECIMAL(10,2) NOT NULL,
+    total_ttc DECIMAL(10,2) NOT NULL,
+    position INT UNSIGNED NOT NULL DEFAULT 1,
+    
+    FOREIGN KEY (facture_id) REFERENCES factures(id) ON DELETE CASCADE,
+    INDEX idx_facture_id (facture_id),
+    INDEX idx_position (position)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
