@@ -58,13 +58,17 @@ switch ($uri) {
         }
         break;
 
-    
-    case 'dashboard':
+    case '/logout':
+        $auth = new \App\Controllers\AuthController();
+        $auth->logout();
+        break;
+
+    case '/dashboard':
         if (!isset($_SESSION['user_id'])) {
             header('Location: ' . url('/login'));
             exit;
         }
-        render('dashboard', ['title' => 'Dashboard']);
+        render('dashboard', ['title' => 'Tableau de bord']);
         break;
 
     default:
