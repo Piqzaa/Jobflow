@@ -19,3 +19,11 @@ function render($view, $data = []) {
     $content = ob_get_clean();
     require __DIR__ . '/../Views/layout.php';
 }
+
+/**
+ * Génère une URL absolue pour le projet
+ */
+function url($path = '') {
+    $basePath = str_replace('/index.php', '', $_SERVER['SCRIPT_NAME']);
+    return $basePath . '/' . ltrim($path, '/');
+}
