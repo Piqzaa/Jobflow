@@ -3,5 +3,6 @@
 
 <div class="stats-preview">
     <p>Prêt à gérer vos clients et factures ?</p>
-    <a href="/login" class="btn">Commencer maintenant</a>
+    <a href="<?= url('/login') ?>" class="btn">Commencer maintenant</a>
 </div>
+

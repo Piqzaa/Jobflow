@@ -6,6 +6,7 @@
 
 // 1. Inclusion de l'autoloader de Composer
 require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../src/Helpers/SecurityHelper.php';
 
 // 2. Sécurité : Headers HTTP
 header("X-Content-Type-Options: nosniff");
@@ -34,18 +35,36 @@ loadEnv(__DIR__ . '/../.env');
 // 4. Initialisation de la session
 session_start();
 
-// 5. Système de routage
-$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+// 5. Système de routage (Amélioré pour gérer les sous-dossiers)
+$basePath = str_replace('/index.php', '', $_SERVER['SCRIPT_NAME']);
+$requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$uri = str_replace($basePath, '', $requestUri);
+
+if (empty($uri)) $uri = '/';
+$method = $_SERVER['REQUEST_METHOD'];
 
 // On simule un petit routeur
 switch ($uri) {
     case '/':
-    case '/index.php':
         render('home', ['title' => 'Accueil']);
         break;
 
     case '/login':
-        echo "Page de connexion (à venir)";
+        $auth = new \App\Controllers\AuthController();
+        if ($method === 'GET') {
+            $auth->showLogin();
+        } else {
+            $auth->login();
+        }
+        break;
+
+    
+    case 'dashboard':
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: ' . url('/login'));
+            exit;
+        }
+        render('dashboard', ['title' => 'Dashboard']);
         break;
 
     default:
