@@ -36,14 +36,18 @@ class User {
     }
 
     public function updateProfile($userId, $data) {
-        $sql = "INSERT INTO user_profiles (user_id, nom, prenom, entreprise, siret, adresse) 
-                VALUES (?, ?, ?, ?, ?, ?) 
+        $sql = "INSERT INTO user_profiles (user_id, nom, prenom, entreprise, siret, adresse, code_postal, ville, telephone, logo_filename) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) 
                 ON DUPLICATE KEY UPDATE 
                 nom = VALUES(nom), 
                 prenom = VALUES(prenom), 
                 entreprise = VALUES(entreprise), 
                 siret = VALUES(siret), 
-                adresse = VALUES(adresse)";
+                adresse = VALUES(adresse),
+                code_postal = VALUES(code_postal),
+                ville = VALUES(ville),
+                telephone = VALUES(telephone),
+                logo_filename = VALUES(logo_filename)";
         
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([
@@ -52,7 +56,11 @@ class User {
             $data['prenom'] ?? null,
             $data['entreprise'] ?? null,
             $data['siret'] ?? null,
-            $data['adresse'] ?? null
+            $data['adresse'] ?? null,
+            $data['code_postal'] ?? null,
+            $data['ville'] ?? null,
+            $data['telephone'] ?? null,
+            $data['logo_filename'] ?? null
         ]);
     }
 }
