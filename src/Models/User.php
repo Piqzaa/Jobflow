@@ -24,13 +24,30 @@ class User {
         $stmt->execute([$id]);
         return $stmt->fetch();
     }
-    public function create($email, $password) {
-        $stmt = $this->db->prepare("INSERT INTO users (email, password) VALUES (?, ?)");
+    public function create($email, $password, $token = null) {
+        $stmt = $this->db->prepare("INSERT INTO users (email, password, verification_token) VALUES (?, ?, ?)");
         return $stmt->execute([
             $email, 
-            password_hash($password, PASSWORD_BCRYPT)
+            password_hash($password, PASSWORD_BCRYPT),
+            $token
         ]);
     }
+
+    public function verifyEmail($token) {
+        // 1. On cherche l'utilisateur qui a ce token
+        $stmt = $this->db->prepare("SELECT id FROM users WHERE verification_token = ?");
+        $stmt->execute([$token]);
+        $user = $stmt->fetch();
+
+        if ($user) {
+            // 2. On met à jour : on valide l'email et on supprime le token
+            $stmt = $this->db->prepare("UPDATE users SET email_verified_at = NOW(), verification_token = NULL WHERE id = ?");
+            return $stmt->execute([$user['id']]);
+        }
+
+        return false;
+    }
+
     public function getLastInsertId() {
         return $this->db->lastInsertId();
     }
