@@ -44,6 +44,11 @@ switch ($uri) {
         }
         break;
 
+    case '/verify':
+        $auth = new \App\Controllers\AuthController();
+        $auth->verify();
+        break;
+        
     case '/login':
         $auth = new \App\Controllers\AuthController();
         if ($method === 'GET') {

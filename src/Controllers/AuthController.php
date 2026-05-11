@@ -64,29 +64,69 @@ class AuthController {
                 'error' => 'Le nom et le prénom sont requis.'
             ]);
             return;
-        
         }
 
-        $success = $userModel->create($email, $password);
+        $token = bin2hex(random_bytes(32));
+        $success = $userModel->create($email, $password, $token);
+
         if ($success) {
             $userId = $userModel->getLastInsertId();
+            $userModel->updateProfile($userId, $profileData);
+
             MongoLogger::write(
                 userId: $userId,
-                action: 'register',
+                action: 'register_pending_verification',
                 entity: 'user',
                 entityId: $userId,
                 data: ['email' => $email]
             );
-            $userModel->updateProfile($userId, $profileData);
 
-            render('auth/register', [
+            $verifyUrl = url("/verify?token=$token");
+            $fullUrl = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]" . $verifyUrl;
+
+            $subject = "Activez votre compte JobFlow";
+            $message = "Bonjour " . $profileData['prenom'] . ",\n\n";
+            $message .= "Merci de vous être inscrit sur JobFlow.\n";
+            $message .= "Pour activer votre compte, cliquez sur le lien ci-dessous :\n";
+            $message .= $fullUrl . "\n\n";
+            $message .= "À bientôt !";
+
+            $headers = "From: no-reply@jobflow.local\r\n";
+            $headers .= "Content-Type: text/plain; charset=UTF-8";
+
+            mail($email, $subject, $message, $headers);
+
+            render('auth/login', [
                 'title' => 'Inscription',
-                'success' => 'Inscription effectuée avec succès ! Vous pouvez maintenant vous connecter.'
+                'success' => 'Inscription réussie ! Un email de confirmation a été envoyé à ' . htmlspecialchars($email) . '. Merci de cliquer sur le lien pour activer votre compte.'
             ]);
         } else {
             render('auth/register', [
                 'title' => 'Inscription',
                 'error' => 'Une erreur est survenue lors de l\'inscription.'
+            ]);
+        }
+        }
+        public function verify() {
+        $token = $_GET['token'] ?? '';
+
+        if (empty($token)) {
+            header('Location: ' . url('/login'));
+            exit;
+        }
+
+        $userModel = new User();
+        $success = $userModel->verifyEmail($token);
+
+        if ($success) {
+            render('auth/login', [
+                'title' => 'Connexion',
+                'success' => 'Votre compte a été activé avec succès ! Vous pouvez maintenant vous connecter.'
+            ]);
+        } else {
+            render('auth/login', [
+                'title' => 'Connexion',
+                'error' => 'Le lien de validation est invalide ou a déjà été utilisé.'
             ]);
         }
     }
@@ -103,6 +143,14 @@ class AuthController {
         $user = $userModel->findByEmail($email);
 
         if ($user && password_verify($password, $user['password'])) {
+            if (empty($user['email_verified_at'])) {
+                render('auth/login', [
+                    'title' => 'Connexion',
+                    'error' => 'Votre compte n\'est pas encore activé. Merci de cliquer sur le lien envoyé par email.'
+                ]);
+                return;
+            }
+
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_email'] = $user['email'];
             session_regenerate_id(true);
