@@ -11,7 +11,16 @@ class AuthController {
     }
     public function register() {
         check_csrf($_POST['csrf_token'] ?? '');
-        
+        $profileData = [
+            'nom' => $_POST['nom'] ?? '',
+            'prenom' => $_POST['prenom'] ?? '',
+            'entreprise' => $_POST['entreprise'] ?? '',
+            'siret' => $_POST['siret'] ?? '',
+            'adresse' => $_POST['adresse'] ?? '',
+            'code_postal' => $_POST['code_postal'] ?? '',
+            'ville' => $_POST['ville'] ?? '',
+            'telephone' => $_POST['telephone'] ?? ''
+        ];
         $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
         $password = $_POST['password'] ?? '';
         $password_confirmation = $_POST['password_confirmation'] ?? '';
@@ -49,6 +58,15 @@ class AuthController {
             return;
         }
         
+        if (!$profileData['nom'] || !$profileData['prenom']) {
+            render('auth/register', [
+                'title' => 'Inscription',
+                'error' => 'Le nom et le prénom sont requis.'
+            ]);
+            return;
+        
+        }
+
         $success = $userModel->create($email, $password);
         if ($success) {
             $userId = $userModel->getLastInsertId();
@@ -59,6 +77,8 @@ class AuthController {
                 entityId: $userId,
                 data: ['email' => $email]
             );
+            $userModel->updateProfile($userId, $profileData);
+
             render('auth/register', [
                 'title' => 'Inscription',
                 'success' => 'Inscription effectuée avec succès ! Vous pouvez maintenant vous connecter.'
