@@ -106,8 +106,9 @@ class AuthController {
                 'error' => 'Une erreur est survenue lors de l\'inscription.'
             ]);
         }
-        }
-        public function verify() {
+    }
+
+    public function verify() {
         $token = $_GET['token'] ?? '';
 
         if (empty($token)) {
