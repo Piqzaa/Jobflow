@@ -66,6 +66,18 @@ switch ($uri) {
         render('dashboard', ['title' => 'Tableau de bord']);
         break;
 
+        case '/profile':
+            if (!isset($_SESSION['user_id'])) {
+                header('Location: ' . url('/login'));
+                exit;
+            }
+            $profile = new \App\Controllers\ProfileController();
+            if ($method === 'GET') {
+                $profile->show();
+            } else {
+                $profile->update();
+            }
+            break;
     default:
         http_response_code(404);
         render('home', ['title' => '404 Non Trouvé', 'content' => '<h1>404 - Page non trouvée</h1>']);

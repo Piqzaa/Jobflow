@@ -3,14 +3,15 @@
 namespace App\Controllers;
 
 use App\Models\User;
+use App\Helpers\MongoLogger;
 
 class AuthController {
     public function showRegister() {
         render('auth/register', ['title' => 'Inscription']);
     }
-
     public function register() {
         check_csrf($_POST['csrf_token'] ?? '');
+        
         $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
         $password = $_POST['password'] ?? '';
         $password_confirmation = $_POST['password_confirmation'] ?? '';
@@ -48,15 +49,32 @@ class AuthController {
             return;
         }
         
-        $userModel->create($email, $password);
-        render('auth/register', [
-            'title' => 'Inscription',
-            'success' => 'Inscription effectuée'
-        ]);
+        $success = $userModel->create($email, $password);
+        if ($success) {
+            $userId = $userModel->getLastInsertId();
+            MongoLogger::write(
+                userId: $userId,
+                action: 'register',
+                entity: 'user',
+                entityId: $userId,
+                data: ['email' => $email]
+            );
+            render('auth/register', [
+                'title' => 'Inscription',
+                'success' => 'Inscription effectuée avec succès ! Vous pouvez maintenant vous connecter.'
+            ]);
+        } else {
+            render('auth/register', [
+                'title' => 'Inscription',
+                'error' => 'Une erreur est survenue lors de l\'inscription.'
+            ]);
+        }
     }
+
     public function showLogin() {
         render('auth/login', ['title' => 'Connexion']);
     }
+
     public function login() {
         check_csrf($_POST['csrf_token'] ?? '');
         $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
@@ -68,10 +86,35 @@ class AuthController {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_email'] = $user['email'];
             session_regenerate_id(true);
+
+            // Log de la connexion
+            MongoLogger::write(
+                userId: $user['id'],
+                action: 'login',
+                entity: 'user',
+                entityId: $user['id'],
+                data: [
+                    'email' => $user['email'],
+                    'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'unknown'
+                ]
+            );
+
             header('Location: ' . url('/dashboard'));
             exit;
         }
-        // Échec
+
+        // Échec de connexion
+        MongoLogger::write(
+            userId: null,
+            action: 'failed_login',
+            entity: 'user',
+            entityId: null,
+            data: [
+                'email' => $email,
+                'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'unknown'
+            ]
+        );
+
         render('auth/login', [
             'title' => 'Connexion',
             'error' => 'Identifiants invalides.'

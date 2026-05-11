@@ -12,5 +12,7 @@
             "name": "Alex B"
         }
     ],
-    "require": {}
+    "require": {
+        "mongodb/mongodb": "^2.3"
+    }
 }
