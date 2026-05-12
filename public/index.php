@@ -88,6 +88,21 @@ switch ($uri) {
         $clientController = new \App\Controllers\ClientController();
         $clientController->index();
         break;
+    
+    case '/clients/add':
+        $clientController = new \App\Controllers\ClientController();
+        $clientController->create();
+        break;
+
+    case '/clients/edit':
+        $clientController = new \App\Controllers\ClientController();
+        $clientController->edit();
+        break;
+    
+    case '/clients/delete':
+        $clientController = new \App\Controllers\ClientController();
+        $clientController->delete();
+        break;
         
     default:
         http_response_code(404);
