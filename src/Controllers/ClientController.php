@@ -59,13 +59,36 @@ class ClientController {
     $userId = $_SESSION['user_id'];
     $clientModel = new Client();
     $result = $clientModel->createClient($userId, $data);
-    
+
     header('Content-Type: application/json');
     if ($result) {
-      echo json_encode(['success' => true]);
+      echo json_encode(['success' => true, 'id' => $result]);
     } else {
       echo json_encode(['success' => false, 'error' => 'Erreur lors de la création du client.']);
     }
+    exit;
+  }
+
+  public function delete() {
+    if (!isset($_SESSION['user_id'])) {
+      header('Content-Type: application/json');
+      echo json_encode(['success' => false, 'error' => 'Session expirée']);
+      exit;
+    }
+    check_csrf($_POST['csrf_token'] ?? '');
+    
+    $clientId = $_POST['id'] ?? null;
+    $userId = $_SESSION['user_id'];
+    if (!$clientId) {
+      header('Content-Type: application/json');
+      echo json_encode(['success' => false, 'error' => 'ID du client manquant']);
+      exit;
+    }
+    $clientModel = new Client();
+    $result = $clientModel->deleteClient($clientId, $userId);
+
+    header('Content-Type: application/json');
+    echo json_encode(['success' => $result]);
     exit;
   }
 }

@@ -32,4 +32,8 @@ class Client {
     ]);
   }
 
+  public function deleteClient($clientId, $userId) {
+    $stmt = $this->db->prepare("UPDATE clients SET deleted_at = NOW() WHERE id = :id AND user_id = :user_id");
+    return $stmt->execute(['id' => $clientId, 'user_id' => $userId]);
+  }
 }
