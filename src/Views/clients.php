@@ -2,7 +2,7 @@
 
 <button id="add-client" data-modal-target="#modal-client">Ajouter un client</button>
 
-<table>
+<table data-delete-url="<?= url('/clients/delete') ?>">
     <thead>
         <tr>
             <th>Nom</th>
@@ -13,6 +13,7 @@
             <th>Ville</th>
             <th>Téléphone</th>
             <th>Notes</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -26,6 +27,10 @@
             <td><?= htmlspecialchars($client['ville'] ?? '') ?></td>
             <td><?= htmlspecialchars($client['telephone'] ?? '') ?></td>
             <td><?= htmlspecialchars($client['notes'] ?? '') ?></td>
+            <td>
+                <button class="edit-btn" data-id="<?= $client['id'] ?>">✏️</button>
+                <button class="delete-btn" data-id="<?= $client['id'] ?>">🗑️</button>
+            </td>
         </tr>
         <?php endforeach; ?>
     </tbody>
