@@ -94,14 +94,19 @@ switch ($uri) {
         $clientController->create();
         break;
 
-    case '/clients/edit':
+    case '/clients/update':
         $clientController = new \App\Controllers\ClientController();
-        $clientController->edit();
+        $clientController->update();
         break;
     
     case '/clients/delete':
         $clientController = new \App\Controllers\ClientController();
         $clientController->delete();
+        break;
+        
+    case '/clients/get':
+        $clientController = new \App\Controllers\ClientController();
+        $clientController->get();
         break;
         
     default:
