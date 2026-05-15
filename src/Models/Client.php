@@ -19,7 +19,7 @@ class Client {
 
   public function createClient($userId, $data) {
     $stmt = $this->db->prepare("INSERT INTO clients (user_id, nom, email, siret, adresse, code_postal, ville, telephone, notes) VALUES (:user_id, :nom, :email, :siret, :adresse, :code_postal, :ville, :telephone, :notes)");
-    return $stmt->execute([
+    $result = $stmt->execute([
       'user_id' => $userId,
       'nom' => $data['nom'] ?? null,
       'email' => $data['email'] ?? null,
@@ -30,6 +30,7 @@ class Client {
       'telephone' => $data['telephone'] ?? null,
       'notes' => $data['notes'] ?? null
     ]);
+    return $result ? $this->db->lastInsertId() : false;
   }
 
   public function deleteClient($clientId, $userId) {
