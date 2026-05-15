@@ -71,18 +71,44 @@ switch ($uri) {
         render('dashboard', ['title' => 'Tableau de bord']);
         break;
 
-        case '/profile':
-            if (!isset($_SESSION['user_id'])) {
-                header('Location: ' . url('/login'));
-                exit;
-            }
-            $profile = new \App\Controllers\ProfileController();
-            if ($method === 'GET') {
-                $profile->show();
-            } else {
-                $profile->update();
-            }
-            break;
+    case '/profile':
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: ' . url('/login'));
+            exit;
+        }
+        $profile = new \App\Controllers\ProfileController();
+        if ($method === 'GET') {
+            $profile->show();
+        } else {
+            $profile->update();
+        }
+        break;
+
+    case '/clients':
+        $clientController = new \App\Controllers\ClientController();
+        $clientController->index();
+        break;
+    
+    case '/clients/add':
+        $clientController = new \App\Controllers\ClientController();
+        $clientController->create();
+        break;
+
+    case '/clients/update':
+        $clientController = new \App\Controllers\ClientController();
+        $clientController->update();
+        break;
+    
+    case '/clients/delete':
+        $clientController = new \App\Controllers\ClientController();
+        $clientController->delete();
+        break;
+        
+    case '/clients/get':
+        $clientController = new \App\Controllers\ClientController();
+        $clientController->get();
+        break;
+        
     default:
         http_response_code(404);
         render('home', ['title' => '404 Non Trouvé', 'content' => '<h1>404 - Page non trouvée</h1>']);
