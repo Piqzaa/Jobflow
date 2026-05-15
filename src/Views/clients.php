@@ -2,7 +2,11 @@
 
 <button id="add-client" data-modal-target="#modal-client">Ajouter un client</button>
 
-<table data-delete-url="<?= url('/clients/delete') ?>">
+<table id="clients-table" 
+    data-delete-url="<?= url('/clients/delete') ?>"
+    data-get-url="<?= url('/clients/get') ?>"
+    data-update-url="<?= url('/clients/update') ?>"
+>
     <thead>
         <tr>
             <th>Nom</th>
@@ -40,6 +44,7 @@
     <div class="modal__overlay"></div>
     
     <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
+    <input type="hidden" name="id" id="client-id" value="">
 
     <div class="modal__content">
         <div class="modal__header">
