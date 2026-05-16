@@ -1,3 +1,5 @@
+import { openModal, closeModal } from "./modal.js";
+
 export function initClients() {
   const table = document.getElementById("clients-table");
   const modal = document.getElementById("modal-client");
@@ -48,25 +50,22 @@ export function initClients() {
           document.getElementById("client-email").value = client.email || "";
           document.getElementById("client-siret").value = client.siret || "";
           document.getElementById("client-tel").value = client.telephone || "";
-          document.getElementById("client-adresse").value =
-            client.adresse || "";
-          document.getElementById("client-code-postal").value =
-            client.code_postal || "";
+          document.getElementById("client-adresse").value = client.adresse || "";
+          document.getElementById("client-code-postal").value = client.code_postal || "";
           document.getElementById("client-ville").value = client.ville || "";
           document.getElementById("client-notes").value = client.notes || "";
 
-          modal.classList.add("is-active");
+          openModal(modal);
         } else {
-          alert(data.error || "Erreur lors du chargement du client");
+          alert(data.error || "Erreur lors du chargement");
         }
       } catch (err) {
         console.error(err);
-        alert("Erreur lors du chargement du client");
       }
     }
 
     if (deleteBtn) {
-      if (!confirm("Voulez-vous vraiment supprimer ce client ?")) return;
+      if (!confirm("Supprimer ce client ?")) return;
 
       const clientId = deleteBtn.dataset.id;
       const csrfToken = document.querySelector('[name="csrf_token"]').value;
@@ -79,7 +78,6 @@ export function initClients() {
         });
 
         const data = await response.json();
-
         if (data.success) {
           deleteBtn.closest("tr").remove();
         } else {
@@ -87,7 +85,6 @@ export function initClients() {
         }
       } catch (err) {
         console.error(err);
-        alert("Erreur lors de la suppression");
       }
     }
   });
@@ -103,15 +100,14 @@ export function initClients() {
       });
 
       const data = await response.json();
-
       if (data.success) {
+        closeModal(modal);
         window.location.reload();
       } else {
         alert(data.error || "Erreur lors de la sauvegarde");
       }
     } catch (err) {
       console.error(err);
-      alert("Erreur lors de la sauvegarde");
     }
   });
 }
