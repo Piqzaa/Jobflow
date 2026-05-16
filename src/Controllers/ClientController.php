@@ -6,6 +6,7 @@ use App\Models\Client;
 use App\Config\Database;
 
 class ClientController {
+  
   public function index() {
     if (!isset($_SESSION['user_id'])) {
       header('Location: /login');
@@ -13,35 +14,35 @@ class ClientController {
     }
 
     $userId = $_SESSION['user_id'];
-
     $clientModel = new Client();
     $clients = $clientModel->getClients($userId);
-    render('clients', ['title' => 'Mes Clients', 'clients' => $clients]);
+    
+    render('clients', [
+      'title' => 'Mes Clients',
+      'clients' => $clients
+    ]);
   }
 
+  // API : Récupère les données d'un client pour le modal
   public function get() {
     if (!isset($_SESSION['user_id'])) {
       header('Content-Type: application/json');
       echo json_encode(['success' => false, 'error' => 'Session expirée']);
       exit;
     }
-    if (!isset($_GET['id'])) {
-      header('Content-Type: application/json');
-      echo json_encode(['success' => false, 'error' => 'ID de client manquant']);
-      exit;
-    }
-    $clientModel = new Client();
-    $clientId = $_GET['id'];
+
+    $clientId = $_GET['id'] ?? null;
     $userId = $_SESSION['user_id'];
+    
+    $clientModel = new Client();
     $client = $clientModel->getClientById($clientId, $userId);
 
-    if ($client) {
-      header('Content-Type: application/json');
-      echo json_encode(['success' => true, 'client' => $client]);
-    } else {
-      header('Content-Type: application/json');
-      echo json_encode(['success' => false, 'error' => 'Client non trouvé']);
-    }
+    header('Content-Type: application/json');
+    echo json_encode([
+      'success' => (bool)$client,
+      'client' => $client,
+      'error' => $client ? null : 'Client non trouvé'
+    ]);
     exit;
   }
   
@@ -51,28 +52,26 @@ class ClientController {
       echo json_encode(['success' => false, 'error' => 'Session expirée']);
       exit;
     }
+    
     check_csrf($_POST['csrf_token'] ?? '');
 
     $inputs = array_map('trim', $_POST);
     $siret = str_replace(' ', '', $inputs['siret'] ?? '');
-    $error = [];
-    if (empty($inputs['nom'])) {
-      $error[] = 'Le nom est requis.';
-    }
-    if (empty($inputs['email']) || !filter_var($inputs['email'], FILTER_VALIDATE_EMAIL)) {
-      $error[] = 'Un email valide est requis.';
-    }
-    if (empty($inputs['siret']) || strlen($siret) !== 14) {
-      $error[] = 'Le SIRET doit comporter exactement 14 caractères.';
-    }
+    
+    // Validation simple
+    $errors = [];
+    if (empty($inputs['nom'])) $errors[] = 'Nom requis.';
+    if (empty($inputs['email']) || !filter_var($inputs['email'], FILTER_VALIDATE_EMAIL)) $errors[] = 'Email invalide.';
+    if (strlen($siret) !== 14) $errors[] = 'SIRET invalide (14 chiffres).';
 
-    if (!empty($error)) {
+    if (!empty($errors)) {
       header('Content-Type: application/json');
-      echo json_encode(['success' => false, 'error' => implode(' ', $error)]);
+      echo json_encode(['success' => false, 'error' => implode(' ', $errors)]);
       exit;
     }
 
-    $data = [
+    $clientModel = new Client();
+    $result = $clientModel->createClient($_SESSION['user_id'], [
       'nom' => $inputs['nom'],
       'email' => $inputs['email'],
       'siret' => $siret,
@@ -81,40 +80,14 @@ class ClientController {
       'ville' => $inputs['ville'] ?? null,
       'telephone' => $inputs['telephone'] ?? null,
       'notes' => $inputs['notes'] ?? null
-    ];
-    $userId = $_SESSION['user_id'];
-    $clientModel = new Client();
-    $result = $clientModel->createClient($userId, $data);
+    ]);
 
     header('Content-Type: application/json');
-    if ($result) {
-      echo json_encode(['success' => true, 'id' => $result]);
-    } else {
-      echo json_encode(['success' => false, 'error' => 'Erreur lors de la création du client.']);
-    }
-    exit;
-  }
-
-  public function delete() {
-    if (!isset($_SESSION['user_id'])) {
-      header('Content-Type: application/json');
-      echo json_encode(['success' => false, 'error' => 'Session expirée']);
-      exit;
-    }
-    check_csrf($_POST['csrf_token'] ?? '');
-    
-    $clientId = $_POST['id'] ?? null;
-    $userId = $_SESSION['user_id'];
-    if (!$clientId) {
-      header('Content-Type: application/json');
-      echo json_encode(['success' => false, 'error' => 'ID du client manquant']);
-      exit;
-    }
-    $clientModel = new Client();
-    $result = $clientModel->deleteClient($clientId, $userId);
-
-    header('Content-Type: application/json');
-    echo json_encode(['success' => $result]);
+    echo json_encode([
+      'success' => (bool)$result,
+      'id' => $result,
+      'error' => $result ? null : 'Erreur SQL lors de la création'
+    ]);
     exit;
   }
 
@@ -124,32 +97,21 @@ class ClientController {
       echo json_encode(['success' => false, 'error' => 'Session expirée']);
       exit;
     }
+    
     check_csrf($_POST['csrf_token'] ?? '');
 
     $clientId = $_POST['id'] ?? null;
     $inputs = array_map('trim', $_POST);
     $siret = str_replace(' ', '', $inputs['siret'] ?? '');
-    $error = [];
-    if (!$clientId) {
-      $error[] = 'ID du client manquant.';
-    }
-    if (empty($inputs['nom'])) {
-      $error[] = 'Le nom est requis.';
-    }
-    if (empty($inputs['email']) || !filter_var($inputs['email'], FILTER_VALIDATE_EMAIL)) {
-      $error[] = 'Un email valide est requis.';
-    }
-    if (empty($inputs['siret']) || strlen($siret) !== 14) {
-      $error[] = 'Le SIRET doit comporter exactement 14 caractères.';
-    }
-
-    if (!empty($error)) {
+    
+    if (empty($inputs['nom']) || strlen($siret) !== 14) {
       header('Content-Type: application/json');
-      echo json_encode(['success' => false, 'error' => implode(' ', $error)]);
+      echo json_encode(['success' => false, 'error' => 'Données invalides']);
       exit;
     }
 
-    $data = [
+    $clientModel = new Client();
+    $result = $clientModel->updateClient($clientId, $_SESSION['user_id'], [
       'nom' => $inputs['nom'],
       'email' => $inputs['email'],
       'siret' => $siret,
@@ -158,13 +120,28 @@ class ClientController {
       'ville' => $inputs['ville'] ?? null,
       'telephone' => $inputs['telephone'] ?? null,
       'notes' => $inputs['notes'] ?? null
-    ];
-    $userId = $_SESSION['user_id'];
-    $clientModel = new Client();
-    $result = $clientModel->updateClient($clientId, $userId, $data);
+    ]);
 
     header('Content-Type: application/json');
     echo json_encode(['success' => $result]);
     exit;
   }
-} 
+
+  public function delete() {
+    if (!isset($_SESSION['user_id'])) {
+      header('Content-Type: application/json');
+      echo json_encode(['success' => false, 'error' => 'Session expirée']);
+      exit;
+    }
+    
+    check_csrf($_POST['csrf_token'] ?? '');
+    
+    $clientId = $_POST['id'] ?? null;
+    $clientModel = new Client();
+    $result = $clientModel->deleteClient($clientId, $_SESSION['user_id']);
+
+    header('Content-Type: application/json');
+    echo json_encode(['success' => $result]);
+    exit;
+  }
+}

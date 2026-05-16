@@ -22,15 +22,15 @@
     </thead>
     <tbody>
         <?php foreach ($clients as $client): ?>
-        <tr>
-            <td><?= htmlspecialchars($client['nom'] ?? '') ?></td>
-            <td><?= htmlspecialchars($client['email'] ?? '') ?></td>
-            <td><?= htmlspecialchars($client['siret'] ?? '') ?></td>
-            <td><?= htmlspecialchars($client['adresse'] ?? '') ?></td>
-            <td><?= htmlspecialchars($client['code_postal'] ?? '') ?></td>
-            <td><?= htmlspecialchars($client['ville'] ?? '') ?></td>
-            <td><?= htmlspecialchars($client['telephone'] ?? '') ?></td>
-            <td><?= htmlspecialchars($client['notes'] ?? '') ?></td>
+        <tr data-id="<?= $client['id'] ?>">
+            <td class="c-nom"><?= htmlspecialchars($client['nom'] ?? '') ?></td>
+            <td class="c-email"><?= htmlspecialchars($client['email'] ?? '') ?></td>
+            <td class="c-siret"><?= htmlspecialchars($client['siret'] ?? '') ?></td>
+            <td class="c-adresse"><?= htmlspecialchars($client['adresse'] ?? '') ?></td>
+            <td class="c-code_postal"><?= htmlspecialchars($client['code_postal'] ?? '') ?></td>
+            <td class="c-ville"><?= htmlspecialchars($client['ville'] ?? '') ?></td>
+            <td class="c-telephone"><?= htmlspecialchars($client['telephone'] ?? '') ?></td>
+            <td class="c-notes"><?= htmlspecialchars($client['notes'] ?? '') ?></td>
             <td>
                 <button class="edit-btn" data-id="<?= $client['id'] ?>">✏️</button>
                 <button class="delete-btn" data-id="<?= $client['id'] ?>">🗑️</button>
