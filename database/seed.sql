@@ -25,7 +25,7 @@ INSERT INTO clients (id, user_id, nom, email, telephone, adresse, code_postal, v
 
 -- 4. Un devis de test
 INSERT INTO devis (id, user_id, client_id, numero, statut, date_emission, date_validite, montant_ht, montant_tva, montant_ttc) VALUES 
-(1, 1, 1, 'DEV-2026-001', 'accepté', '2026-05-01', '2026-06-01', 1000.00, 200.00, 1200.00);
+(1, 1, 1, 'DEV-2026-001', 'accepte', '2026-05-01', '2026-06-01', 1000.00, 200.00, 1200.00);
 
 -- Items du devis
 INSERT INTO devis_items (devis_id, designation, quantite, prix_unitaire, tva, total_ht, total_ttc, position) VALUES 
@@ -34,7 +34,7 @@ INSERT INTO devis_items (devis_id, designation, quantite, prix_unitaire, tva, to
 
 -- 5. Une facture liée au devis
 INSERT INTO factures (id, user_id, client_id, devis_id, numero, statut, date_emission, date_echeance, montant_ht, montant_tva, montant_ttc) VALUES 
-(1, 1, 1, 1, 'FAC-2026-001', 'envoyée', '2026-05-07', '2026-06-07', 1000.00, 200.00, 1200.00);
+(1, 1, 1, 1, 'FAC-2026-001', 'envoyee', '2026-05-07', '2026-06-07', 1000.00, 200.00, 1200.00);
 
 -- Items de la facture (identiques au devis dans cet exemple)
 INSERT INTO facture_items (facture_id, designation, quantite, prix_unitaire, tva, total_ht, total_ttc, position) VALUES 
