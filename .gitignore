@@ -1,5 +1,8 @@
 # Environnement
 .env
+.env.laragon
+.env.docker
+.env.test
 
 # Dépendances
 /vendor/
