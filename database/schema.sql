@@ -81,7 +81,7 @@ CREATE TABLE devis (
     user_id INT UNSIGNED NOT NULL,
     client_id INT UNSIGNED NOT NULL,
     numero VARCHAR(50) NOT NULL UNIQUE,
-    statut ENUM('brouillon', 'envoyé', 'accepté', 'refusé', 'expiré') DEFAULT 'brouillon',
+    statut ENUM('brouillon', 'envoye', 'accepte', 'refuse', 'expire') DEFAULT 'brouillon',
     date_emission DATE NOT NULL,
     date_validite DATE,
     montant_ht DECIMAL(10,2) NOT NULL DEFAULT 0.00,
@@ -128,7 +128,7 @@ CREATE TABLE factures (
     client_id INT UNSIGNED NOT NULL,
     devis_id INT UNSIGNED NULL,  -- Nullable : facture directe possible
     numero VARCHAR(50) NOT NULL UNIQUE,
-    statut ENUM('brouillon', 'envoyée', 'payée', 'en_retard', 'annulée') DEFAULT 'brouillon',
+    statut ENUM('brouillon', 'envoyee', 'payee', 'en_retard', 'annulee') DEFAULT 'brouillon',
     date_emission DATE NOT NULL,
     date_echeance DATE NOT NULL,  -- Ex: +30 jours pour paiement
     date_paiement DATE NULL,      -- Date réelle du paiement
