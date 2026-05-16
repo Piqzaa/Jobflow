@@ -13,6 +13,16 @@ class EmailService {
             $mail->isSMTP();
             $mail->Host       = $_ENV['SMTP_HOST'] ?? 'mailpit';
             $mail->Port       = $_ENV['SMTP_PORT'] ?? 1025;
+
+            // Gestion du chiffrement (SSL pour port 465, TLS pour 587, rien pour 1025/Mailpit)
+            if ($mail->Port == 465) {
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+            } elseif ($mail->Port == 587) {
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            } else {
+                $mail->SMTPSecure = '';
+                $mail->SMTPAutoTLS = false;
+            }
             
             // Authentification
             if (!empty($_ENV['SMTP_USER'])) {
