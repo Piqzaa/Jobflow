@@ -12,7 +12,7 @@ class Client {
   }
 
   public function getClients($userId) {
-  $stmt = $this->db->prepare("SELECT * FROM clients WHERE user_id = :user_id AND deleted_at IS NULL");
+    $stmt = $this->db->prepare("SELECT * FROM clients WHERE user_id = :user_id AND deleted_at IS NULL ORDER BY created_at DESC");
     $stmt->execute(['user_id' => $userId]);
     return $stmt->fetchAll();
   }
