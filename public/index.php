@@ -84,6 +84,11 @@ switch ($uri) {
         }
         break;
 
+    case '/devis':
+        $devisController = new \App\Controllers\DevisController();
+        $devisController->index();
+        break;
+
     case '/clients':
         $clientController = new \App\Controllers\ClientController();
         $clientController->index();
