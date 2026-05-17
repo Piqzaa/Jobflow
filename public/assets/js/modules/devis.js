@@ -124,7 +124,22 @@ export function initDevis() {
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    alert("Sauvegarde bientôt disponible (en attente du Controller) !");
-    closeModal(modal);
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch(form.action, {
+        method: "POST",
+        body: new URLSearchParams(formData),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        window.location.reload(); 
+      } else {
+        alert(data.error || "Erreur lors de la sauvegarde");
+      }
+    } catch (err) {
+      console.error(err);
+    }
   });
 }
