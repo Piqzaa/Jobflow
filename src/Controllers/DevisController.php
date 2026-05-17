@@ -17,14 +17,90 @@ class DevisController {
         $devisModel = new Devis();
         $clientModel = new Client();
 
-        // Récupération des données
         $clients = $clientModel->getClients($userId);
         $devisList = $devisModel->getAllByUser($userId);
+        $nextNumber = $devisModel->getNextNumber($userId);
         
         render('devis', [
-            'title'   => 'Mes Devis',
-            'devis'   => $devisList,
-            'clients' => $clients // Pour le select dans la modale
+            'title'      => 'Mes Devis',
+            'devis'      => $devisList,
+            'clients'    => $clients,
+            'nextNumber' => $nextNumber
         ]);
+    }
+
+    public function create() {
+        if (!isset($_SESSION['user_id'])) {
+            header('Content-Type: application/json');
+            echo json_encode(['success' => false, 'error' => 'Session expirée']);
+            exit;
+        }
+        
+        check_csrf($_POST['csrf_token'] ?? '');
+
+        $userId = $_SESSION['user_id'];
+        $devisModel = new Devis();
+
+        $clientId     = $_POST['client_id'] ?? null;
+        $dateEmission = $_POST['date_emission'] ?? date('Y-m-d');
+        $dateValidite = $_POST['date_validite'] ?? null;
+        $notes        = trim($_POST['notes'] ?? '');
+        $tvaApp       = isset($_POST['tva_applicable']);
+        $tvaRate      = $tvaApp ? 20.00 : 0.00;
+
+        $numero = $devisModel->getNextNumber($userId);
+
+        $designations = $_POST['item_designation'] ?? [];
+        $quantites    = $_POST['item_quantite']    ?? [];
+        $prix         = $_POST['item_prix']        ?? [];
+
+        if (empty($designations)) {
+            echo json_encode(['success' => false, 'error' => 'Au moins un article requis.']);
+            exit;
+        }
+
+        $items = [];
+        $totalHt = 0;
+
+        foreach ($designations as $i => $designation) {
+            $qty  = floatval($quantites[$i] ?? 0);
+            $p    = floatval($prix[$i] ?? 0);
+            $tht  = $qty * $p;
+            $tttc = $tht * (1 + ($tvaRate / 100));
+
+            $items[] = [
+                'designation' => trim($designation),
+                'qty'         => $qty,
+                'prix'        => $p,
+                'total_ht'    => $tht,
+                'total_ttc'   => $tttc
+            ];
+            $totalHt += $tht;
+        }
+
+        $totalTva = $totalHt * ($tvaRate / 100);
+        $totalTtc = $totalHt + $totalTva;
+
+        $devisData = [
+            'client_id'     => $clientId,
+            'numero'        => $numero,
+            'date_emission' => $dateEmission,
+            'date_validite' => $dateValidite,
+            'montant_ht'    => $totalHt,
+            'montant_tva'   => $totalTva,
+            'montant_ttc'   => $totalTtc,
+            'tva_rate'      => $tvaRate,
+            'notes'         => $notes
+        ];
+
+        $result = $devisModel->createWithItems($userId, $devisData, $items);
+
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => (bool)$result,
+            'id'      => $result,
+            'error'   => $result ? null : 'Erreur lors de la sauvegarde du devis'
+        ]);
+        exit;
     }
 }
