@@ -1,125 +1,204 @@
 import { openModal, closeModal } from "./modal.js";
 
 export function initDevis() {
+  // Elements
   const table = document.getElementById("devis-table");
   const modal = document.getElementById("modal-devis");
   if (!table || !modal) return;
 
+  const form = modal;
   const modalTitle = modal.querySelector(".modal__title");
   const modalBtn = document.getElementById("modal-save-devis-btn");
-  const form = modal;
   const devisIdInput = document.getElementById("devis-id");
-
   const addBtn = document.getElementById("add-devis");
 
-  // --- LOGIQUE DE CALCUL DES TOTAUX ---
   const tvaCheckbox = document.getElementById("devis-tva-applicable");
   const totalHtSpan = document.getElementById("total-ht");
   const totalTvaSpan = document.getElementById("total-tva");
   const totalTtcSpan = document.getElementById("total-ttc");
   const tvaRow = document.getElementById("tva-row");
+  const container = document.getElementById("devis-items-container");
+  const addItemBtn = document.getElementById("add-item-row");
+
+  // --- Fonctions ---
 
   function calculateTotals() {
     let totalHt = 0;
     const rows = document.querySelectorAll(".devis-item-row");
 
-    rows.forEach(row => {
-        const qty = parseFloat(row.querySelector(".item-qty").value) || 0;
-        const price = parseFloat(row.querySelector(".item-price").value) || 0;
-        totalHt += qty * price;
+    rows.forEach((row) => {
+      const qty = parseFloat(row.querySelector(".item-qty").value) || 0;
+      const price = parseFloat(row.querySelector(".item-price").value) || 0;
+      totalHt += qty * price;
     });
 
     const isTvaApplicable = tvaCheckbox.checked;
-    const tvaRate = isTvaApplicable ? 0.20 : 0;
+    const tvaRate = isTvaApplicable ? 0.2 : 0;
     const totalTva = totalHt * tvaRate;
     const totalTtc = totalHt + totalTva;
 
-    // Mise à jour de l'affichage
     totalHtSpan.textContent = totalHt.toFixed(2);
     totalTvaSpan.textContent = totalTva.toFixed(2);
     totalTtcSpan.textContent = totalTtc.toFixed(2);
-
-    // Cacher la ligne TVA si non applicable
     tvaRow.style.display = isTvaApplicable ? "block" : "none";
   }
 
-  // Écouteurs pour le calcul
-  modal.addEventListener("input", (e) => {
-    if (e.target.classList.contains("item-qty") || e.target.classList.contains("item-price")) {
-        calculateTotals();
-    }
-  });
+  function createItemRow() {
+    const row = document.createElement("div");
+    row.className = "devis-item-row";
+    row.style.cssText = "display: flex; gap: 10px; margin-bottom: 10px;";
 
-  tvaCheckbox.addEventListener("change", calculateTotals);
+    const inputs = [
+      {
+        name: "item_designation[]",
+        placeholder: "Désignation",
+        flex: "3",
+        type: "text",
+      },
+      {
+        name: "item_quantite[]",
+        placeholder: "Qté",
+        flex: "1",
+        type: "number",
+        class: "item-qty",
+        value: "1",
+        step: "0.01",
+      },
+      {
+        name: "item_prix[]",
+        placeholder: "Prix Unit. HT",
+        flex: "1",
+        type: "number",
+        class: "item-price",
+        step: "0.01",
+      },
+    ];
 
-  // --- GESTION DYNAMIQUE DES LIGNES ---
-  const container = document.getElementById("devis-items-container");
-  const addItemBtn = document.getElementById("add-item-row");
-
-  if (addItemBtn) {
-    addItemBtn.addEventListener("click", () => {
-        const row = document.createElement("div");
-        row.className = "devis-item-row";
-        row.style.display = "flex";
-        row.style.gap = "10px";
-        row.style.marginBottom = "10px";
-        row.innerHTML = `
-            <input type="text" name="item_designation[]" placeholder="Désignation" class="modal__input" style="flex: 3;" required>
-            <input type="number" name="item_quantite[]" placeholder="Qté" class="modal__input item-qty" style="flex: 1;" value="1" step="0.01" required>
-            <input type="number" name="item_prix[]" placeholder="Prix Unit. HT" class="modal__input item-price" style="flex: 1;" step="0.01" required>
-            <button type="button" class="remove-item-row" style="background: none; border: none; cursor: pointer; color: #dc3545;">✖</button>
-        `;
-        container.appendChild(row);
-        calculateTotals();
+    inputs.forEach((cfg) => {
+      const input = document.createElement("input");
+      input.type = cfg.type;
+      input.name = cfg.name;
+      input.placeholder = cfg.placeholder;
+      input.className = "modal__input" + (cfg.class ? " " + cfg.class : "");
+      input.style.flex = cfg.flex;
+      if (cfg.value) input.value = cfg.value;
+      if (cfg.step) input.step = cfg.step;
+      input.required = true;
+      row.appendChild(input);
     });
+
+    const removeBtn = document.createElement("button");
+    removeBtn.type = "button";
+    removeBtn.className = "remove-item-row";
+    removeBtn.style.cssText =
+      "background: none; border: none; cursor: pointer; color: #dc3545;";
+    removeBtn.textContent = "✖";
+    row.appendChild(removeBtn);
+
+    return row;
   }
 
-  // Délégation d'événement pour la suppression de ligne
-  container.addEventListener("click", (e) => {
-    if (e.target.closest(".remove-item-row")) {
-        const rows = container.querySelectorAll(".devis-item-row");
-        if (rows.length > 1) {
-            e.target.closest(".devis-item-row").remove();
-            calculateTotals();
-        } else {
-            alert("Un devis doit comporter au moins une ligne.");
-        }
-    }
-  });
-
-  function resetModalToAdd() {
+  function resetModal() {
     modalTitle.textContent = "Ajouter un devis";
     modalBtn.textContent = "✓ Enregistrer";
     form.action = "/devis/add";
     devisIdInput.value = "";
     form.reset();
-  }
 
-  if (addBtn) {
-    addBtn.addEventListener("click", () => {
-        resetModalToAdd();
-        openModal(modal);
+    const rows = container.querySelectorAll(".devis-item-row");
+    rows.forEach((row, i) => {
+      if (i > 0) row.remove();
     });
+    calculateTotals();
   }
 
-  // Gestion des clics dans le tableau (Edit / Delete / PDF)
-  table.addEventListener("click", async (e) => {
-    const editBtn = e.target.closest(".edit-btn");
-    const deleteBtn = e.target.closest(".delete-btn");
-    const viewPdfBtn = e.target.closest(".view-pdf-btn");
+  function addDevisToTable(formData, id) {
+    const tbody = table.querySelector("tbody");
+    const tr = document.createElement("tr");
 
-    if (viewPdfBtn) {
-        const id = viewPdfBtn.dataset.id;
-        window.open(`/devis/pdf?id=${id}`, '_blank');
-    }
+    const clientSelect = document.getElementById("devis-client-id");
+    const clientNom = clientSelect.options[clientSelect.selectedIndex].text;
+    const numero = document.getElementById("devis-numero").value;
+    const dateEmi = formData.get("date_emission");
+    const dateVal = formData.get("date_validite");
+    const ttc = totalTtcSpan.textContent;
 
-    if (editBtn) {
-        alert("Modification bientôt disponible (en attente du Controller) !");
-    }
+    // Colonnes texte
+    [numero, clientNom, dateEmi, dateVal, `${ttc} €`].forEach((text) => {
+      const td = document.createElement("td");
+      td.textContent = text;
+      tr.appendChild(td);
+    });
 
-    if (deleteBtn) {
-        alert("Suppression bientôt disponible (en attente du Controller) !");
+    // Badge statut
+    const tdStatus = document.createElement("td");
+    const badge = document.createElement("span");
+    badge.className = "badge badge--draft";
+    badge.textContent = "Brouillon";
+    tdStatus.appendChild(badge);
+    tr.appendChild(tdStatus);
+
+    // Actions
+    const tdActions = document.createElement("td");
+    tdActions.className = "table__actions";
+
+    const actions = [
+      { class: "view-pdf-btn", icon: "👁️", title: "Voir PDF" },
+      { class: "edit-btn", icon: "✏️", title: "Modifier" },
+      { class: "delete-btn", icon: "🗑️", title: "Supprimer" },
+    ];
+
+    actions.forEach((act) => {
+      const btn = document.createElement("button");
+      btn.className = `${act.class} action-btn`;
+      btn.dataset.id = id;
+      btn.title = act.title;
+      btn.textContent = act.icon;
+      tdActions.appendChild(btn);
+    });
+
+    tr.appendChild(tdActions);
+    tbody.prepend(tr);
+  }
+
+  // --- Listeners ---
+
+  addItemBtn?.addEventListener("click", () => {
+    container.appendChild(createItemRow());
+    calculateTotals();
+  });
+
+  container.addEventListener("click", (e) => {
+    if (e.target.closest(".remove-item-row")) {
+      const rows = container.querySelectorAll(".devis-item-row");
+      if (rows.length > 1) {
+        e.target.closest(".devis-item-row").remove();
+        calculateTotals();
+      } else {
+        alert("Au moins une ligne requise.");
+      }
     }
+  });
+
+  modal.addEventListener("input", (e) => {
+    if (
+      e.target.classList.contains("item-qty") ||
+      e.target.classList.contains("item-price")
+    ) {
+      calculateTotals();
+    }
+  });
+
+  tvaCheckbox.addEventListener("change", calculateTotals);
+
+  addBtn?.addEventListener("click", () => {
+    resetModal();
+    openModal(modal);
+  });
+
+  table.addEventListener("click", (e) => {
+    const btn = e.target.closest(".view-pdf-btn");
+    if (btn) window.open(`/devis/pdf?id=${btn.dataset.id}`, "_blank");
   });
 
   form.addEventListener("submit", async (e) => {
@@ -134,7 +213,8 @@ export function initDevis() {
 
       const data = await response.json();
       if (data.success) {
-        window.location.reload(); 
+        addDevisToTable(formData, data.id);
+        closeModal(modal);
       } else {
         alert(data.error || "Erreur lors de la sauvegarde");
       }
