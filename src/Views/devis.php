@@ -74,7 +74,7 @@
                     type="text"
                     class="modal__input"
                     name="numero"
-                    value="DEV-<?= date('Y') ?>-..." 
+                    value="<?= $nextNumber ?>" 
                     readonly
                     style="background-color: #f0f0f0; cursor: not-allowed;"
                 />
