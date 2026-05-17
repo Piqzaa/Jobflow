@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\User;
 use App\Helpers\MongoLogger;
+use App\Services\EmailService;
 
 class AuthController {
     public function showRegister() {
@@ -85,16 +86,14 @@ class AuthController {
             $fullUrl = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]" . $verifyUrl;
 
             $subject = "Activez votre compte JobFlow";
-            $message = "Bonjour " . $profileData['prenom'] . ",\n\n";
-            $message .= "Merci de vous être inscrit sur JobFlow.\n";
-            $message .= "Pour activer votre compte, cliquez sur le lien ci-dessous :\n";
-            $message .= $fullUrl . "\n\n";
-            $message .= "À bientôt !";
+            $message = "<h1>Bienvenue " . htmlspecialchars($profileData['prenom']) . " !</h1>";
+            $message .= "<p>Merci de vous être inscrit sur JobFlow.</p>";
+            $message .= "<p>Pour activer votre compte et commencer à gérer vos devis, cliquez sur le bouton ci-dessous :</p>";
+            $message .= "<p style='margin: 30px 0;'><a href='$fullUrl' style='background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Activer mon compte</a></p>";
+            $message .= "<p>Ou copiez-collez ce lien : <br>$fullUrl</p>";
+            $message .= "<p>À bientôt !</p>";
 
-            $headers = "From: no-reply@jobflow.local\r\n";
-            $headers .= "Content-Type: text/plain; charset=UTF-8";
-
-            mail($email, $subject, $message, $headers);
+            EmailService::send($email, $subject, $message);
 
             render('auth/login', [
                 'title' => 'Inscription',
