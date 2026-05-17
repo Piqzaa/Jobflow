@@ -29,4 +29,10 @@ RUN sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
 # 6. Installation de Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# 7. Copie des fichiers composer pour installation des dépendances
+COPY composer.json composer.lock* ./
+
+# 8. Installation des dépendances
+RUN composer install --no-scripts --no-autoloader --no-interaction
+
 WORKDIR /var/www/html
