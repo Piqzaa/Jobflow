@@ -94,6 +94,11 @@ switch ($uri) {
         $devisController->create();
         break;
 
+    case '/devis/delete':
+        $devisController = new \App\Controllers\DevisController();
+        $devisController->delete();
+        break;
+
     case '/clients':
         $clientController = new \App\Controllers\ClientController();
         $clientController->index();

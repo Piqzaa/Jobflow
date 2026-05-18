@@ -103,4 +103,32 @@ class DevisController {
         ]);
         exit;
     }
+
+    public function delete() {
+        if (!isset($_SESSION['user_id'])) {
+            header('Content-Type: application/json');
+            echo json_encode(['success' => false, 'error' => 'Session expirée']);
+            exit;
+        }
+
+        check_csrf($_POST['csrf_token'] ?? '');
+
+        $userId = $_SESSION['user_id'];
+        $devisId = $_POST['devis_id'] ?? null;
+
+        if (!$devisId) {
+            echo json_encode(['success' => false, 'error' => 'ID de devis manquant']);
+            exit;
+        }
+
+        $devisModel = new Devis();
+        $result = $devisModel->deleteDevis($devisId, $userId);
+
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => (bool)$result,
+            'error'   => $result ? null : 'Erreur lors de la suppression du devis'
+        ]);
+        exit;
+    }
 }
