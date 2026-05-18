@@ -96,4 +96,9 @@ class Devis {
             return false;
         }
     }
+
+    public function deleteDevis($id, $userId) {
+        $stmt = $this->db->prepare("UPDATE devis SET deleted_at = NOW() WHERE id = :id AND user_id = :user_id");
+        return $stmt->execute(['id' => $id, 'user_id' => $userId]);
+    }
 }
