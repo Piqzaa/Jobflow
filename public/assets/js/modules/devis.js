@@ -196,9 +196,52 @@ export function initDevis() {
     openModal(modal);
   });
 
-  table.addEventListener("click", (e) => {
-    const btn = e.target.closest(".view-pdf-btn");
-    if (btn) window.open(`/devis/pdf?id=${btn.dataset.id}`, "_blank");
+  table.addEventListener("click", async (e) => {
+    // --- CLIC SUR VOIR PDF ---
+    const pdfBtn = e.target.closest(".view-pdf-btn");
+    if (pdfBtn) {
+      window.open(`/devis/pdf?id=${pdfBtn.dataset.id}`, "_blank");
+      return;
+    }
+
+    // --- CLIC SUR SUPPRIMER ---
+    const deleteBtn = e.target.closest(".delete-btn");
+    if (deleteBtn) {
+      if (!confirm("Voulez-vous vraiment supprimer ce devis ?")) return;
+
+      const id = deleteBtn.dataset.id;
+      const url = table.dataset.deleteUrl;
+      const csrfToken = document.querySelector(
+        'input[name="csrf_token"]',
+      ).value;
+
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          body: new URLSearchParams({
+            devis_id: id,
+            csrf_token: csrfToken,
+          }),
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          deleteBtn.closest("tr").remove();
+        } else {
+          alert(data.error || "Erreur lors de la suppression");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Une erreur est survenue lors de la suppression.");
+      }
+      return;
+    }
+
+    // --- CLIC SUR MODIFIER (À venir) ---
+    const editBtn = e.target.closest(".edit-btn");
+    if (editBtn) {
+      console.log("Modifier le devis", editBtn.dataset.id);
+    }
   });
 
   form.addEventListener("submit", async (e) => {
