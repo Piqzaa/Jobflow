@@ -89,6 +89,11 @@ switch ($uri) {
         $devisController->index();
         break;
 
+    case '/devis/get':
+        $devisController = new \App\Controllers\DevisController();
+        $devisController->get();
+        break;
+        
     case '/devis/add':
         $devisController = new \App\Controllers\DevisController();
         $devisController->create();
@@ -97,6 +102,11 @@ switch ($uri) {
     case '/devis/delete':
         $devisController = new \App\Controllers\DevisController();
         $devisController->delete();
+        break;
+
+    case '/devis/update':
+        $devisController = new \App\Controllers\DevisController();
+        $devisController->update();
         break;
 
     case '/clients':
