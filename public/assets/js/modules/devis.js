@@ -46,31 +46,27 @@ export function initDevis() {
   function createItemRow() {
     const row = document.createElement("div");
     row.className = "devis-item-row";
-    row.style.cssText = "display: flex; gap: 10px; margin-bottom: 10px;";
 
     const inputs = [
       {
         name: "item_designation[]",
         placeholder: "Désignation",
-        flex: "3",
         type: "text",
+        class: "item-designation",
       },
       {
         name: "item_quantite[]",
         placeholder: "Qté",
-        flex: "1",
         type: "number",
         class: "item-qty",
         value: "1",
-        step: "0.01",
+        step: "1",
       },
       {
         name: "item_prix[]",
         placeholder: "Prix Unit. HT",
-        flex: "1",
         type: "number",
         class: "item-price",
-        step: "0.01",
       },
     ];
 
@@ -122,9 +118,10 @@ export function initDevis() {
     const dateEmi = formData.get("date_emission");
     const dateVal = formData.get("date_validite");
     const ttc = totalTtcSpan.textContent;
+    const ttcFormatted = formatCurrency(parseFloat(ttc));
 
     // Colonnes texte
-    [numero, clientNom, dateEmi, dateVal, `${ttc} €`].forEach((text) => {
+    [numero, clientNom, dateEmi, dateVal, ttcFormatted].forEach((text) => {
       const td = document.createElement("td");
       td.textContent = text;
       tr.appendChild(td);
@@ -159,6 +156,15 @@ export function initDevis() {
 
     tr.appendChild(tdActions);
     tbody.prepend(tr);
+  }
+
+  function formatCurrency(amount) {
+    return (
+      new Intl.NumberFormat("fr-FR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(amount) + " €"
+    );
   }
 
   // --- Listeners ---
@@ -237,16 +243,55 @@ export function initDevis() {
       return;
     }
 
-    // --- CLIC SUR MODIFIER (À venir) ---
+    // --- CLIC SUR MODIFIER ---
     const editBtn = e.target.closest(".edit-btn");
     if (editBtn) {
-      console.log("Modifier le devis", editBtn.dataset.id);
+      const id = editBtn.dataset.id;
+      const url = table.dataset.getUrl + `?id=` + id;
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        if (data.success) {
+          modalTitle.textContent = "Modifier le devis";
+          modalBtn.textContent = "💾 Mettre à jour";
+          form.action = table.dataset.updateUrl;
+          devisIdInput.value = data.devis.id;
+
+          document.getElementById("devis-numero").value = data.devis.numero;
+          document.getElementById("devis-client-id").value =
+            data.devis.client_id;
+          document.getElementById("devis-date-emission").value =
+            data.devis.date_emission;
+          document.getElementById("devis-date-validite").value =
+            data.devis.date_validite;
+          document.getElementById("devis-notes").value = data.devis.notes || "";
+          tvaCheckbox.checked = parseFloat(data.devis.montant_tva) > 0;
+
+          container.innerHTML = "";
+
+          data.items.forEach((item) => {
+            const row = createItemRow();
+            row.querySelector(".item-designation").value = item.designation;
+            row.querySelector(".item-qty").value = item.quantite;
+            row.querySelector(".item-price").value = item.prix_unitaire;
+            container.appendChild(row);
+          });
+
+          calculateTotals();
+
+          openModal(modal);
+        }
+      } catch (err) {
+        console.error(err);
+      }
     }
   });
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(form);
+    const isEditing = devisIdInput.value !== "";
 
     try {
       const response = await fetch(form.action, {
@@ -256,8 +301,30 @@ export function initDevis() {
 
       const data = await response.json();
       if (data.success) {
-        addDevisToTable(formData, data.id);
-        closeModal(modal);
+        if (isEditing) {
+          const row = table.querySelector(
+            `tr[data-id="${devisIdInput.value}"]`,
+          );
+          if (row) {
+            const clientSelect = document.getElementById("devis-client-id");
+            const clientNom =
+              clientSelect.options[clientSelect.selectedIndex].text;
+            const ttcValue = formatCurrency(
+              parseFloat(totalTtcSpan.textContent),
+            );
+
+            row.querySelector(".d-client").textContent = clientNom;
+            row.querySelector(".d-date-emission").textContent =
+              formData.get("date_emission");
+            row.querySelector(".d-date-validite").textContent =
+              formData.get("date_validite");
+            row.querySelector(".d-montant-ttc").textContent = ttcValue;
+          }
+          closeModal(modal);
+        } else {
+          addDevisToTable(formData, data.id);
+          closeModal(modal);
+        }
       } else {
         alert(data.error || "Erreur lors de la sauvegarde");
       }
