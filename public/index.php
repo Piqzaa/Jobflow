@@ -109,6 +109,11 @@ switch ($uri) {
         $devisController->update();
         break;
 
+    case '/devis/pdf':
+        $devisController = new \App\Controllers\DevisController();
+        $devisController->pdf();
+        break;
+        
     case '/clients':
         $clientController = new \App\Controllers\ClientController();
         $clientController->index();
