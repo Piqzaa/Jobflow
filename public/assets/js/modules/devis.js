@@ -40,7 +40,12 @@ export function initDevis() {
     totalHtSpan.textContent = totalHt.toFixed(2);
     totalTvaSpan.textContent = totalTva.toFixed(2);
     totalTtcSpan.textContent = totalTtc.toFixed(2);
-    tvaRow.style.display = isTvaApplicable ? "block" : "none";
+    
+    if (isTvaApplicable) {
+      tvaRow.classList.remove("is-hidden");
+    } else {
+      tvaRow.classList.add("is-hidden");
+    }
   }
 
   function createItemRow() {
@@ -76,7 +81,6 @@ export function initDevis() {
       input.name = cfg.name;
       input.placeholder = cfg.placeholder;
       input.className = "modal__input" + (cfg.class ? " " + cfg.class : "");
-      input.style.flex = cfg.flex;
       if (cfg.value) input.value = cfg.value;
       if (cfg.step) input.step = cfg.step;
       input.required = true;
@@ -86,8 +90,6 @@ export function initDevis() {
     const removeBtn = document.createElement("button");
     removeBtn.type = "button";
     removeBtn.className = "remove-item-row";
-    removeBtn.style.cssText =
-      "background: none; border: none; cursor: pointer; color: #dc3545;";
     removeBtn.textContent = "✖";
     row.appendChild(removeBtn);
 
