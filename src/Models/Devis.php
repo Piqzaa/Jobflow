@@ -12,6 +12,11 @@ class Devis {
         $this->db = Database::getInstance();
     }
 
+    public function getItems($devisId) {
+        $stmt = $this->db->prepare("SELECT * FROM devis_items WHERE devis_id = :devis_id ORDER BY position ASC");
+        $stmt->execute(['devis_id' => $devisId]);
+        return $stmt->fetchAll();
+    }
 
     public function getAllByUser($userId) {
         $sql = "SELECT d.*, c.nom as client_nom 
@@ -89,6 +94,56 @@ class Devis {
 
             $this->db->commit();
             return $devisId;
+
+        } catch (\Exception $e) {
+            $this->db->rollBack();
+            error_log("[DevisModel] Erreur transaction : " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function updateWithItems($devisId, $userId, $devisData, $items) {
+        try {
+            $this->db->beginTransaction();
+
+            $sqlDevis = "UPDATE devis SET client_id = :client_id, date_emission = :date_emission, date_validite = :date_validite, montant_ht = :ht, montant_tva = :tva, montant_ttc = :ttc, notes = :notes WHERE id = :id AND user_id = :user_id";
+            
+            $stmt = $this->db->prepare($sqlDevis);
+            $stmt->execute([
+                'id'            => $devisId,
+                'user_id'       => $userId,
+                'client_id'     => $devisData['client_id'],
+                'date_emission' => $devisData['date_emission'],
+                'date_validite' => $devisData['date_validite'],
+                'ht'            => $devisData['montant_ht'],
+                'tva'           => $devisData['montant_tva'],
+                'ttc'           => $devisData['montant_ttc'],
+                'notes'         => $devisData['notes']
+            ]);
+
+            $stmtDelete = $this->db->prepare("DELETE FROM devis_items WHERE devis_id = :devis_id");
+            $stmtDelete->execute(['devis_id' => $devisId]);
+
+            $sqlItem = "INSERT INTO devis_items (devis_id, designation, quantite, prix_unitaire, tva, total_ht, total_ttc, position) 
+                        VALUES (:devis_id, :designation, :qty, :prix, :tva_rate, :tht, :tttc, :pos)";
+            
+            $stmtItem = $this->db->prepare($sqlItem);
+
+            foreach ($items as $index => $item) {
+                $stmtItem->execute([
+                    'devis_id'    => $devisId,
+                    'designation' => $item['designation'],
+                    'qty'         => $item['qty'],
+                    'prix'        => $item['prix'],
+                    'tva_rate'    => $devisData['tva_rate'],
+                    'tht'         => $item['total_ht'],
+                    'tttc'        => $item['total_ttc'],
+                    'pos'         => $index + 1
+                ]);
+            }
+
+            $this->db->commit();
+            return true;
 
         } catch (\Exception $e) {
             $this->db->rollBack();
