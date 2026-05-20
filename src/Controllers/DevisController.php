@@ -230,4 +230,33 @@ class DevisController {
         ]);
         exit;
     }
+
+    public function pdf() {
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: ' . url('/login'));
+            exit;
+        }
+
+        $devisId = $_GET['id'] ?? null;
+        $userId = $_SESSION['user_id'];
+        $devisModel = new Devis();
+        $userModel = new \App\Models\User();
+        $devis = $devisModel->getById($devisId, $userId);
+
+        if (!$devis) {
+            echo "Devis non trouvé ou accès refusé.";
+            exit;
+        }
+
+        $items = $devisModel->getItems($devisId);
+        $userProfile = $userModel->findById($userId);
+
+        ob_start();
+        require __DIR__ . '/../Views/devis_pdf.php';
+        $html = ob_get_clean();
+
+        $pdfService = new \App\Services\PdfService();
+        $filename = "Devis_{$devis['numero']}.pdf";
+        $pdfService->generatePdf($html, $filename);
+    }
 }
