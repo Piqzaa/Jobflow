@@ -29,6 +29,7 @@ CREATE TABLE user_profiles (
     code_postal VARCHAR(10),
     ville VARCHAR(100),
     telephone VARCHAR(20),
+    tva_intra VARCHAR(20),
     logo_filename VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
