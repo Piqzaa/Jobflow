@@ -158,4 +158,18 @@ class Devis {
         $stmt = $this->db->prepare("UPDATE devis SET deleted_at = NOW() WHERE id = :id AND user_id = :user_id");
         return $stmt->execute(['id' => $id, 'user_id' => $userId]);
     }
+
+    public function updateStatus($id, $userId, $status) {
+        $allowedStatuses = ['brouillon', 'envoye', 'accepte', 'refuse', 'expire'];
+        if (!in_array($status, $allowedStatuses)) {
+            return false;
+        }
+
+        $stmt = $this->db->prepare("UPDATE devis SET statut = :status WHERE id = :id AND user_id = :user_id");
+        return $stmt->execute([
+            'status'  => $status,
+            'id'      => $id,
+            'user_id' => $userId
+        ]);
+    }
 }
