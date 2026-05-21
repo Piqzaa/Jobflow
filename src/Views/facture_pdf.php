@@ -77,6 +77,12 @@
     <div class="payment-terms">
         <strong>Conditions de paiement :</strong><br>
         - Mode de règlement : Virement bancaire ou Chèque<br>
+        <?php if (!empty($userProfile['iban'])): ?>
+            - IBAN : <?= htmlspecialchars($userProfile['iban']) ?><br>
+        <?php endif; ?>
+        <?php if (!empty($userProfile['bic'])): ?>
+            - BIC : <?= htmlspecialchars($userProfile['bic']) ?><br>
+        <?php endif; ?>
         - Échéance : Le <?= date('d/m/Y', strtotime($facture['date_echeance'])) ?><br>
         - Tout retard de paiement donnera lieu à l'application de pénalités de retard au taux légal en vigueur, ainsi qu'à une indemnité forfaitaire pour frais de recouvrement de 40 € (Art. L. 441-6 du Code de commerce).
     </div>
