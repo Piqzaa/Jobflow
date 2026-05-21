@@ -3,6 +3,7 @@
 <button id="add-facture" data-modal-target="#modal-facture">Ajouter une facture</button>
 
 <table id="factures-table"
+    data-add-url="<?= url('/facture/add') ?>"
     data-delete-url="<?= url('/facture/delete') ?>"
     data-get-url="<?= url('/facture/get') ?>"
     data-update-url="<?= url('/facture/update') ?>"
@@ -37,10 +38,8 @@
             </td>
             <td>
                 <a href="<?= url('/facture/pdf?id=' . $f['id']) ?>" target="_blank" class="action-btn" title="Voir PDF">👁️</a>
-                <?php if ($f['statut'] === 'brouillon'): ?>
-                    <button class="edit-btn" data-id="<?= $f['id'] ?>" title="Modifier">✏️</button>
-                    <button class="delete-btn" data-id="<?= $f['id'] ?>" title="Supprimer">🗑️</button>
-                <?php endif; ?>
+                <button class="edit-btn <?= $f['statut'] !== 'brouillon' ? 'is-hidden' : '' ?>" data-id="<?= $f['id'] ?>" title="Modifier">✏️</button>
+                <button class="delete-btn <?= $f['statut'] !== 'brouillon' ? 'is-hidden' : '' ?>" data-id="<?= $f['id'] ?>" title="Supprimer">🗑️</button>
             </td>
         </tr>
         <?php endforeach; ?>
@@ -52,8 +51,8 @@
     </tbody>
 </table>
 
-<!-- MODALE FACTURE (Similaire à Devis) -->
-<form class="modal" id="modal-facture" method="POST" action="<?= url('/facture/add') ?>">
+
+<form class="modal" id="modal-facture" method="POST">
     <div class="modal__overlay"></div>
     
     <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
