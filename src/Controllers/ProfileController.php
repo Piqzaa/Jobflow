@@ -98,6 +98,10 @@ class ProfileController {
         $newFileName = md5(time() . $file['name']) . '.' . $extension;
         $uploadDir = __DIR__ . '/../../public/uploads/logos/';
 
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+
         if (move_uploaded_file($file['tmp_name'], $uploadDir . $newFileName)) {
             return $newFileName;
         }
