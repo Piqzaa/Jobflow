@@ -11,6 +11,7 @@ class PdfService {
   public function __construct() {
     $options = new Options();
     $options->set('isRemoteEnabled', true);
+    $options->set('chroot', realpath(__DIR__ . '/../../'));
     $options->set('defaultFont', 'Arial');
     $this->dompdf = new Dompdf($options);
   }
