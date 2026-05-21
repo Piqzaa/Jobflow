@@ -53,8 +53,8 @@ class User {
     }
 
     public function updateProfile($userId, $data) {
-        $sql = "INSERT INTO user_profiles (user_id, nom, prenom, entreprise, siret, adresse, code_postal, ville, telephone, tva_intra, logo_filename) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) 
+        $sql = "INSERT INTO user_profiles (user_id, nom, prenom, entreprise, siret, adresse, code_postal, ville, telephone, tva_intra, iban, bic, logo_filename) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) 
                 ON DUPLICATE KEY UPDATE 
                 nom = VALUES(nom), 
                 prenom = VALUES(prenom), 
@@ -65,6 +65,8 @@ class User {
                 ville = VALUES(ville),
                 telephone = VALUES(telephone),
                 tva_intra = VALUES(tva_intra),
+                iban = VALUES(iban),
+                bic = VALUES(bic),
                 logo_filename = VALUES(logo_filename)";
         
         $stmt = $this->db->prepare($sql);
@@ -79,6 +81,8 @@ class User {
             $data['ville'] ?? null,
             $data['telephone'] ?? null,
             $data['tva_intra'] ?? null,
+            $data['iban'] ?? null,
+            $data['bic'] ?? null,
             $data['logo_filename'] ?? null
         ]);
     }

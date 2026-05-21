@@ -58,10 +58,12 @@ export function initDevis() {
     const pdfBtn = e.target.closest(".view-pdf-btn");
     const editBtn = e.target.closest(".edit-btn");
     const deleteBtn = e.target.closest(".delete-btn");
+    const convertBtn = e.target.closest(".convert-btn");
 
     if (pdfBtn) window.open(`/devis/pdf?id=${pdfBtn.dataset.id}`, "_blank");
     if (editBtn) await handleEdit(editBtn);
     if (deleteBtn) await handleDelete(deleteBtn);
+    if (convertBtn) await handleConvert(convertBtn);
   });
 
   table.addEventListener("change", async (e) => {
@@ -350,6 +352,31 @@ export function initDevis() {
     } catch (err) {
       console.error(err);
       alert("Une erreur est survenue lors de la mise à jour du statut.");
+    }
+  }
+
+  async function handleConvert(btn) {
+    if (!confirm("Voulez-vous convertir ce devis en facture ?")) return;
+
+    const id = btn.dataset.id;
+    const csrfToken = document.querySelector('input[name="csrf_token"]').value;
+
+    try {
+      const response = await fetch("/facture/convert", {
+        method: "POST",
+        body: new URLSearchParams({ devis_id: id, csrf_token: csrfToken }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        alert("Devis converti avec succès !");
+        window.location.href = "/factures";
+      } else {
+        alert(data.error || "Erreur lors de la conversion");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Une erreur est survenue lors de la conversion.");
     }
   }
 }
