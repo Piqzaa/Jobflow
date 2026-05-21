@@ -64,6 +64,12 @@ export function initDevis() {
     if (deleteBtn) await handleDelete(deleteBtn);
   });
 
+  table.addEventListener("change", async (e) => {
+    if (e.target.classList.contains("status-select")) {
+      await handleStatusChange(e.target);
+    }
+  });
+
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(form);
@@ -213,18 +219,33 @@ export function initDevis() {
     const ttcFormatted = formatCurrency(parseFloat(ttc));
 
     tr.innerHTML = `
-      <td class="d-numero">${numero}</td>
-      <td class="d-client">${clientNom}</td>
-      <td class="d-date-emission">${dateEmi}</td>
-      <td class="d-date-validite">${dateVal}</td>
-      <td class="d-montant-ttc">${ttcFormatted}</td>
-      <td class="d-statut"><span class="badge badge--draft">Brouillon</span></td>
+      <td class="d-numero"></td>
+      <td class="d-client"></td>
+      <td class="d-date-emission"></td>
+      <td class="d-date-validite"></td>
+      <td class="d-montant-ttc"></td>
+      <td class="d-statut">
+        <select class="status-select badge-select badge--brouillon" data-id="${id}">
+          <option value="brouillon" selected>Brouillon</option>
+          <option value="envoye">Envoyé</option>
+          <option value="accepte">Accepté</option>
+          <option value="refuse">Refusé</option>
+          <option value="expire">Expiré</option>
+        </select>
+      </td>
       <td class="table__actions">
         <button class="view-pdf-btn action-btn" data-id="${id}" title="Voir PDF">👁️</button>
         <button class="edit-btn action-btn" data-id="${id}" title="Modifier">✏️</button>
         <button class="delete-btn action-btn" data-id="${id}" title="Supprimer">🗑️</button>
       </td>
     `;
+
+    // Sécurité XSS
+    tr.querySelector(".d-numero").textContent = numero;
+    tr.querySelector(".d-client").textContent = clientNom;
+    tr.querySelector(".d-date-emission").textContent = dateEmi;
+    tr.querySelector(".d-date-validite").textContent = dateVal;
+    tr.querySelector(".d-montant-ttc").textContent = ttcFormatted;
 
     tbody.prepend(tr);
   }
@@ -301,6 +322,34 @@ export function initDevis() {
     } catch (err) {
       console.error(err);
       alert("Erreur lors de la récupération du devis.");
+    }
+  }
+
+  async function handleStatusChange(select) {
+    const id = select.dataset.id;
+    const status = select.value;
+    const url = table.dataset.statusUrl;
+    const csrfToken = document.querySelector('input[name="csrf_token"]').value;
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        body: new URLSearchParams({
+          devis_id: id,
+          status: status,
+          csrf_token: csrfToken,
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        select.className = `status-select badge-select badge--${status}`;
+      } else {
+        alert(data.error || "Erreur lors de la mise à jour du statut");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Une erreur est survenue lors de la mise à jour du statut.");
     }
   }
 }
