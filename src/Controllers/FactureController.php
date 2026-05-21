@@ -156,7 +156,9 @@ class FactureController {
         $userId = $_SESSION['user_id'];
         $factureModel = new Facture();
         $factureId = $_POST['id'] ?? null;
+        $userModel = new \App\Models\User();
 
+        // Vérification statut
         $existing = $factureModel->getById($factureId, $userId);
         if (!$existing || $existing['statut'] !== 'brouillon') {
             echo json_encode(['success' => false, 'error' => 'Seule une facture en "Brouillon" peut être modifiée.']);
@@ -170,6 +172,14 @@ class FactureController {
         $tvaApp       = isset($_POST['tva_applicable']);
         $tvaRate      = $tvaApp ? 20.00 : 0.00;
 
+        if ($tvaApp) {
+            $userProfile = $userModel->findById($userId);
+            if (empty($userProfile['tva_intra'])) {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'error' => 'Numéro de TVA intracommunautaire requis dans votre profil pour appliquer la TVA.']);
+                exit;
+            }
+        }
         $designations = $_POST['item_designation'] ?? [];
         $quantites    = $_POST['item_quantite']    ?? [];
         $prix         = $_POST['item_prix']        ?? [];
