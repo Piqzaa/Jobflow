@@ -84,6 +84,41 @@ switch ($uri) {
         }
         break;
 
+    case '/devis':
+        $devisController = new \App\Controllers\DevisController();
+        $devisController->index();
+        break;
+
+    case '/devis/get':
+        $devisController = new \App\Controllers\DevisController();
+        $devisController->get();
+        break;
+        
+    case '/devis/add':
+        $devisController = new \App\Controllers\DevisController();
+        $devisController->create();
+        break;
+
+    case '/devis/delete':
+        $devisController = new \App\Controllers\DevisController();
+        $devisController->delete();
+        break;
+
+    case '/devis/update':
+        $devisController = new \App\Controllers\DevisController();
+        $devisController->update();
+        break;
+
+    case '/devis/status':
+        $devisController = new \App\Controllers\DevisController();
+        $devisController->updateStatus();
+        break;
+
+    case '/devis/pdf':
+        $devisController = new \App\Controllers\DevisController();
+        $devisController->pdf();
+        break;
+        
     case '/clients':
         $clientController = new \App\Controllers\ClientController();
         $clientController->index();

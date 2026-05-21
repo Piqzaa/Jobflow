@@ -46,6 +46,11 @@
     </div>
 
     <div class="form-group">
+        <label for="tva_intra">Numéro de TVA Intracommunautaire</label>
+        <input type="text" name="tva_intra" id="tva_intra" value="<?= htmlspecialchars($user['tva_intra'] ?? '') ?>" class="form-control" placeholder="FRXXXXXXXXXXXXXXXXX">
+    </div>
+
+    <div class="form-group">
         <label for="telephone">Téléphone</label>
         <input type="text" name="telephone" id="telephone" value="<?= htmlspecialchars($user['telephone'] ?? '') ?>" class="form-control">
     </div>

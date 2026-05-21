@@ -31,3 +31,22 @@
   width: 400px;
   max-width: 90%;
 }
+
+/* Uniquement le structurel pour le JS */
+.is-hidden {
+    display: none !important;
+}
+
+.devis-item-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.item-designation { flex: 3; }
+.item-qty { flex: 1; }
+.item-price { flex: 1; }
+
+.remove-item-row {
+    cursor: pointer;
+}
