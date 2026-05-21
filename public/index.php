@@ -118,6 +118,46 @@ switch ($uri) {
         $devisController = new \App\Controllers\DevisController();
         $devisController->pdf();
         break;
+
+    case '/factures':
+        $factureController = new \App\Controllers\FactureController();
+        $factureController->index();
+        break;
+
+    case '/facture/get':
+        $factureController = new \App\Controllers\FactureController();
+        $factureController->get();
+        break;
+
+    case '/facture/add':
+        $factureController = new \App\Controllers\FactureController();
+        $factureController->create();
+        break;
+
+    case '/facture/update':
+        $factureController = new \App\Controllers\FactureController();
+        $factureController->update();
+        break;
+
+    case '/facture/delete':
+        $factureController = new \App\Controllers\FactureController();
+        $factureController->delete();
+        break;
+
+    case '/facture/status':
+        $factureController = new \App\Controllers\FactureController();
+        $factureController->updateStatus();
+        break;
+
+    case '/facture/convert':
+        $factureController = new \App\Controllers\FactureController();
+        $factureController->createFromDevis();
+        break;
+
+    case '/facture/pdf':
+        $factureController = new \App\Controllers\FactureController();
+        $factureController->pdf();
+        break;
         
     case '/clients':
         $clientController = new \App\Controllers\ClientController();

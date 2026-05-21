@@ -15,13 +15,6 @@ export function initClients() {
   const deleteUrl = table.dataset.deleteUrl;
   const updateUrl = table.dataset.updateUrl;
 
-  // Protection XSS pour l'insertion dynamique de texte
-  function escape(str) {
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
-  }
-
   function resetModalToAdd() {
     modalTitle.textContent = "Ajouter un client";
     modalBtn.textContent = "✓ Ajouter";
@@ -48,20 +41,32 @@ export function initClients() {
     const tbody = table.querySelector("tbody");
     const row = document.createElement("tr");
     row.dataset.id = id;
+
     row.innerHTML = `
-      <td class="c-nom">${escape(data.get("nom"))}</td>
-      <td class="c-email">${escape(data.get("email"))}</td>
-      <td class="c-siret">${escape(data.get("siret"))}</td>
-      <td class="c-adresse">${escape(data.get("adresse"))}</td>
-      <td class="c-code_postal">${escape(data.get("code_postal"))}</td>
-      <td class="c-ville">${escape(data.get("ville"))}</td>
-      <td class="c-telephone">${escape(data.get("telephone"))}</td>
-      <td class="c-notes">${escape(data.get("notes"))}</td>
+      <td class="c-nom"></td>
+      <td class="c-email"></td>
+      <td class="c-siret"></td>
+      <td class="c-adresse"></td>
+      <td class="c-code_postal"></td>
+      <td class="c-ville"></td>
+      <td class="c-telephone"></td>
+      <td class="c-notes"></td>
       <td>
           <button class="edit-btn" data-id="${id}">✏️</button>
           <button class="delete-btn" data-id="${id}">🗑️</button>
       </td>
     `;
+
+    // sécurité XSS
+    row.querySelector(".c-nom").textContent = data.get("nom");
+    row.querySelector(".c-email").textContent = data.get("email");
+    row.querySelector(".c-siret").textContent = data.get("siret");
+    row.querySelector(".c-adresse").textContent = data.get("adresse");
+    row.querySelector(".c-code_postal").textContent = data.get("code_postal");
+    row.querySelector(".c-ville").textContent = data.get("ville");
+    row.querySelector(".c-telephone").textContent = data.get("telephone");
+    row.querySelector(".c-notes").textContent = data.get("notes");
+
     tbody.prepend(row);
   }
 
@@ -90,8 +95,10 @@ export function initClients() {
           document.getElementById("client-email").value = client.email || "";
           document.getElementById("client-siret").value = client.siret || "";
           document.getElementById("client-tel").value = client.telephone || "";
-          document.getElementById("client-adresse").value = client.adresse || "";
-          document.getElementById("client-code-postal").value = client.code_postal || "";
+          document.getElementById("client-adresse").value =
+            client.adresse || "";
+          document.getElementById("client-code-postal").value =
+            client.code_postal || "";
           document.getElementById("client-ville").value = client.ville || "";
           document.getElementById("client-notes").value = client.notes || "";
 

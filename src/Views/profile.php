@@ -55,6 +55,17 @@
         <input type="text" name="telephone" id="telephone" value="<?= htmlspecialchars($user['telephone'] ?? '') ?>" class="form-control">
     </div>
 
+    <div class="row">
+        <div class="form-group col">
+            <label for="iban">IBAN</label>
+            <input type="text" name="iban" id="iban" value="<?= htmlspecialchars($user['iban'] ?? '') ?>" class="form-control" placeholder="FR76...">
+        </div>
+        <div class="form-group col">
+            <label for="bic">BIC / SWIFT</label>
+            <input type="text" name="bic" id="bic" value="<?= htmlspecialchars($user['bic'] ?? '') ?>" class="form-control" placeholder="XXXXXXXX">
+        </div>
+    </div>
+
     <div class="form-group">
         <label for="adresse">Adresse</label>
         <textarea name="adresse" id="adresse" class="form-control"><?= htmlspecialchars($user['adresse'] ?? '') ?></textarea>

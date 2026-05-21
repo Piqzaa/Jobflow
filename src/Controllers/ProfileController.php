@@ -35,6 +35,8 @@ class ProfileController {
             'ville'       => trim($_POST['ville'] ?? ''),
             'telephone'   => trim($_POST['telephone'] ?? ''),
             'tva_intra'   => trim($_POST['tva_intra'] ?? ''),
+            'iban'        => trim($_POST['iban'] ?? ''),
+            'bic'         => trim($_POST['bic'] ?? ''),
             'logo_filename' => $_POST['current_logo'] ?? null
         ];
 
@@ -97,6 +99,10 @@ class ProfileController {
 
         $newFileName = md5(time() . $file['name']) . '.' . $extension;
         $uploadDir = __DIR__ . '/../../public/uploads/logos/';
+
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
 
         if (move_uploaded_file($file['tmp_name'], $uploadDir . $newFileName)) {
             return $newFileName;
