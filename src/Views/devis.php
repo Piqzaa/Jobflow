@@ -6,6 +6,7 @@
     data-delete-url="<?= url('/devis/delete') ?>"
     data-get-url="<?= url('/devis/get') ?>"
     data-update-url="<?= url('/devis/update') ?>"
+    data-status-url="<?= url('/devis/status') ?>"
 >
     <thead>
         <tr>
@@ -27,9 +28,13 @@
             <td class="d-date-validite"><?= htmlspecialchars($d['date_validite'] ?? '') ?></td>
             <td class="d-montant-ttc"><?= number_format($d['montant_ttc'] ?? 0, 2, ',', ' ') ?> €</td>
             <td class="d-statut">
-                <span class="badge badge--<?= $d['statut'] ?>">
-                    <?= htmlspecialchars(ucfirst($d['statut'])) ?>
-                </span>
+                <select class="status-select badge-select badge--<?= $d['statut'] ?>" data-id="<?= $d['id'] ?>">
+                    <option value="brouillon" <?= $d['statut'] === 'brouillon' ? 'selected' : '' ?>>Brouillon</option>
+                    <option value="envoye" <?= $d['statut'] === 'envoye' ? 'selected' : '' ?>>Envoyé</option>
+                    <option value="accepte" <?= $d['statut'] === 'accepte' ? 'selected' : '' ?>>Accepté</option>
+                    <option value="refuse" <?= $d['statut'] === 'refuse' ? 'selected' : '' ?>>Refusé</option>
+                    <option value="expire" <?= $d['statut'] === 'expire' ? 'selected' : '' ?>>Expiré</option>
+                </select>
             </td>
             <td>
                 <button class="view-pdf-btn" data-id="<?= $d['id'] ?>" title="Voir PDF">👁️</button>
