@@ -9,7 +9,10 @@
     <div class="header">
         <div class="company-info">
             <?php if (!empty($userProfile['logo_filename'])): ?>
-                <img src="<?= 'storage/uploads/' . htmlspecialchars($userProfile['logo_filename']) ?>"><br>
+                <?php $logoPath = realpath(__DIR__ . '/../../public/uploads/logos/' . $userProfile['logo_filename']); ?>
+                <?php if ($logoPath): ?>
+                    <img src="<?= $logoPath ?>" width="150"><br>
+                <?php endif; ?>
             <?php endif; ?>
             <strong><?= htmlspecialchars($userProfile['entreprise'] ?? 'Mon Entreprise') ?></strong><br>
             <?= htmlspecialchars($userProfile['prenom'] ?? '') ?> <?= htmlspecialchars($userProfile['nom'] ?? '') ?><br>
