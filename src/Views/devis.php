@@ -38,6 +38,9 @@
             </td>
             <td>
                 <button class="view-pdf-btn" data-id="<?= $d['id'] ?>" title="Voir PDF">👁️</button>
+                <?php if ($d['statut'] === 'accepte'): ?>
+                    <button class="convert-btn" data-id="<?= $d['id'] ?>" title="Convertir en Facture">🧾</button>
+                <?php endif; ?>
                 <button class="edit-btn" data-id="<?= $d['id'] ?>" title="Modifier">✏️</button>
                 <button class="delete-btn" data-id="<?= $d['id'] ?>" title="Supprimer">🗑️</button>
             </td>
