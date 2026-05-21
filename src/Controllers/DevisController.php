@@ -68,6 +68,7 @@ class DevisController {
 
         $userId = $_SESSION['user_id'];
         $devisModel = new Devis();
+        $userModel = new \App\Models\User();
 
         $clientId     = $_POST['client_id'] ?? null;
         $dateEmission = $_POST['date_emission'] ?? date('Y-m-d');
@@ -75,6 +76,19 @@ class DevisController {
         $notes        = trim($_POST['notes'] ?? '');
         $tvaApp       = isset($_POST['tva_applicable']);
         $tvaRate      = $tvaApp ? 20.00 : 0.00;
+
+        // Vérification TVA Intracommunautaire si TVA applicable
+        if ($tvaApp) {
+            $userProfile = $userModel->findById($userId);
+            if (empty($userProfile['tva_intra'])) {
+                header('Content-Type: application/json');
+                echo json_encode([
+                    'success' => false, 
+                    'error' => 'Vous devez renseigner votre numéro de TVA intracommunautaire dans votre profil pour créer un devis avec TVA.'
+                ]);
+                exit;
+            }
+        }
 
         $numero = $devisModel->getNextNumber($userId);
 
