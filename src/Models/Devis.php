@@ -19,7 +19,8 @@ class Devis {
     }
 
     public function getAllByUser($userId) {
-        $sql = "SELECT d.*, c.nom as client_nom 
+        $sql = "SELECT d.*, c.nom as client_nom, c.adresse as client_adresse, 
+                       c.code_postal as client_code_postal, c.ville as client_ville, c.siret as client_siret
                 FROM devis d 
                 JOIN clients c ON d.client_id = c.id 
                 WHERE d.user_id = :user_id 
@@ -32,7 +33,8 @@ class Devis {
     }
 
     public function getById($id, $userId) {
-        $sql = "SELECT d.*, c.nom as client_nom 
+        $sql = "SELECT d.*, c.nom as client_nom, c.adresse as client_adresse, 
+                       c.code_postal as client_code_postal, c.ville as client_ville, c.siret as client_siret
                 FROM devis d 
                 JOIN clients c ON d.client_id = c.id 
                 WHERE d.id = :id AND d.user_id = :user_id";
