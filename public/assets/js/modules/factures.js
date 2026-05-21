@@ -58,8 +58,8 @@ export function initFactures() {
     const editBtn = e.target.closest(".edit-btn");
     const deleteBtn = e.target.closest(".delete-btn");
 
-    if (editBtn) await handleEdit(editBtn);
-    if (deleteBtn) await handleDelete(deleteBtn);
+    if (editBtn && !editBtn.classList.contains('is-hidden')) await handleEdit(editBtn);
+    if (deleteBtn && !deleteBtn.classList.contains('is-hidden')) await handleDelete(deleteBtn);
   });
 
   table.addEventListener("change", async (e) => {
@@ -71,18 +71,25 @@ export function initFactures() {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(form);
-    const isEditing = factureIdInput.value !== "";
+    const id = factureIdInput.value;
+    const isEditing = id !== "";
+    const actionUrl = isEditing ? table.dataset.updateUrl : table.dataset.addUrl || "/facture/add";
 
     try {
-      const response = await fetch(form.action, {
+      const response = await fetch(actionUrl, {
         method: "POST",
         body: new URLSearchParams(formData),
       });
 
       const data = await response.json();
       if (data.success) {
-        // Pour simplifier, on recharge la page car la gestion complexe des boutons dynamiques (Edit/Delete selon statut) est plus robuste via un refresh
-        window.location.reload();
+        if (isEditing) {
+            updateFactureInTable(id, formData);
+        } else {
+            addFactureToTable(formData, data.id);
+        }
+        closeModal(modal);
+        form.reset();
       } else {
         alert(data.error || "Erreur lors de la sauvegarde");
       }
@@ -112,11 +119,11 @@ export function initFactures() {
     totalHtSpan.textContent = totalHt.toFixed(2);
     totalTvaSpan.textContent = totalTva.toFixed(2);
     totalTtcSpan.textContent = totalTtc.toFixed(2);
-
+    
     if (isTvaApplicable) {
-      tvaRow.style.display = "block";
+        tvaRow.classList.remove('is-hidden');
     } else {
-      tvaRow.style.display = "none";
+        tvaRow.classList.add('is-hidden');
     }
   }
 
@@ -125,10 +132,10 @@ export function initFactures() {
     row.className = "facture-item-row";
 
     row.innerHTML = `
-      <input type="text" name="item_designation[]" placeholder="Désignation" class="modal__input" style="flex: 3;" required>
-      <input type="number" name="item_quantite[]" placeholder="Qté" class="modal__input item-qty" style="flex: 1;" value="1" step="0.01" required>
-      <input type="number" name="item_prix[]" placeholder="Prix Unit. HT" class="modal__input item-price" style="flex: 1;" step="0.01" required>
-      <button type="button" class="remove-item-row" style="background: none; border: none; cursor: pointer; color: #dc3545;">✖</button>
+      <input type="text" name="item_designation[]" placeholder="Désignation" class="modal__input item-designation" required>
+      <input type="number" name="item_quantite[]" placeholder="Qté" class="modal__input item-qty" value="1" step="0.01" required>
+      <input type="number" name="item_prix[]" placeholder="Prix Unit. HT" class="modal__input item-price" step="0.01" required>
+      <button type="button" class="remove-item-row">✖</button>
     `;
 
     return row;
@@ -137,7 +144,6 @@ export function initFactures() {
   function resetModal() {
     modalTitle.textContent = "Ajouter une facture";
     modalBtn.textContent = "✓ Enregistrer";
-    form.action = "/facture/add";
     factureIdInput.value = "";
     form.reset();
 
@@ -146,6 +152,62 @@ export function initFactures() {
       if (i > 0) row.remove();
     });
     calculateTotals();
+  }
+
+  function addFactureToTable(formData, id) {
+    const tbody = table.querySelector("tbody");
+    const tr = document.createElement("tr");
+    tr.dataset.id = id;
+
+    const clientSelect = document.getElementById("facture-client-id");
+    const clientNom = clientSelect.options[clientSelect.selectedIndex].text;
+    const numero = document.getElementById("facture-numero").value;
+    const dateEmi = formData.get("date_emission");
+    const dateEch = formData.get("date_echeance");
+    const ttcValue = formatCurrency(parseFloat(totalTtcSpan.textContent));
+
+    tr.innerHTML = `
+        <td class="f-numero"></td>
+        <td class="f-client"></td>
+        <td class="f-date-emission"></td>
+        <td class="f-date-echeance"></td>
+        <td class="f-montant-ttc"></td>
+        <td class="f-statut">
+            <select class="status-select badge-select badge--brouillon" data-id="${id}">
+                <option value="brouillon" selected>Brouillon</option>
+                <option value="envoyee">Envoyée</option>
+                <option value="payee">Payée</option>
+                <option value="annulee">Annulée</option>
+            </select>
+        </td>
+        <td>
+            <a href="/facture/pdf?id=${id}" target="_blank" class="action-btn" title="Voir PDF">👁️</a>
+            <button class="edit-btn" data-id="${id}" title="Modifier">✏️</button>
+            <button class="delete-btn" data-id="${id}" title="Supprimer">🗑️</button>
+        </td>
+    `;
+
+    tr.querySelector(".f-numero").textContent = numero;
+    tr.querySelector(".f-client").textContent = clientNom;
+    tr.querySelector(".f-date-emission").textContent = formatDate(dateEmi);
+    tr.querySelector(".f-date-echeance").textContent = formatDate(dateEch);
+    tr.querySelector(".f-montant-ttc").textContent = ttcValue;
+
+    tbody.prepend(tr);
+  }
+
+  function updateFactureInTable(id, formData) {
+    const tr = table.querySelector(`tr[data-id="${id}"]`);
+    if (!tr) return;
+
+    const clientSelect = document.getElementById("facture-client-id");
+    const clientNom = clientSelect.options[clientSelect.selectedIndex].text;
+    const ttcValue = formatCurrency(parseFloat(totalTtcSpan.textContent));
+
+    tr.querySelector(".f-client").textContent = clientNom;
+    tr.querySelector(".f-date-emission").textContent = formatDate(formData.get("date_emission"));
+    tr.querySelector(".f-date-echeance").textContent = formatDate(formData.get("date_echeance"));
+    tr.querySelector(".f-montant-ttc").textContent = ttcValue;
   }
 
   async function handleDelete(btn) {
@@ -182,7 +244,6 @@ export function initFactures() {
       if (data.success) {
         modalTitle.textContent = "Modifier la facture";
         modalBtn.textContent = "💾 Mettre à jour";
-        form.action = table.dataset.updateUrl;
         factureIdInput.value = data.facture.id;
 
         document.getElementById("facture-numero").value = data.facture.numero;
@@ -195,7 +256,7 @@ export function initFactures() {
         container.innerHTML = "";
         data.items.forEach((item) => {
           const row = createItemRow();
-          row.querySelector('input[name="item_designation[]"]').value = item.designation;
+          row.querySelector('.item-designation').value = item.designation;
           row.querySelector(".item-qty").value = item.quantite;
           row.querySelector(".item-price").value = item.prix_unitaire;
           container.appendChild(row);
@@ -229,11 +290,17 @@ export function initFactures() {
       const data = await response.json();
       if (data.success) {
         select.className = `status-select badge-select badge--${status}`;
-        // Si on change le statut et que ce n'est plus "brouillon", on devrait normalement masquer Edit/Delete
-        // Pour plus de simplicité, on peut recharger la page
-        if (status !== 'brouillon') {
-            window.location.reload();
-        }
+        
+        const actionsTd = select.closest("tr").querySelector("td:last-child");
+        const buttons = actionsTd.querySelectorAll(".edit-btn, .delete-btn");
+        
+        buttons.forEach(btn => {
+            if (status === 'brouillon') {
+                btn.classList.remove('is-hidden');
+            } else {
+                btn.classList.add('is-hidden');
+            }
+        });
       } else {
         alert(data.error || "Erreur lors de la mise à jour du statut");
       }
@@ -241,5 +308,15 @@ export function initFactures() {
       console.error(err);
       alert("Une erreur est survenue lors de la mise à jour du statut.");
     }
+  }
+
+  function formatCurrency(amount) {
+    return new Intl.NumberFormat("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(amount) + " €";
+  }
+
+  function formatDate(dateStr) {
+    if (!dateStr) return "";
+    const [y, m, d] = dateStr.split("-");
+    return `${d}/${m}/${y}`;
   }
 }
