@@ -34,6 +34,7 @@ class ProfileController {
             'code_postal' => trim($_POST['code_postal'] ?? ''),
             'ville'       => trim($_POST['ville'] ?? ''),
             'telephone'   => trim($_POST['telephone'] ?? ''),
+            'tva_intra'   => trim($_POST['tva_intra'] ?? ''),
             'logo_filename' => $_POST['current_logo'] ?? null
         ];
 
