@@ -273,4 +273,34 @@ class DevisController {
         $filename = "Devis_{$devis['numero']}.pdf";
         $pdfService->generatePdf($html, $filename);
     }
+
+    public function updateStatus() {
+        if (!isset($_SESSION['user_id'])) {
+            header('Content-Type: application/json');
+            echo json_encode(['success' => false, 'error' => 'Session expirée']);
+            exit;
+        }
+
+        check_csrf($_POST['csrf_token'] ?? '');
+
+        $userId = $_SESSION['user_id'];
+        $devisId = $_POST['devis_id'] ?? null;
+        $status = $_POST['status'] ?? null;
+
+        if (!$devisId || !$status) {
+            header('Content-Type: application/json');
+            echo json_encode(['success' => false, 'error' => 'Données manquantes']);
+            exit;
+        }
+
+        $devisModel = new Devis();
+        $result = $devisModel->updateStatus($devisId, $userId, $status);
+
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => (bool)$result,
+            'error'   => $result ? null : 'Erreur lors de la mise à jour du statut'
+        ]);
+        exit;
+    }
 }
