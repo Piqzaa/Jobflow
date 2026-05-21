@@ -346,37 +346,25 @@ export function initDevis() {
       const data = await response.json();
       if (data.success) {
         select.className = `status-select badge-select badge--${status}`;
+
+        const actionsTd = select.closest("tr").querySelector("td:last-child");
+        const convertBtn = actionsTd.querySelector(".convert-btn");
+
+        if (status === "accepte") {
+          if (convertBtn) {
+            convertBtn.classList.remove("is-hidden");
+          }
+        } else {
+          if (convertBtn) {
+            convertBtn.classList.add("is-hidden");
+          }
+        }
       } else {
         alert(data.error || "Erreur lors de la mise à jour du statut");
       }
     } catch (err) {
       console.error(err);
       alert("Une erreur est survenue lors de la mise à jour du statut.");
-    }
-  }
-
-  async function handleConvert(btn) {
-    if (!confirm("Voulez-vous convertir ce devis en facture ?")) return;
-
-    const id = btn.dataset.id;
-    const csrfToken = document.querySelector('input[name="csrf_token"]').value;
-
-    try {
-      const response = await fetch("/facture/convert", {
-        method: "POST",
-        body: new URLSearchParams({ devis_id: id, csrf_token: csrfToken }),
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        alert("Devis converti avec succès !");
-        window.location.href = "/factures";
-      } else {
-        alert(data.error || "Erreur lors de la conversion");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Une erreur est survenue lors de la conversion.");
     }
   }
 }
