@@ -4,10 +4,12 @@ namespace App\Controllers;
 
 use App\Models\Facture;
 use App\Models\User;
+use App\Models\TvaPayment;
 use App\Helpers\SecurityHelper;
 
 class DashboardController {
     private $factureModel;
+    private $tvaModel;
 
     public function __construct() {
         if (!isset($_SESSION['user_id'])) {
@@ -15,6 +17,7 @@ class DashboardController {
             exit;
         }
         $this->factureModel = new Facture();
+        $this->tvaModel = new TvaPayment();
     }
 
     public function index() {
@@ -23,6 +26,8 @@ class DashboardController {
 
         $caTotal = $this->factureModel->getTotalCAYear($userId, $year);
         $tvaCollectee = $this->factureModel->getTotalTVAYear($userId, $year);
+        $tvaPayee = $this->tvaModel->getTotalPaidYear($userId, $year);
+        
         $monthlyCA = $this->factureModel->getMonthlyCA($userId, $year);
         $monthlyTVA = $this->factureModel->getMonthlyTVA($userId, $year);
         $seuilMicro = 83600;
@@ -43,6 +48,8 @@ class DashboardController {
             'title' => 'Tableau de bord',
             'caTotal' => $caTotal,
             'tvaCollectee' => $tvaCollectee,
+            'tvaPayee' => $tvaPayee,
+            'tvaRestante' => max(0, $tvaCollectee - $tvaPayee),
             'monthlyCA' => json_encode(array_values($monthlyCA)),
             'monthlyTVA' => json_encode(array_values($monthlyTVA)),
             'percentMicro' => $percentMicro,
