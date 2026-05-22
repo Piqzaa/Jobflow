@@ -64,11 +64,8 @@ switch ($uri) {
         break;
 
     case '/dashboard':
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: ' . url('/login'));
-            exit;
-        }
-        render('dashboard', ['title' => 'Tableau de bord']);
+        $dashboard = new \App\Controllers\DashboardController();
+        $dashboard->index();
         break;
 
     case '/profile':
