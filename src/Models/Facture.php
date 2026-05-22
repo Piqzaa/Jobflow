@@ -219,11 +219,95 @@ class Facture {
             return false;
         }
 
-        $stmt = $this->db->prepare("UPDATE factures SET statut = :status WHERE id = :id AND user_id = :user_id");
-        return $stmt->execute([
+        $sql = "UPDATE factures SET statut = :status";
+        $params = [
             'status'  => $status,
             'id'      => $id,
             'user_id' => $userId
-        ]);
+        ];
+
+        if ($status === 'payee') {
+            $sql .= ", date_paiement = IFNULL(date_paiement, NOW())";
+        }
+
+        $sql .= " WHERE id = :id AND user_id = :user_id";
+
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute($params);
+    }
+
+    public function getTotalCAYear($userId, $year) {
+        $sql = "SELECT SUM(montant_ht) as total 
+                FROM factures 
+                WHERE user_id = :user_id 
+                AND statut = 'payee' 
+                AND YEAR(date_paiement) = :year 
+                AND deleted_at IS NULL";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['user_id' => $userId, 'year' => $year]);
+        $result = $stmt->fetch();
+        
+        return (float)($result['total'] ?? 0);
+    }
+
+    public function getMonthlyCA($userId, $year) {
+        $sql = "SELECT MONTH(date_paiement) as mois, SUM(montant_ht) as total 
+                FROM factures 
+                WHERE user_id = :user_id 
+                AND statut = 'payee' 
+                AND YEAR(date_paiement) = :year 
+                AND deleted_at IS NULL 
+                GROUP BY MONTH(date_paiement) 
+                ORDER BY mois ASC";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['user_id' => $userId, 'year' => $year]);
+        $rows = $stmt->fetchAll();
+
+        // On initialise un tableau avec les 12 mois à 0
+        $monthlyData = array_fill(1, 12, 0);
+        foreach ($rows as $row) {
+            $monthlyData[(int)$row['mois']] = (float)$row['total'];
+        }
+        
+        return $monthlyData;
+    }
+
+    public function getTotalTVAYear($userId, $year) {
+        $sql = "SELECT SUM(montant_tva) as total 
+                FROM factures 
+                WHERE user_id = :user_id 
+                AND statut = 'payee' 
+                AND YEAR(date_paiement) = :year 
+                AND deleted_at IS NULL";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['user_id' => $userId, 'year' => $year]);
+        $result = $stmt->fetch();
+        
+        return (float)($result['total'] ?? 0);
+    }
+
+    public function getMonthlyTVA($userId, $year) {
+        $sql = "SELECT MONTH(date_paiement) as mois, SUM(montant_tva) as total 
+                FROM factures 
+                WHERE user_id = :user_id 
+                AND statut = 'payee' 
+                AND YEAR(date_paiement) = :year 
+                AND deleted_at IS NULL 
+                GROUP BY MONTH(date_paiement) 
+                ORDER BY mois ASC";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['user_id' => $userId, 'year' => $year]);
+        $rows = $stmt->fetchAll();
+
+        $monthlyData = array_fill(1, 12, 0);
+        foreach ($rows as $row) {
+            $monthlyData[(int)$row['mois']] = (float)$row['total'];
+        }
+        
+        return $monthlyData;
     }
 }
