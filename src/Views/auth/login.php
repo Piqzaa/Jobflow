@@ -25,6 +25,7 @@
             <label for="password">Mot de passe</label>
             <input type="password" name="password" id="password" required>
         </div>
+        <a href="<?= url('/forgot-password') ?>" class="forgot-password">Mot de passe oublié ?</a>
 
         <button type="submit" class="btn">Se connecter</button>
     </form>
