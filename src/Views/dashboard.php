@@ -29,23 +29,34 @@
                     <span><?= round($percentMicro) ?>%</span>
                 </div>
                 <div class="progress-bar-bg">
-                    <div class="progress-bar-fill" style="width: <?= $percentMicro ?>%; background-color: <?= $percentMicro > 90 ? '#e74c3c' : '#2ecc71' ?>;"></div>
+                    <div class="progress-bar-fill" style="width: <?= $percentMicro ?>%;"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Carte TVA -->
+        <!-- Carte Situation TVA -->
         <div class="card card-stats">
-            <h3>TVA Collectée</h3>
-            <p class="stat-value"><?= number_format($tvaCollectee, 2, ',', ' ') ?> €</p>
-            <p class="stat-subtitle">Total à reverser (selon vos factures payées)</p>
+            <h3>Situation TVA</h3>
+            <p class="stat-value"><?= number_format($tvaRestante, 2, ',', ' ') ?> €</p>
+            <p class="stat-subtitle">Reste à payer à l'État</p>
+            
+            <div class="tva-details">
+                <div class="tva-row">
+                    <span>Collectée :</span>
+                    <span><?= number_format($tvaCollectee, 2, ',', ' ') ?> €</span>
+                </div>
+                <div class="tva-row">
+                    <span>Déjà payée :</span>
+                    <span>- <?= number_format($tvaPayee, 2, ',', ' ') ?> €</span>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Graphique -->
     <div class="card chart-card">
         <h3>Évolution du CA HT par mois</h3>
-        <div style="height: 300px;">
+        <div class="chart-container">
             <canvas id="caChart" data-monthly='<?= $monthlyCA ?>'></canvas>
         </div>
     </div>
