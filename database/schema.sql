@@ -174,3 +174,16 @@ CREATE TABLE facture_items (
     INDEX idx_facture_id (facture_id),
     INDEX idx_position (position)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- TABLE tva_payments : Suivi des versements de TVA à l'État
+CREATE TABLE tva_payments (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id INT UNSIGNED NOT NULL,
+    montant DECIMAL(10,2) NOT NULL,
+    date_paiement DATE NOT NULL,
+    periode VARCHAR(50), -- Ex: "Trimestre 1 2026"
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    INDEX idx_user_id (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

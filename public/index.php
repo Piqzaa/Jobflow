@@ -5,7 +5,7 @@ header("X-Content-Type-Options: nosniff");
 header("X-Frame-Options: DENY");
 header("X-XSS-Protection: 1; mode=block");
 header("Referrer-Policy: strict-origin-when-cross-origin");
-header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;");
+header("Content-Security-Policy: default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data:;");
 require_once __DIR__ . '/../src/Helpers/ViewHelper.php';
 
 function loadEnv($path) {
@@ -64,11 +64,8 @@ switch ($uri) {
         break;
 
     case '/dashboard':
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: ' . url('/login'));
-            exit;
-        }
-        render('dashboard', ['title' => 'Tableau de bord']);
+        $dashboard = new \App\Controllers\DashboardController();
+        $dashboard->index();
         break;
 
     case '/profile':
