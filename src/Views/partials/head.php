@@ -5,7 +5,6 @@
     <title><?= $title ?? 'Jobflow' ?> | Gestion Freelance</title>
     
     <link rel="stylesheet" href="<?= url('/assets/css/main.css') ?>">
-    
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     <script type="module" src="<?= url('/assets/js/main.js') ?>"></script>
 </head>
