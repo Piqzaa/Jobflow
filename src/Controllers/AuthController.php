@@ -202,4 +202,114 @@ class AuthController {
         header('Location: ' . url('/'));
         exit;
     }
+
+    public function showResetPassword() {
+        $token = $_GET['token'] ?? '';
+        $userModel = new User();
+        $resetRequest = $userModel->findResetToken($token);
+
+        if (!$resetRequest) {
+            render('auth/login', [
+                'title' => 'Connexion',
+                'error' => 'Le lien de réinitialisation est invalide ou a déjà été utilisé.'
+            ]);
+            return;
+        }
+
+        render('auth/reset-password', [
+            'title' => 'Nouveau mot de passe',
+            'token' => $token
+        ]);
+    }
+
+    public function showForgotPassword() {
+        render('auth/forgot-password', [
+            'title' => 'Mot de passe oublié'
+        ]);
+    }
+
+
+    public function forgotPassword() {
+        check_csrf($_POST['csrf_token'] ?? '');
+        $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+        $userModel = new User();
+        $user = $userModel->findByEmail($email);
+        $successMessage = 'Si un compte existe avec cet email, un lien de réinitialisation de mot de passe a été envoyé.';
+
+        if ($user) {
+            $token = bin2hex(random_bytes(16));
+            $userModel->createPasswordResetToken($user['id'], $token);
+            $resetLink = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]" . url("/reset-password?token=$token");
+            $subject = "Réinitialisation de votre mot de passe - JobFlow";
+            $body = "<h1>Réinitialisation de votre mot de passe</h1>";
+            $body .= "<p>Bonjour " . htmlspecialchars($user['email']) . ",</p>";
+            $body .= "<p>Vous avez demandé une réinitialisation de votre mot de passe. Cliquez sur le bouton ci-dessous pour le réinitialiser :</p>";
+            $body .= "<a href='$resetLink' style='background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Réinitialiser mon mot de passe</a>";
+            $body .= "<p>Si vous n'avez pas demandé cette réinitialisation, ignorez cet email.</p>";
+            
+            EmailService::send($email, $subject, $body);
+
+             // Log de la demande de réinitialisation
+             MongoLogger::write(
+                userId: $user['id'],
+                action: 'password_reset_requested',
+                entity: 'user',
+                entityId: $user['id'],
+                data: [
+                    'email' => $user['email'],
+                    'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'unknown'
+                ]
+            );
+
+            render('auth/forgot-password', [
+                'title' => 'Mot de passe oublié',
+                'success' => $successMessage
+            ]);
+        } else {
+            render('auth/forgot-password', [
+                'title' => 'Mot de passe oublié',
+                'error' => 'Aucun utilisateur trouve avec cet email.'
+            ]);
+        }
+    }
+
+    public function resetPassword() {
+        check_csrf($_POST['csrf_token'] ?? '');
+        $token = $_POST['token'] ?? '';
+        $password = $_POST['password'] ?? '';
+        $userModel = new User();
+        $resetRequest = $userModel->findResetToken($token);
+
+        if (!$resetRequest) {
+            render('auth/login', [
+                'title' => 'Connexion',
+                'error' => 'Le lien invalide ou expiré.'
+            ]);
+            return;
+        }
+        if ($password !== ($_POST['password_confirmation'] ?? '')) {
+            render('auth/reset-password', [
+                'title' => 'Nouveau mot de passe',
+                'error' => 'Les mots de passe ne correspondent pas.',
+                'token' => $token
+            ]);
+            return;
+        }
+
+        if (strlen($password) < 8 || !preg_match('/[A-Z]/', $password) || !preg_match('/[a-z]/', $password) || !preg_match('/[0-9]/', $password)) {
+            render('auth/reset-password', [
+                'title' => 'Nouveau mot de passe',
+                'error' => 'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.',
+                'token' => $token
+            ]);
+            return;
+        }
+
+        $userModel->updatePassword($resetRequest['user_id'], $password);
+        $userModel->deleteResetToken($token);
+        render('auth/login', [
+            'title' => 'Connexion',
+            'success' => 'Votre mot de passe a été mis à jour.'
+        ]);
+    }
 }

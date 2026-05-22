@@ -1,5 +1,5 @@
 <section class="auth-form">
-    <h1>Connexion</h1>
+    <h1>Mot de passe oublié</h1>
 
     <?php if (isset($error)): ?>
         <div class="alert alert-danger">
@@ -12,7 +12,7 @@
         </div>
     <?php endif; ?>
 
-    <form action="<?= url('/login') ?>" method="POST">
+    <form action="<?= url('/forgot-password') ?>" method="POST">
         <!-- Protection CSRF -->
         <?php csrf_field(); ?>
 
@@ -21,14 +21,8 @@
             <input type="email" name="email" id="email" required>
         </div>
 
-        <div class="form-group">
-            <label for="password">Mot de passe</label>
-            <input type="password" name="password" id="password" required>
-        </div>
-        <a href="<?= url('/forgot-password') ?>" class="forgot-password">Mot de passe oublié ?</a>
-
-        <button type="submit" class="btn">Se connecter</button>
+        <button type="submit" class="btn">Envoyer le lien de réinitialisation</button>
     </form>
 
-    <p>Pas encore de compte ? <a href="<?= url('/register') ?>">S'inscrire</a></p>
+    <p>Retour à la <a href="<?= url('/login') ?>">connexion</a></p>
 </section>

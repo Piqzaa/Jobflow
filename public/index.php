@@ -44,6 +44,24 @@ switch ($uri) {
         }
         break;
 
+    case '/forgot-password':
+        $auth = new \App\Controllers\AuthController();
+        if ($method === 'GET') {
+            $auth->showForgotPassword();
+        } else {
+            $auth->forgotPassword();
+        }
+        break;
+
+    case '/reset-password':
+        $auth = new \App\Controllers\AuthController();
+        if ($method === 'GET') {
+            $auth->showResetPassword();
+        } else {
+            $auth->resetPassword();
+        }
+        break;
+
     case '/verify':
         $auth = new \App\Controllers\AuthController();
         $auth->verify();
