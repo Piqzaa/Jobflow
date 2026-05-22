@@ -198,6 +198,21 @@ switch ($uri) {
         $clientController = new \App\Controllers\ClientController();
         $clientController->get();
         break;
+
+    case '/tva':
+        $tvaController = new \App\Controllers\TvaController();
+        $tvaController->index();
+        break;
+
+    case '/tva/add':
+        $tvaController = new \App\Controllers\TvaController();
+        $tvaController->create();
+        break;
+
+    case '/tva/delete':
+        $tvaController = new \App\Controllers\TvaController();
+        $tvaController->delete();
+        break;
         
     default:
         http_response_code(404);
