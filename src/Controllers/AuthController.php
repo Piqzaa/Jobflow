@@ -150,22 +150,24 @@ class AuthController {
                 ]);
                 return;
             }
+        
+        $fullUser = $userModel->findById($user['id']);
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['user_email'] = $user['email'];
+        $_SESSION['user_prenom'] = $fullUser['prenom'];
+        session_regenerate_id(true);
 
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['user_email'] = $user['email'];
-            session_regenerate_id(true);
-
-            // Log de la connexion
-            MongoLogger::write(
-                userId: $user['id'],
-                action: 'login',
-                entity: 'user',
-                entityId: $user['id'],
-                data: [
-                    'email' => $user['email'],
-                    'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'unknown'
-                ]
-            );
+        // Log de la connexion
+        MongoLogger::write(
+            userId: $user['id'],
+            action: 'login',
+            entity: 'user',
+            entityId: $user['id'],
+            data: [
+                'email' => $user['email'],
+                'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'unknown'
+            ]
+        );
 
             header('Location: ' . url('/dashboard'));
             exit;
