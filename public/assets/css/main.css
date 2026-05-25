@@ -469,6 +469,94 @@ small,
     text-align: center;
   }
 }
+.footer {
+  background: #ffffff;
+  border-top: 1px solid #f3f4f6;
+  padding: 40px 0 30px;
+}
+
+.footer__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.footer__content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.footer__brand-logo {
+  display: flex;
+  align-items: baseline;
+  line-height: 1;
+  text-decoration: none;
+  margin-bottom: 8px;
+}
+
+.footer__logo-job {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.footer__logo-flow {
+  font-size: 1.4rem;
+  font-weight: 300;
+  color: #4f46e5;
+}
+
+.footer__logo-dot {
+  width: 5px;
+  height: 5px;
+  background: #4f46e5;
+  border-radius: 9999px;
+  margin-left: 2px;
+}
+
+.footer__description {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.footer__socials {
+  display: flex;
+  gap: 12px;
+}
+
+.footer__social-link {
+  color: #9ca3af;
+  font-size: 1.4rem;
+  transition: all 0.3s ease;
+}
+.footer__social-link:hover {
+  color: #4f46e5;
+}
+
+.footer__bottom {
+  border-top: 1px solid #f9fafb;
+  padding-top: 20px;
+  text-align: center;
+}
+
+.footer__copyright {
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+.app-logged-in .footer {
+  display: none;
+}
+
+@media (max-width: 576px) {
+  .footer__content {
+    flex-direction: column;
+    text-align: center;
+    gap: 24px;
+  }
+}
 .btn, .btn-light, .btn-primary {
   display: inline-flex;
   align-items: center;
