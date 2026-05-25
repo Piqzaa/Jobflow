@@ -347,8 +347,35 @@ export function initDevis() {
     }
   }
 
-  function handleConvert(btn) {
+  async function handleConvert(btn) {
     if (!confirm("Convertir ce devis en facture ?")) return;
-    window.location.href = `/devis/convert?id=${btn.dataset.id}`;
+    const csrfToken = document.querySelector('input[name="csrf_token"]')?.value;
+
+    if (!csrfToken) {
+      alert("Token CSRF manquant. Impossible de convertir.");
+      return;
+    }
+
+    try {
+      const response = await fetch(table.dataset.convertUrl, {
+        method: "POST",
+        body: new URLSearchParams({
+          devis_id: btn.dataset.id,
+          csrf_token: csrfToken,
+        }),
+      });
+      const data = await response.json();
+      if (!data.success) {
+        alert(data.error || "Une erreur est survenue lors de la conversion.");
+        return;
+      }
+
+      alert("Devis converti en facture.");
+      window.location.href = `/factures`;
+    } catch (err) {
+      console.error(err);
+      alert("Une erreur est survenue lors de la conversion.");
+      return;
+    }
   }
 }

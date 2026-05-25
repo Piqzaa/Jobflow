@@ -13,6 +13,7 @@
         data-get-url="<?= url('/devis/get') ?>"
         data-update-url="<?= url('/devis/update') ?>"
         data-status-url="<?= url('/devis/status') ?>"
+        data-convert-url="<?= url('/facture/convert') ?>"
     >
         <thead>
             <tr>
