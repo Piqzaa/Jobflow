@@ -19,19 +19,22 @@
   border-color: $gray-200;
 }
 
-.badge--envoye {
+.badge--envoye,
+.badge--envoyee {
   background: $info-soft;
   color: $info;
   border-color: rgba($info, 0.2);
 }
 
-.badge--accepte {
+.badge--accepte,
+.badge--payee {
   background: $success-soft;
   color: $success;
   border-color: rgba($success, 0.2);
 }
 
-.badge--refuse {
+.badge--refuse,
+.badge--annulee {
   background: $danger-soft;
   color: $danger;
   border-color: rgba($danger, 0.2);

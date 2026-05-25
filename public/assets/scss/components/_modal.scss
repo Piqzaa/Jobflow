@@ -128,6 +128,51 @@
   color: $gray-900;
 }
 
+.modal-item-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.modal-item-row__designation {
+  flex: 3;
+}
+
+.modal-item-row__qty {
+  flex: 1;
+}
+
+.modal-item-row__price {
+  flex: 1.5;
+}
+
+.remove-item-row {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius;
+  border: 1px solid $gray-200;
+  background: $white;
+  color: $gray-400;
+  cursor: pointer;
+  transition: $transition;
+  flex-shrink: 0;
+  align-self: center;
+
+  &:hover {
+    background: $danger-soft;
+    color: $danger;
+    border-color: rgba($danger, 0.2);
+  }
+}
+
+.remove-item-row i {
+  font-size: 1rem;
+}
+
 @keyframes modalIn {
   from {
     opacity: 0;

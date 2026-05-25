@@ -638,19 +638,22 @@ small,
   border-color: #e5e7eb;
 }
 
-.badge--envoye {
+.badge--envoye,
+.badge--envoyee {
   background: #eff6ff;
   color: #3b82f6;
   border-color: rgba(59, 130, 246, 0.2);
 }
 
-.badge--accepte {
+.badge--accepte,
+.badge--payee {
   background: #ecfdf5;
   color: #10b981;
   border-color: rgba(16, 185, 129, 0.2);
 }
 
-.badge--refuse {
+.badge--refuse,
+.badge--annulee {
   background: #fef2f2;
   color: #ef4444;
   border-color: rgba(239, 68, 68, 0.2);
@@ -1096,6 +1099,50 @@ small,
   color: #111827;
 }
 
+.modal-item-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.modal-item-row__designation {
+  flex: 3;
+}
+
+.modal-item-row__qty {
+  flex: 1;
+}
+
+.modal-item-row__price {
+  flex: 1.5;
+}
+
+.remove-item-row {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #9ca3af;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  align-self: center;
+}
+.remove-item-row:hover {
+  background: #fef2f2;
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.remove-item-row i {
+  font-size: 1rem;
+}
+
 @keyframes modalIn {
   from {
     opacity: 0;
@@ -1166,23 +1213,4 @@ small,
   text-align: center;
   font-size: 0.9rem;
   color: #4b5563;
-}
-
-.devis-item-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
-.devis-item-row__field--designation {
-  flex: 3;
-}
-
-.devis-item-row__field--qty {
-  flex: 1;
-}
-
-.devis-item-row__field--price {
-  flex: 1.5;
 }
