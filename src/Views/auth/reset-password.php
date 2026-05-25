@@ -1,35 +1,53 @@
-<section class="auth-form">
-  <h1>Nouveau mot de passe</h1>
+<div class="auth-page">
+    <div class="auth-card">
+        <div class="auth-card__header">
+            <h2 class="auth-card__title">Nouveau mot de passe</h2>
+            <p class="auth-card__subtitle">Choisissez un mot de passe sécurisé pour votre compte</p>
+        </div>
 
-  <?php if (isset($error)): ?>
-    <div class="alert alert-danger">
-      <?= htmlspecialchars($error) ?>
+        <?php if (isset($error)): ?>
+            <div class="alert alert--danger">
+                <i class="ri-error-warning-line"></i>
+                <?= htmlspecialchars($error) ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($success)): ?>
+            <div class="alert alert--success">
+                <i class="ri-checkbox-circle-line"></i>
+                <?= htmlspecialchars($success) ?>
+            </div>
+        <?php endif; ?>
+
+        <form action="<?= url('/reset-password') ?>" method="POST">
+            <?php csrf_field(); ?>
+
+            <input type="hidden" name="token" value="<?= htmlspecialchars($token) ?>">
+
+            <div class="form-group">
+                <label for="password" class="form-label">Nouveau mot de passe</label>
+                <div class="input-group has-icon">
+                    <i class="ri-lock-2-line"></i>
+                    <input type="password" name="password" id="password" class="form-control" placeholder="••••••••" required autofocus>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password_confirmation" class="form-label">Confirmation</label>
+                <div class="input-group has-icon">
+                    <i class="ri-lock-check-line"></i>
+                    <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="••••••••" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary btn-block btn-lg">
+                <span>Enregistrer le mot de passe</span>
+                <i class="ri-checkbox-circle-line"></i>
+            </button>
+        </form>
+
+        <div class="auth-card__footer">
+            <p>Retour à la <a href="<?= url('/login') ?>" class="auth-card__link">connexion</a></p>
+        </div>
     </div>
-  <?php endif; ?>
-  <?php if (isset($success)): ?>
-    <div class="alert alert-success">
-      <?= htmlspecialchars($success) ?>
-    </div>
-  <?php endif; ?>
-
-  <form action="<?= url('/reset-password') ?>" method="POST">
-    <!-- Protection CSRF -->
-    <?php csrf_field(); ?>
-
-    <div class="form-group">
-      <label for="password">Nouveau mot de passe</label>
-      <input type="password" name="password" id="password" required>
-    </div>
-
-    <div class="form-group">
-      <label for="password_confirmation">Confirmer le nouveau mot de passe</label>
-      <input type="password" name="password_confirmation" id="password_confirmation" required>
-    </div>
-
-    <input type="hidden" name="token" value="<?= $token ?>">
-
-    <button type="submit" class="btn">Modifier le mot de passe</button>
-  </form>
-
-  <p>Retour à la <a href="<?= url('/login') ?>">connexion</a></p>
-</section>
+</div>
