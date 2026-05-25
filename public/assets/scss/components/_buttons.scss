@@ -1,0 +1,58 @@
+@use "../abstracts/variables" as *;
+
+// Base button
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: $radius;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: $transition;
+  border: 1px solid transparent;
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// Primary
+.btn-primary {
+  @extend .btn;
+  background: $primary;
+  color: $white;
+  box-shadow: $shadow-sm;
+
+  &:hover {
+    background: $primary-dark;
+    transform: translateY(-1px);
+    box-shadow: $shadow;
+    color: $white;
+  }
+}
+
+// Light
+.btn-light {
+  @extend .btn;
+  background: transparent;
+  color: $primary;
+
+  &:hover {
+    background: $primary-soft;
+    color: $primary-dark;
+  }
+}
+
+// Full width modifier
+.btn-block {
+  width: 100%;
+}
+
+// Large padding modifier
+.btn-lg {
+  padding: 12px;
+}
