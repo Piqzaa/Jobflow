@@ -1,162 +1,112 @@
-<h1> Gestions des clients </h1>
+<header class="page-header">
+    <div class="page-actions">
+        <button class="btn-primary" id="add-client" data-modal-target="#modal-client">
+            <i class="ri-user-add-line"></i>
+            <span>Nouveau client</span>
+        </button>
+    </div>
+</header>
 
-<button id="add-client" data-modal-target="#modal-client">Ajouter un client</button>
+<div class="table-container">
+    <table class="data-table" id="clients-table" 
+        data-delete-url="<?= url('/clients/delete') ?>"
+        data-get-url="<?= url('/clients/get') ?>"
+        data-update-url="<?= url('/clients/update') ?>"
+    >
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Ville</th>
+                <th>Téléphone</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($clients as $client): ?>
+            <tr data-id="<?= $client['id'] ?>">
+                <td class="c-nom" data-label="Nom"><?= htmlspecialchars($client['nom'] ?? '') ?></td>
+                <td class="c-email" data-label="Email"><?= htmlspecialchars($client['email'] ?? '') ?></td>
+                <td class="c-ville" data-label="Ville"><?= htmlspecialchars($client['ville'] ?? '') ?></td>
+                <td class="c-telephone" data-label="Tel"><?= htmlspecialchars($client['telephone'] ?? '') ?></td>
+                <td data-label="Actions">
+                    <div class="table-actions">
+                        <button class="btn-action edit-btn" data-id="<?= $client['id'] ?>" title="Modifier">
+                            <i class="ri-pencil-line"></i>
+                        </button>
+                        <button class="btn-action btn-action--danger delete-btn" data-id="<?= $client['id'] ?>" title="Supprimer">
+                            <i class="ri-delete-bin-line"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
 
-<table id="clients-table" 
-    data-delete-url="<?= url('/clients/delete') ?>"
-    data-get-url="<?= url('/clients/get') ?>"
-    data-update-url="<?= url('/clients/update') ?>"
->
-    <thead>
-        <tr>
-            <th>Nom</th>
-            <th>Email</th>
-            <th>SIRET</th>
-            <th>Adresse</th>
-            <th>Code Postal</th>
-            <th>Ville</th>
-            <th>Téléphone</th>
-            <th>Notes</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($clients as $client): ?>
-        <tr data-id="<?= $client['id'] ?>">
-            <td class="c-nom"><?= htmlspecialchars($client['nom'] ?? '') ?></td>
-            <td class="c-email"><?= htmlspecialchars($client['email'] ?? '') ?></td>
-            <td class="c-siret"><?= htmlspecialchars($client['siret'] ?? '') ?></td>
-            <td class="c-adresse"><?= htmlspecialchars($client['adresse'] ?? '') ?></td>
-            <td class="c-code_postal"><?= htmlspecialchars($client['code_postal'] ?? '') ?></td>
-            <td class="c-ville"><?= htmlspecialchars($client['ville'] ?? '') ?></td>
-            <td class="c-telephone"><?= htmlspecialchars($client['telephone'] ?? '') ?></td>
-            <td class="c-notes"><?= htmlspecialchars($client['notes'] ?? '') ?></td>
-            <td>
-                <button class="edit-btn" data-id="<?= $client['id'] ?>">✏️</button>
-                <button class="delete-btn" data-id="<?= $client['id'] ?>">🗑️</button>
-            </td>
-        </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
-
+<!-- Modal Client -->
 <form class="modal" id="modal-client" method="POST" action="<?= url('/clients/add') ?>">
-    <div class="modal__overlay"></div>
-    
-    <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
-    <input type="hidden" name="id" id="client-id" value="">
+    <div class="modal__overlay" data-modal-close></div>
+    <div class="modal__container">
+        <?php csrf_field(); ?>
+        <input type="hidden" name="id" id="client-id" value="">
 
-    <div class="modal__content">
         <div class="modal__header">
-            <h3 class="modal__title">Ajouter un client</h3>
-            <button class="modal__close" data-modal-close type="button">✖</button>
+            <h3 class="modal__title">Informations Client</h3>
+            <button class="modal__close" data-modal-close type="button">
+                <i class="ri-close-line"></i>
+            </button>
         </div>
 
         <div class="modal__body">
-            <div class="modal__form">
-            <label class="modal__label">Nom</label>
-            <input
-                id="client-nom"
-                type="text"
-                class="modal__input"
-                placeholder="Nom du client"
-                name="nom"
-                required
-            />
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="client-nom" class="form-label">Nom / Entreprise</label>
+                    <input type="text" name="nom" id="client-nom" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="client-email" class="form-label">Email</label>
+                    <input type="email" name="email" id="client-email" class="form-control" required>
+                </div>
             </div>
 
-            <div class="modal__form">
-            <label class="modal__label">Email</label>
-            <input
-                id="client-email"
-                type="email"
-                class="modal__input"
-                placeholder="Email du client"
-                name="email"
-                required
-            />
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="client-siret" class="form-label">SIRET</label>
+                    <input type="text" name="siret" id="client-siret" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="client-tel" class="form-label">Téléphone</label>
+                    <input type="tel" name="telephone" id="client-tel" class="form-control" placeholder="06 00 00 00 00" required>
+                </div>
             </div>
 
-            <div class="modal__form">
-            <label class="modal__label">SIRET</label>
-            <input
-                id="client-siret"
-                type="text"
-                class="modal__input"
-                placeholder="SIRET du client"
-                name="siret"
-                required
-            />
+            <div class="form-group">
+                <label for="client-adresse" class="form-label">Adresse</label>
+                <input type="text" name="adresse" id="client-adresse" class="form-control" required>
             </div>
 
-            <div class="modal__form">
-            <label class="modal__label">Téléphone</label>
-            <input
-                id="client-tel"
-                type="tel"
-                pattern="(\+33|0)[0-9 ]{9,14}"
-                class="modal__input"
-                placeholder="Numéro du client"
-                name="telephone"
-                required
-            />
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="client-code-postal" class="form-label">Code Postal</label>
+                    <input type="text" name="code_postal" id="client-code-postal" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="client-ville" class="form-label">Ville</label>
+                    <input type="text" name="ville" id="client-ville" class="form-control" required>
+                </div>
             </div>
 
-            <div class="modal__form">
-            <label class="modal__label">Adresse</label>
-            <input
-                id="client-adresse"
-                type="text"
-                class="modal__input"
-                placeholder="Adresse du client"
-                name="adresse"
-                required
-            />
-            </div>
-
-            <div class="modal__form">
-            <label class="modal__label">Code Postal</label>
-            <input
-                id="client-code-postal"
-                type="text"
-                class="modal__input"
-                placeholder="Code Postal du client"
-                name="code_postal"
-                required
-            />
-            </div>
-
-            <div class="modal__form">
-            <label class="modal__label">Ville</label>
-            <input
-                id="client-ville"
-                type="text"
-                class="modal__input"
-                placeholder="Ville du client"
-                name="ville"
-                required
-            />
-            </div>
-
-            <div class="modal__form">
-            <label class="modal__label">Notes</label>
-            <input
-                id="client-notes"
-                type="text"
-                class="modal__input"
-                placeholder="Notes sur le client"
-                name="notes"
-            />
+            <div class="form-group">
+                <label for="client-notes" class="form-label">Notes</label>
+                <textarea name="notes" id="client-notes" class="form-control" rows="2"></textarea>
             </div>
         </div>
 
         <div class="modal__footer">
-            <button class="modal__btn-close" data-modal-close type="button">
-            Annuler
-            </button>
-            <button class="modal__btn-add" id="modal-addClient-btn" type="submit">
-            ✓ Ajouter
-            </button>
+            <button class="btn-light" data-modal-close type="button">Annuler</button>
+            <button class="btn-primary" id="modal-addClient-btn" type="submit">✓ Enregistrer</button>
         </div>
-        </div>
-    </form>
+    </div>
+</form>
