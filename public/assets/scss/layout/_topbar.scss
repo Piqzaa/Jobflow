@@ -18,3 +18,34 @@
   margin: 0;
   line-height: 1;
 }
+
+.topbar__toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: $gray-600;
+  cursor: pointer;
+  padding: 8px;
+  margin-left: -8px;
+  margin-right: 12px;
+  border-radius: $radius;
+  transition: $transition;
+
+  &:hover {
+    background: $gray-100;
+    color: $primary;
+  }
+}
+
+@media (max-width: 768px) {
+  .topbar {
+    padding: 0 16px;
+  }
+
+  .topbar__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

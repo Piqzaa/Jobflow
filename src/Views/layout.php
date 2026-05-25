@@ -67,8 +67,13 @@
                 </div>
             </aside>
 
+            <div class="sidebar-overlay"></div>
+
             <div class="app-main">
                 <header class="topbar">
+                    <button class="topbar__toggle" aria-label="Ouvrir le menu">
+                        <i class="ri-menu-2-line"></i>
+                    </button>
                     <h1 class="topbar__title"><?= $title ?? 'Jobflow' ?></h1>
                 </header>
 
