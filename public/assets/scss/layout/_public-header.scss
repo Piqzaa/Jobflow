@@ -21,13 +21,11 @@
   justify-content: space-between;
 }
 
-.header__brand {
-  a {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    text-decoration: none;
-  }
+.header__brand a {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
 }
 
 .header__logo {
@@ -60,7 +58,6 @@
   margin-bottom: 4px;
 }
 
-// Navigation
 .header__nav {
   display: flex;
   align-items: center;
@@ -73,39 +70,6 @@
   gap: 12px;
 }
 
-.btn-login {
-  padding: 10px 20px;
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: $primary;
-  text-decoration: none;
-  border-radius: $radius;
-  transition: $transition;
-
-  &:hover {
-    background: $primary-soft;
-  }
-}
-
-.btn-register {
-  padding: 10px 20px;
-  background: $primary;
-  color: $white;
-  font-size: 0.95rem;
-  font-weight: 500;
-  text-decoration: none;
-  border-radius: $radius;
-  box-shadow: $shadow-sm;
-  transition: $transition;
-
-  &:hover {
-    background: $primary-dark;
-    box-shadow: $shadow;
-    transform: translateY(-1px);
-  }
-}
-
-// Burger menu
 .header__toggle {
   display: none;
   background: none;
@@ -121,7 +85,6 @@
   }
 }
 
-// Mobile
 @media (max-width: 768px) {
   .header__toggle {
     display: block;
@@ -143,18 +106,12 @@
     transition: all 0.3s ease;
     z-index: 40;
     box-shadow: $shadow-lg;
-  }
 
-  .header__nav.is-open {
-    transform: translateY(0);
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .header__list {
-    flex-direction: column;
-    width: 100%;
-    text-align: center;
+    &.is-open {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+    }
   }
 
   .header__auth {
@@ -162,8 +119,7 @@
     width: 100%;
     gap: 12px;
 
-    .btn-login,
-    .btn-register {
+    .btn {
       width: 100%;
       text-align: center;
     }

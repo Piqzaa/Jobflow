@@ -1,7 +1,13 @@
 @use "abstracts/variables";
 @use "base/reset";
 @use "base/typography";
+
 @use "layout/app-layout";
 @use "layout/sidebar";
 @use "layout/topbar";
 @use "layout/public-header";
+
+@use "components/buttons";
+@use "components/forms";
+
+@use "pages/auth";
