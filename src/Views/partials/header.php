@@ -1,9 +1,24 @@
-<header class="main-header">
-    <nav class="container">
-        <a href="<?= url('/') ?>" class="brand">Jobflow</a>
-        <ul class="nav-links">
-            <li><a href="<?= url('/') ?>">Accueil</a></li>
-            <li><a href="<?= url('/login') ?>">Connexion</a></li>
-        </ul>
-    </nav>
+<header class="header">
+    <div class="header__container">
+        <div class="header__brand">
+            <a href="<?= url('/') ?>">
+                <div class="header__logo">
+                    <span class="header__logo-job">Job</span>
+                    <span class="header__logo-flow">flow</span>
+                </div>
+                <span class="header__logo-dot"></span>
+            </a>
+        </div>
+
+        <button class="header__toggle" aria-label="Menu">
+            <i class="ri-menu-3-line"></i>
+        </button>
+
+        <nav class="header__nav">
+            <div class="header__auth">
+                <a href="<?= url('/login') ?>" class="btn-login">Connexion</a>
+                <a href="<?= url('/register') ?>" class="btn-register">Inscription</a>
+            </div>
+        </nav>
+    </div>
 </header>
