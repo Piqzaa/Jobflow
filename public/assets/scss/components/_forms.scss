@@ -22,15 +22,15 @@
   position: relative;
   display: flex;
   align-items: center;
+}
 
-  i {
-    position: absolute;
-    left: 14px;
-    color: $gray-400;
-    font-size: 18px;
-    pointer-events: none;
-    transition: $transition;
-  }
+.input-group i {
+  position: absolute;
+  left: 14px;
+  color: $gray-400;
+  font-size: 18px;
+  pointer-events: none;
+  transition: $transition;
 }
 
 .form-control {
@@ -42,7 +42,19 @@
   font-size: 0.95rem;
   color: $gray-900;
   transition: $transition;
+}
 
+.form-control--readonly {
+  background-color: $gray-50;
+  cursor: not-allowed;
+}
+.form-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: $gray-700;
   &::placeholder {
     color: $gray-400;
   }
@@ -51,11 +63,13 @@
     outline: none;
     border-color: $primary;
     box-shadow: 0 0 0 4px rgba($primary, 0.1);
-
-    + i {
-      color: $primary;
-    }
   }
+}
+
+.form-checkbox input {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
 }
 
 .has-icon .form-control {

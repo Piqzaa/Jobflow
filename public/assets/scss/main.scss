@@ -12,9 +12,11 @@
 
 // Components
 @use "components/buttons";
+@use "components/badges";
 @use "components/forms";
 @use "components/tables";
 @use "components/modal";
 
 // Pages
 @use "pages/auth";
+@use "pages/devis";

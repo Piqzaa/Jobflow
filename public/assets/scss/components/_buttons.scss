@@ -1,6 +1,5 @@
 @use "../abstracts/variables" as *;
 
-// Base button
 .btn {
   display: inline-flex;
   align-items: center;
@@ -20,7 +19,6 @@
   }
 }
 
-// Primary
 .btn-primary {
   @extend .btn;
   background: $primary;
@@ -35,7 +33,6 @@
   }
 }
 
-// Light
 .btn-light {
   @extend .btn;
   background: transparent;
@@ -45,14 +42,17 @@
     background: $primary-soft;
     color: $primary-dark;
   }
+
+  &--sm {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
 }
 
-// Full width modifier
 .btn-block {
   width: 100%;
 }
 
-// Large padding modifier
 .btn-lg {
   padding: 12px;
 }
