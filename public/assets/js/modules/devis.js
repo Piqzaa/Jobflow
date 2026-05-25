@@ -10,16 +10,15 @@ export function initDevis() {
   const modalBtn = document.getElementById("modal-save-devis-btn");
   const devisIdInput = document.getElementById("devis-id");
   const addBtn = document.getElementById("add-devis");
-
   const tvaCheckbox = document.getElementById("devis-tva-applicable");
   const totalHtSpan = document.getElementById("total-ht");
   const totalTvaSpan = document.getElementById("total-tva");
   const totalTtcSpan = document.getElementById("total-ttc");
-  const tvaRow = document.getElementById("tva-row");
+  const tvaRow = document.getElementById("total-tva-row");
   const container = document.getElementById("devis-items-container");
   const addItemBtn = document.getElementById("add-item-row");
 
-  // event listeners
+  // --- Event listeners ---
 
   addBtn?.addEventListener("click", () => {
     resetModal();
@@ -32,44 +31,56 @@ export function initDevis() {
   });
 
   container.addEventListener("click", (e) => {
-    if (e.target.closest(".remove-item-row")) {
-      const rows = container.querySelectorAll(".devis-item-row");
-      if (rows.length > 1) {
-        e.target.closest(".devis-item-row").remove();
-        calculateTotals();
-      } else {
-        alert("Au moins une ligne requise.");
-      }
+    if (!e.target.closest(".remove-item-row")) return;
+    const rows = container.querySelectorAll(".devis-item-row");
+    if (rows.length > 1) {
+      e.target.closest(".devis-item-row").remove();
+      calculateTotals();
+    } else {
+      alert("Au moins une ligne requise.");
     }
   });
 
   modal.addEventListener("input", (e) => {
     if (
-      e.target.classList.contains("item-qty") ||
-      e.target.classList.contains("item-price")
-    ) {
-      calculateTotals();
-    }
+      !e.target.classList.contains("item-qty") &&
+      !e.target.classList.contains("item-price")
+    )
+      return;
+    calculateTotals();
   });
 
   tvaCheckbox.addEventListener("change", calculateTotals);
 
   table.addEventListener("click", async (e) => {
     const pdfBtn = e.target.closest(".view-pdf-btn");
-    const editBtn = e.target.closest(".edit-btn");
-    const deleteBtn = e.target.closest(".delete-btn");
-    const convertBtn = e.target.closest(".convert-btn");
+    if (pdfBtn) {
+      window.open(`/devis/pdf?id=${pdfBtn.dataset.id}`, "_blank");
+      return;
+    }
 
-    if (pdfBtn) window.open(`/devis/pdf?id=${pdfBtn.dataset.id}`, "_blank");
-    if (editBtn) await handleEdit(editBtn);
-    if (deleteBtn) await handleDelete(deleteBtn);
-    if (convertBtn) await handleConvert(convertBtn);
+    const editBtn = e.target.closest(".edit-btn");
+    if (editBtn) {
+      await handleEdit(editBtn);
+      return;
+    }
+
+    const deleteBtn = e.target.closest(".delete-btn");
+    if (deleteBtn) {
+      await handleDelete(deleteBtn);
+      return;
+    }
+
+    const convertBtn = e.target.closest(".convert-btn");
+    if (convertBtn) {
+      handleConvert(convertBtn);
+      return;
+    }
   });
 
   table.addEventListener("change", async (e) => {
-    if (e.target.classList.contains("status-select")) {
-      await handleStatusChange(e.target);
-    }
+    if (!e.target.classList.contains("status-select")) return;
+    await handleStatusChange(e.target);
   });
 
   form.addEventListener("submit", async (e) => {
@@ -82,151 +93,108 @@ export function initDevis() {
         method: "POST",
         body: new URLSearchParams(formData),
       });
-
       const data = await response.json();
-      if (data.success) {
-        if (isEditing) {
-          const row = table.querySelector(
-            `tr[data-id="${devisIdInput.value}"]`,
-          );
-          if (row) {
-            const clientSelect = document.getElementById("devis-client-id");
-            const clientNom =
-              clientSelect.options[clientSelect.selectedIndex].text;
-            const ttcValue = formatCurrency(
-              parseFloat(totalTtcSpan.textContent),
-            );
 
-            row.querySelector(".d-client").textContent = clientNom;
-            row.querySelector(".d-date-emission").textContent =
-              formData.get("date_emission");
-            row.querySelector(".d-date-validite").textContent =
-              formData.get("date_validite");
-            row.querySelector(".d-montant-ttc").textContent = ttcValue;
-          }
-        } else {
-          addDevisToTable(formData, data.id);
-        }
-        closeModal(modal);
-      } else {
+      if (!data.success) {
         alert(data.error || "Erreur lors de la sauvegarde");
+        return;
       }
+
+      if (isEditing) {
+        updateDevisRow(formData);
+      } else {
+        addDevisToTable(formData, data.id);
+      }
+      closeModal(modal);
     } catch (err) {
       console.error(err);
       alert("Une erreur est survenue lors de l'enregistrement.");
     }
   });
 
-  // functions
+  // --- Functions ---
 
   function calculateTotals() {
     let totalHt = 0;
-    const rows = document.querySelectorAll(".devis-item-row");
 
-    rows.forEach((row) => {
+    container.querySelectorAll(".devis-item-row").forEach((row) => {
       const qty = parseFloat(row.querySelector(".item-qty").value) || 0;
       const price = parseFloat(row.querySelector(".item-price").value) || 0;
       totalHt += qty * price;
     });
 
     const isTvaApplicable = tvaCheckbox.checked;
-    const tvaRate = isTvaApplicable ? 0.2 : 0;
-    const totalTva = totalHt * tvaRate;
+    const totalTva = isTvaApplicable ? totalHt * 0.2 : 0;
     const totalTtc = totalHt + totalTva;
 
     totalHtSpan.textContent = totalHt.toFixed(2);
     totalTvaSpan.textContent = totalTva.toFixed(2);
     totalTtcSpan.textContent = totalTtc.toFixed(2);
-
-    if (isTvaApplicable) {
-      tvaRow.classList.remove("is-hidden");
-    } else {
-      tvaRow.classList.add("is-hidden");
-    }
+    tvaRow.style.display = isTvaApplicable ? "flex" : "none";
   }
 
   function createItemRow() {
     const row = document.createElement("div");
     row.className = "devis-item-row";
 
-    const inputs = [
-      {
-        name: "item_designation[]",
-        placeholder: "Désignation",
-        type: "text",
-        class: "item-designation",
-      },
-      {
-        name: "item_quantite[]",
-        placeholder: "Qté",
-        type: "number",
-        class: "item-qty",
-        value: "1",
-        step: "1",
-      },
-      {
-        name: "item_prix[]",
-        placeholder: "Prix Unit. HT",
-        type: "number",
-        class: "item-price",
-      },
-    ];
-
-    inputs.forEach((cfg) => {
-      const input = document.createElement("input");
-      input.type = cfg.type;
-      input.name = cfg.name;
-      input.placeholder = cfg.placeholder;
-      input.className = "modal__input" + (cfg.class ? " " + cfg.class : "");
-      if (cfg.value) input.value = cfg.value;
-      if (cfg.step) input.step = cfg.step;
-      input.required = true;
-      row.appendChild(input);
-    });
-
-    const removeBtn = document.createElement("button");
-    removeBtn.type = "button";
-    removeBtn.className = "remove-item-row";
-    removeBtn.textContent = "✖";
-    row.appendChild(removeBtn);
+    row.innerHTML = `
+      <div class="devis-item-row__field devis-item-row__field--designation">
+        <input type="text" name="item_designation[]" placeholder="Désignation" class="form-control" required>
+      </div>
+      <div class="devis-item-row__field devis-item-row__field--qty">
+        <input type="number" name="item_quantite[]" placeholder="Qté" class="form-control item-qty" value="1" step="0.01" required>
+      </div>
+      <div class="devis-item-row__field devis-item-row__field--price">
+        <input type="number" name="item_prix[]" placeholder="Prix HT" class="form-control item-price" step="0.01" required>
+      </div>
+      <button type="button" class="btn-action btn-action--danger remove-item-row">
+        <i class="ri-close-line"></i>
+      </button>
+    `;
 
     return row;
   }
 
   function resetModal() {
     modalTitle.textContent = "Ajouter un devis";
-    modalBtn.textContent = "✓ Enregistrer";
+    modalBtn.querySelector("span").textContent = "Enregistrer";
     form.action = "/devis/add";
     devisIdInput.value = "";
     form.reset();
-
-    const rows = container.querySelectorAll(".devis-item-row");
-    rows.forEach((row, i) => {
-      if (i > 0) row.remove();
-    });
+    container.innerHTML = "";
+    container.appendChild(createItemRow());
     calculateTotals();
   }
 
-  function addDevisToTable(formData, id) {
-    const tbody = table.querySelector("tbody");
-    const tr = document.createElement("tr");
-    tr.dataset.id = id; // Permet l'édition immédiate sans rechargement
+  function updateDevisRow(formData) {
+    const row = table.querySelector(`tr[data-id="${devisIdInput.value}"]`);
+    if (!row) return;
 
     const clientSelect = document.getElementById("devis-client-id");
     const clientNom = clientSelect.options[clientSelect.selectedIndex].text;
+
+    row.querySelector(".d-client .text-main").textContent = clientNom;
+    row.querySelector(".d-date-validite .text-sub").textContent =
+      formData.get("date_validite");
+    row.querySelector(".d-montant-ttc .text-main").textContent = formatCurrency(
+      parseFloat(totalTtcSpan.textContent),
+    );
+  }
+
+  function addDevisToTable(formData, id) {
+    const clientSelect = document.getElementById("devis-client-id");
+    const clientNom = clientSelect.options[clientSelect.selectedIndex].text;
     const numero = document.getElementById("devis-numero").value;
-    const dateEmi = formData.get("date_emission");
-    const dateVal = formData.get("date_validite");
-    const ttc = totalTtcSpan.textContent;
-    const ttcFormatted = formatCurrency(parseFloat(ttc));
+
+    const tr = document.createElement("tr");
+    tr.dataset.id = id;
 
     tr.innerHTML = `
-      <td class="d-numero"></td>
-      <td class="d-client"></td>
-      <td class="d-date-emission"></td>
-      <td class="d-date-validite"></td>
-      <td class="d-montant-ttc"></td>
-      <td class="d-statut">
+      <td class="d-numero" data-label="Numéro"><span class="text-main"></span></td>
+      <td class="d-client" data-label="Client"><span class="text-main"></span></td>
+      <td class="d-date-validite" data-label="Validité"><span class="text-sub"></span></td>
+      <td class="d-montant-ttc" data-label="Montant TTC"><span class="text-main"></span></td>
+      <td class="d-statut" data-label="Statut">
         <select class="status-select badge-select badge--brouillon" data-id="${id}">
           <option value="brouillon" selected>Brouillon</option>
           <option value="envoye">Envoyé</option>
@@ -235,21 +203,24 @@ export function initDevis() {
           <option value="expire">Expiré</option>
         </select>
       </td>
-      <td class="table__actions">
-        <button class="view-pdf-btn action-btn" data-id="${id}" title="Voir PDF">👁️</button>
-        <button class="edit-btn action-btn" data-id="${id}" title="Modifier">✏️</button>
-        <button class="delete-btn action-btn" data-id="${id}" title="Supprimer">🗑️</button>
+      <td>
+        <div class="table-actions">
+          <button class="btn-action view-pdf-btn" data-id="${id}" title="Voir PDF"><i class="ri-file-pdf-line"></i></button>
+          <button class="btn-action edit-btn" data-id="${id}" title="Modifier"><i class="ri-pencil-line"></i></button>
+          <button class="btn-action btn-action--danger delete-btn" data-id="${id}" title="Supprimer"><i class="ri-delete-bin-line"></i></button>
+        </div>
       </td>
     `;
 
-    // Sécurité XSS
-    tr.querySelector(".d-numero").textContent = numero;
-    tr.querySelector(".d-client").textContent = clientNom;
-    tr.querySelector(".d-date-emission").textContent = dateEmi;
-    tr.querySelector(".d-date-validite").textContent = dateVal;
-    tr.querySelector(".d-montant-ttc").textContent = ttcFormatted;
+    tr.querySelector(".d-numero .text-main").textContent = numero;
+    tr.querySelector(".d-client .text-main").textContent = clientNom;
+    tr.querySelector(".d-date-validite .text-sub").textContent =
+      formData.get("date_validite");
+    tr.querySelector(".d-montant-ttc .text-main").textContent = formatCurrency(
+      parseFloat(totalTtcSpan.textContent),
+    );
 
-    tbody.prepend(tr);
+    table.querySelector("tbody").prepend(tr);
   }
 
   function formatCurrency(amount) {
@@ -261,66 +232,65 @@ export function initDevis() {
     );
   }
 
-  // async function
-
   async function handleDelete(btn) {
     if (!confirm("Voulez-vous vraiment supprimer ce devis ?")) return;
 
-    const id = btn.dataset.id;
-    const url = table.dataset.deleteUrl;
     const csrfToken = document.querySelector('input[name="csrf_token"]').value;
 
     try {
-      const response = await fetch(url, {
+      const response = await fetch(table.dataset.deleteUrl, {
         method: "POST",
-        body: new URLSearchParams({ devis_id: id, csrf_token: csrfToken }),
+        body: new URLSearchParams({
+          devis_id: btn.dataset.id,
+          csrf_token: csrfToken,
+        }),
       });
       const data = await response.json();
-      if (data.success) {
-        btn.closest("tr").remove();
-      } else {
+
+      if (!data.success) {
         alert(data.error || "Erreur lors de la suppression");
+        return;
       }
+      btn.closest("tr").remove();
     } catch (err) {
       console.error(err);
-      alert("Une erreur est survenue lors de la suppression.");
     }
   }
 
   async function handleEdit(btn) {
-    const id = btn.dataset.id;
-    const url = table.dataset.getUrl + `?id=` + id;
-
     try {
-      const response = await fetch(url);
+      const response = await fetch(
+        `${table.dataset.getUrl}?id=${btn.dataset.id}`,
+      );
       const data = await response.json();
-      if (data.success) {
-        modalTitle.textContent = "Modifier le devis";
-        modalBtn.textContent = "💾 Mettre à jour";
-        form.action = table.dataset.updateUrl;
-        devisIdInput.value = data.devis.id;
+      if (!data.success) return;
 
-        document.getElementById("devis-numero").value = data.devis.numero;
-        document.getElementById("devis-client-id").value = data.devis.client_id;
-        document.getElementById("devis-date-emission").value =
-          data.devis.date_emission;
-        document.getElementById("devis-date-validite").value =
-          data.devis.date_validite;
-        document.getElementById("devis-notes").value = data.devis.notes || "";
-        tvaCheckbox.checked = parseFloat(data.devis.montant_tva) > 0;
+      modalTitle.textContent = "Modifier le devis";
+      modalBtn.querySelector("span").textContent = "Mettre à jour";
+      form.action = table.dataset.updateUrl;
+      devisIdInput.value = data.devis.id;
 
-        container.innerHTML = "";
-        data.items.forEach((item) => {
-          const row = createItemRow();
-          row.querySelector(".item-designation").value = item.designation;
-          row.querySelector(".item-qty").value = item.quantite;
-          row.querySelector(".item-price").value = item.prix_unitaire;
-          container.appendChild(row);
-        });
+      document.getElementById("devis-numero").value = data.devis.numero;
+      document.getElementById("devis-client-id").value = data.devis.client_id;
+      document.getElementById("devis-date-emission").value =
+        data.devis.date_emission;
+      document.getElementById("devis-date-validite").value =
+        data.devis.date_validite;
+      document.getElementById("devis-notes").value = data.devis.notes || "";
+      tvaCheckbox.checked = parseFloat(data.devis.montant_tva) > 0;
 
-        calculateTotals();
-        openModal(modal);
-      }
+      container.innerHTML = "";
+      data.items.forEach((item) => {
+        const row = createItemRow();
+        row.querySelector('input[name="item_designation[]"]').value =
+          item.designation;
+        row.querySelector(".item-qty").value = item.quantite;
+        row.querySelector(".item-price").value = item.prix_unitaire;
+        container.appendChild(row);
+      });
+
+      calculateTotals();
+      openModal(modal);
     } catch (err) {
       console.error(err);
       alert("Erreur lors de la récupération du devis.");
@@ -328,43 +298,45 @@ export function initDevis() {
   }
 
   async function handleStatusChange(select) {
-    const id = select.dataset.id;
-    const status = select.value;
-    const url = table.dataset.statusUrl;
     const csrfToken = document.querySelector('input[name="csrf_token"]').value;
 
     try {
-      const response = await fetch(url, {
+      const response = await fetch(table.dataset.statusUrl, {
         method: "POST",
         body: new URLSearchParams({
-          devis_id: id,
-          status: status,
+          devis_id: select.dataset.id,
+          status: select.value,
           csrf_token: csrfToken,
         }),
       });
-
       const data = await response.json();
-      if (data.success) {
-        select.className = `status-select badge-select badge--${status}`;
+      if (!data.success) return;
 
-        const actionsTd = select.closest("tr").querySelector("td:last-child");
-        const convertBtn = actionsTd.querySelector(".convert-btn");
+      select.className = `status-select badge-select badge--${select.value}`;
 
-        if (status === "accepte") {
-          if (convertBtn) {
-            convertBtn.classList.remove("is-hidden");
-          }
-        } else {
-          if (convertBtn) {
-            convertBtn.classList.add("is-hidden");
-          }
-        }
-      } else {
-        alert(data.error || "Erreur lors de la mise à jour du statut");
+      const actionsDiv = select.closest("tr").querySelector(".table-actions");
+      const existingConvertBtn = actionsDiv.querySelector(".convert-btn");
+
+      if (select.value === "accepte" && !existingConvertBtn) {
+        const btn = document.createElement("button");
+        btn.className = "btn-action convert-btn";
+        btn.dataset.id = select.dataset.id;
+        btn.title = "Convertir en Facture";
+        btn.innerHTML = '<i class="ri-exchange-funds-line"></i>';
+        actionsDiv.insertBefore(btn, actionsDiv.querySelector(".edit-btn"));
+        return;
+      }
+
+      if (select.value !== "accepte" && existingConvertBtn) {
+        existingConvertBtn.remove();
       }
     } catch (err) {
       console.error(err);
-      alert("Une erreur est survenue lors de la mise à jour du statut.");
     }
+  }
+
+  function handleConvert(btn) {
+    if (!confirm("Convertir ce devis en facture ?")) return;
+    window.location.href = `/devis/convert?id=${btn.dataset.id}`;
   }
 }
