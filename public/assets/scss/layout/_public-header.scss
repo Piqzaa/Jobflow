@@ -1,0 +1,127 @@
+@use "../abstracts/variables" as *;
+
+.header {
+  height: $topbar-height;
+  background: $white;
+  border-bottom: 1px solid $gray-100;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  padding: 0 24px;
+}
+
+.header__container {
+  width: 100%;
+  max-width: $container-max-width;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header__brand a {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
+.header__logo {
+  display: flex;
+  align-items: baseline;
+  line-height: 1;
+}
+
+.header__logo-job {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: $gray-900;
+  letter-spacing: -0.5px;
+}
+
+.header__logo-flow {
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: $primary;
+  letter-spacing: -0.5px;
+}
+
+.header__logo-dot {
+  width: 6px;
+  height: 6px;
+  background: $primary;
+  border-radius: $radius-full;
+  flex-shrink: 0;
+  align-self: flex-end;
+  margin-bottom: 4px;
+}
+
+.header__nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header__auth {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header__toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: $gray-600;
+  cursor: pointer;
+  padding: 4px;
+  transition: $transition;
+
+  &:hover {
+    color: $primary;
+  }
+}
+
+@media (max-width: 768px) {
+  .header__toggle {
+    display: block;
+  }
+
+  .header__nav {
+    position: fixed;
+    top: $topbar-height;
+    left: 0;
+    right: 0;
+    background: $white;
+    flex-direction: column;
+    padding: 24px;
+    gap: 24px;
+    border-bottom: 1px solid $gray-100;
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 40;
+    box-shadow: $shadow-lg;
+
+    &.is-open {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  .header__auth {
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+
+    .btn {
+      width: 100%;
+      text-align: center;
+    }
+  }
+}

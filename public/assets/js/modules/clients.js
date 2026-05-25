@@ -23,49 +23,73 @@ export function initClients() {
     form.reset();
   }
 
+  /**
+   * Met à jour une ligne du tableau de manière sécurisée.
+   * On vérifie si l'élément existe avant de modifier son texte.
+   */
   function updateRowInTable(id, data) {
     const row = table.querySelector(`tr[data-id="${id}"]`);
-    if (row) {
-      row.querySelector(".c-nom").textContent = data.get("nom");
-      row.querySelector(".c-email").textContent = data.get("email");
-      row.querySelector(".c-siret").textContent = data.get("siret");
-      row.querySelector(".c-adresse").textContent = data.get("adresse");
-      row.querySelector(".c-code_postal").textContent = data.get("code_postal");
-      row.querySelector(".c-ville").textContent = data.get("ville");
-      row.querySelector(".c-telephone").textContent = data.get("telephone");
-      row.querySelector(".c-notes").textContent = data.get("notes");
-    }
+    if (!row) return;
+
+    const fields = [
+      "nom",
+      "email",
+      "siret",
+      "adresse",
+      "code_postal",
+      "ville",
+      "telephone",
+      "notes",
+    ];
+
+    fields.forEach((field) => {
+      const cell = row.querySelector(`.c-${field}`);
+      if (cell) {
+        cell.textContent = data.get(field);
+      }
+    });
   }
 
+  /**
+   * Ajoute une nouvelle ligne au tableau.
+   * Utilise la structure HTML actuelle (simplifiée).
+   */
   function addRowToTable(id, data) {
     const tbody = table.querySelector("tbody");
     const row = document.createElement("tr");
     row.dataset.id = id;
 
+    // On construit le HTML dynamiquement en fonction des données reçues
+    // Note: On n'ajoute que les colonnes présentes dans ton nouveau design (Nom, Email, Ville, Tel)
     row.innerHTML = `
-      <td class="c-nom"></td>
-      <td class="c-email"></td>
-      <td class="c-siret"></td>
-      <td class="c-adresse"></td>
-      <td class="c-code_postal"></td>
-      <td class="c-ville"></td>
-      <td class="c-telephone"></td>
-      <td class="c-notes"></td>
-      <td>
-          <button class="edit-btn" data-id="${id}">✏️</button>
-          <button class="delete-btn" data-id="${id}">🗑️</button>
+      <td class="c-nom" data-label="Nom"></td>
+      <td class="c-email" data-label="Email"></td>
+      <td class="c-ville" data-label="Ville"></td>
+      <td class="c-telephone" data-label="Tel"></td>
+      <td data-label="Actions">
+          <div class="table-actions">
+              <button class="btn-action edit-btn" data-id="${id}" title="Modifier">
+                  <i class="ri-pencil-line"></i>
+              </button>
+              <button class="btn-action btn-action--danger delete-btn" data-id="${id}" title="Supprimer">
+                  <i class="ri-delete-bin-line"></i>
+              </button>
+          </div>
       </td>
     `;
 
-    // sécurité XSS
-    row.querySelector(".c-nom").textContent = data.get("nom");
-    row.querySelector(".c-email").textContent = data.get("email");
-    row.querySelector(".c-siret").textContent = data.get("siret");
-    row.querySelector(".c-adresse").textContent = data.get("adresse");
-    row.querySelector(".c-code_postal").textContent = data.get("code_postal");
-    row.querySelector(".c-ville").textContent = data.get("ville");
-    row.querySelector(".c-telephone").textContent = data.get("telephone");
-    row.querySelector(".c-notes").textContent = data.get("notes");
+    // Remplissage sécurisé (XSS)
+    const fieldsMapping = {
+      ".c-nom": data.get("nom"),
+      ".c-email": data.get("email"),
+      ".c-ville": data.get("ville"),
+      ".c-telephone": data.get("telephone"),
+    };
+
+    Object.entries(fieldsMapping).forEach(([selector, value]) => {
+      const el = row.querySelector(selector);
+      if (el) el.textContent = value;
+    });
 
     tbody.prepend(row);
   }
@@ -91,16 +115,23 @@ export function initClients() {
           form.action = updateUrl;
 
           clientIdInput.value = client.id;
-          document.getElementById("client-nom").value = client.nom || "";
-          document.getElementById("client-email").value = client.email || "";
-          document.getElementById("client-siret").value = client.siret || "";
-          document.getElementById("client-tel").value = client.telephone || "";
-          document.getElementById("client-adresse").value =
-            client.adresse || "";
-          document.getElementById("client-code-postal").value =
-            client.code_postal || "";
-          document.getElementById("client-ville").value = client.ville || "";
-          document.getElementById("client-notes").value = client.notes || "";
+
+          // Mapping des champs de la modal
+          const inputsMapping = {
+            "client-nom": client.nom,
+            "client-email": client.email,
+            "client-siret": client.siret,
+            "client-tel": client.telephone,
+            "client-adresse": client.adresse,
+            "client-code-postal": client.code_postal,
+            "client-ville": client.ville,
+            "client-notes": client.notes,
+          };
+
+          Object.entries(inputsMapping).forEach(([id, value]) => {
+            const input = document.getElementById(id);
+            if (input) input.value = value || "";
+          });
 
           openModal(modal);
         } else {
