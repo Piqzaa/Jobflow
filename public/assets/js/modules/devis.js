@@ -60,13 +60,13 @@ export function initDevis() {
     }
 
     const editBtn = e.target.closest(".edit-btn");
-    if (editBtn) {
+    if (editBtn && !editBtn.classList.contains("is-hidden")) {
       await handleEdit(editBtn);
       return;
     }
 
     const deleteBtn = e.target.closest(".delete-btn");
-    if (deleteBtn) {
+    if (deleteBtn && !deleteBtn.classList.contains("is-hidden")) {
       await handleDelete(deleteBtn);
       return;
     }
