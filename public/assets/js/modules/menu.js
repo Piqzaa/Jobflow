@@ -1,4 +1,5 @@
 export function initMenu() {
+  // --- Public Header Menu ---
   const headerToggle = document.querySelector(".header__toggle");
   const headerNav = document.querySelector(".header__nav");
 
