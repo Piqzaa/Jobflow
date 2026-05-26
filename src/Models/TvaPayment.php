@@ -12,7 +12,7 @@ class TvaPayment {
     }
 
     public function getAllByUser($userId) {
-        $stmt = $this->db->prepare("SELECT * FROM tva_payments WHERE user_id = ? ORDER BY date_paiement DESC");
+        $stmt = $this->db->prepare("SELECT * FROM tva_payments WHERE user_id = ? AND deleted_at IS NULL ORDER BY date_paiement DESC");
         $stmt->execute([$userId]);
         return $stmt->fetchAll();
     }
@@ -29,12 +29,12 @@ class TvaPayment {
     }
 
     public function delete($id, $userId) {
-        $stmt = $this->db->prepare("DELETE FROM tva_payments WHERE id = ? AND user_id = ?");
+        $stmt = $this->db->prepare("UPDATE tva_payments SET deleted_at = NOW() WHERE id = ? AND user_id = ?");
         return $stmt->execute([$id, $userId]);
     }
 
     public function getTotalPaidYear($userId, $year) {
-        $stmt = $this->db->prepare("SELECT SUM(montant) as total FROM tva_payments WHERE user_id = ? AND YEAR(date_paiement) = ?");
+        $stmt = $this->db->prepare("SELECT SUM(montant) as total FROM tva_payments WHERE user_id = ? AND YEAR(date_paiement) = ? AND deleted_at IS NULL");
         $stmt->execute([$userId, $year]);
         $result = $stmt->fetch();
         return (float)($result['total'] ?? 0);
