@@ -1220,6 +1220,280 @@ small,
   color: #4b5563;
 }
 
+.pdf-body {
+  margin: 0;
+  padding: 0;
+  font-family: "Helvetica", "Arial", sans-serif;
+  color: #111827;
+  line-height: 1.5;
+  background: #ffffff;
+}
+
+.pdf-document {
+  padding: 10mm;
+}
+
+.pdf-header {
+  margin-bottom: 40px;
+}
+
+.pdf-header__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.pdf-header__company {
+  width: 50%;
+  vertical-align: top;
+}
+
+.pdf-header__logo {
+  max-width: 150px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.pdf-header__company-name {
+  margin: 0;
+  color: #000;
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.pdf-header__company-details {
+  font-size: 0.85rem;
+  color: #4b5563;
+  margin-top: 5px;
+}
+
+.pdf-header__company-details p {
+  margin: 2px 0;
+}
+
+.pdf-header__client {
+  width: 50%;
+  vertical-align: top;
+}
+
+.pdf-header__client-box {
+  background: #fff;
+  padding: 20px;
+  border: 1px solid #d1d5db;
+  margin-left: 40px;
+}
+
+.pdf-header__client-label {
+  font-size: 0.7rem;
+  color: #4b5563;
+  text-transform: uppercase;
+  margin: 0 0 8px 0;
+  font-weight: 700;
+  border-bottom: 1px solid #d1d5db;
+  display: inline-block;
+}
+
+.pdf-header__client-name {
+  margin: 5px 0 8px 0;
+  font-size: 1.1rem;
+  color: #000;
+  font-weight: 700;
+}
+
+.pdf-header__client-details {
+  font-size: 0.9rem;
+  color: #111827;
+  margin: 0;
+}
+
+.pdf-title-box {
+  margin-bottom: 30px;
+  border-top: 2px solid #000;
+  border-bottom: 1px solid #d1d5db;
+  padding: 15px 0;
+}
+
+.pdf-title-box__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.pdf-title-box__title {
+  margin: 0;
+  font-size: 2rem;
+  color: #000;
+  font-weight: 800;
+}
+
+.pdf-title-box__number {
+  margin: 0;
+  font-size: 1rem;
+  color: #4b5563;
+}
+
+.pdf-title-box__meta {
+  text-align: right;
+  font-size: 0.85rem;
+}
+
+.pdf-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+}
+
+.pdf-table__th {
+  background: #f3f4f6;
+  color: #000;
+  text-align: left;
+  padding: 10px 12px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  border-bottom: 2px solid #000;
+}
+
+.pdf-table__th--qty {
+  width: 50px;
+  text-align: center;
+}
+
+.pdf-table__th--price {
+  width: 110px;
+  text-align: right;
+}
+
+.pdf-table__th--total {
+  width: 110px;
+  text-align: right;
+}
+
+.pdf-table__tr--even {
+  background: #fafafa;
+}
+
+.pdf-table__td {
+  padding: 12px;
+  border-bottom: 1px solid #d1d5db;
+  font-size: 0.85rem;
+  color: #111827;
+  vertical-align: top;
+}
+
+.pdf-table__td--center {
+  text-align: center;
+}
+
+.pdf-table__td--right {
+  text-align: right;
+}
+
+.pdf-totals-container {
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.pdf-totals-table {
+  width: 300px;
+  margin-left: auto;
+  border-collapse: collapse;
+}
+
+.pdf-totals__label {
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 0.85rem;
+  border-bottom: 1px solid #d1d5db;
+}
+
+.pdf-totals__value {
+  padding: 8px 12px;
+  text-align: right;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-bottom: 1px solid #d1d5db;
+}
+
+.pdf-totals__row--grand-total {
+  background: #fff;
+}
+
+.pdf-totals__row--grand-total .pdf-totals__label,
+.pdf-totals__row--grand-total .pdf-totals__value {
+  color: #000;
+  font-weight: 800;
+  font-size: 1.2rem;
+  border-top: 2px solid #000;
+  border-bottom: 2px solid #000;
+  padding: 15px 12px;
+  text-transform: uppercase;
+}
+
+.pdf-legal {
+  font-size: 0.75rem;
+  color: #4b5563;
+  font-style: italic;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.pdf-infos {
+  margin-bottom: 40px;
+}
+
+.pdf-infos__title {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 5px;
+  border-bottom: 1px solid #d1d5db;
+}
+
+.pdf-infos__text {
+  font-size: 0.8rem;
+  color: #4b5563;
+  margin: 0;
+}
+
+.pdf-signature-table {
+  width: 100%;
+  margin-top: 50px;
+}
+
+.pdf-signature-box {
+  width: 250px;
+  border: 1px solid #d1d5db;
+  padding: 15px;
+}
+
+.pdf-signature__title {
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.pdf-signature__area {
+  height: 60px;
+  margin-top: 10px;
+  border-bottom: 1px dotted #d1d5db;
+}
+
+.pdf-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  border-top: 1px solid #d1d5db;
+  padding: 15px 0;
+}
+
+.pdf-footer__text {
+  font-size: 0.7rem;
+  color: #4b5563;
+}
+
 .is-hidden {
   display: none !important;
 }
