@@ -33,7 +33,7 @@
                 Enregistrer un versement
             </h2>
             
-            <form action="<?= url('/tva/add') ?>" method="POST">
+            <form action="<?= url('/tva/add') ?>" method="POST" class="tva-form">
                 <?= csrf_field() ?>
                 
                 <div class="form-group">
@@ -70,7 +70,7 @@
 
     <main class="tva-layout__main">
         <div class="table-container">
-            <table class="data-table">
+            <table class="data-table" id="tva-table">
                 <thead>
                     <tr>
                         <th>Date</th>
