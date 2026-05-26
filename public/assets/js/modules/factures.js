@@ -55,6 +55,12 @@ export function initFactures() {
   tvaCheckbox.addEventListener("change", calculateTotals);
 
   table.addEventListener("click", async (e) => {
+    const pdfBtn = e.target.closest(".view-pdf-btn");
+    if (pdfBtn) {
+      window.open(`/facture/pdf?id=${pdfBtn.dataset.id}`, "_blank");
+      return;
+    }
+
     const editBtn = e.target.closest(".edit-btn");
     const deleteBtn = e.target.closest(".delete-btn");
 
