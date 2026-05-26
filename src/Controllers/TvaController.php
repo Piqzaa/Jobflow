@@ -34,6 +34,7 @@ class TvaController {
 
     public function create() {
         check_csrf($_POST['csrf_token'] ?? '');
+        header('Content-Type: application/json');
 
         $userId = $_SESSION['user_id'];
         $data = [
@@ -43,38 +44,47 @@ class TvaController {
         ];
 
         if ($data['montant'] <= 0) {
-            render('tva', [
-                'title' => 'Gestion de la TVA',
-                'payments' => $this->tvaModel->getAllByUser($userId),
-                'error' => 'Le montant doit être supérieur à 0.'
-            ]);
-            return;
+            echo json_encode(['success' => false, 'error' => 'Le montant doit être supérieur à 0.']);
+            exit;
         }
 
         if ($this->tvaModel->create($userId, $data)) {
-            header('Location: ' . url('/tva'));
-            exit;
+            $newId = \App\Config\Database::getInstance()->lastInsertId();
+            $stats = $this->getUpdatedStats($userId);
+            echo json_encode(['success' => true, 'id' => $newId, 'stats' => $stats]);
         } else {
-            render('tva', [
-                'title' => 'Gestion de la TVA',
-                'payments' => $this->tvaModel->getAllByUser($userId),
-                'error' => 'Erreur lors de l\'enregistrement du paiement.'
-            ]);
+            echo json_encode(['success' => false, 'error' => 'Erreur lors de l\'enregistrement.']);
         }
+        exit;
     }
 
     public function delete() {
         check_csrf($_POST['csrf_token'] ?? '');
+        header('Content-Type: application/json');
         
         $id = $_POST['id'] ?? null;
         $userId = $_SESSION['user_id'];
 
         if ($id && $this->tvaModel->delete($id, $userId)) {
-            header('Location: ' . url('/tva'));
-            exit;
+            $stats = $this->getUpdatedStats($userId);
+            echo json_encode(['success' => true, 'stats' => $stats]);
+        } else {
+            echo json_encode(['success' => false, 'error' => 'Erreur lors de la suppression.']);
         }
-        
-        header('Location: ' . url('/tva'));
         exit;
     }
+
+    private function getUpdatedStats($userId) {
+        $year = date('Y');
+        $factureModel = new \App\Models\Facture();
+        $tvaCollectee = $factureModel->getTotalTVAYear($userId, $year);
+        $tvaPayee = $this->tvaModel->getTotalPaidYear($userId, $year);
+        $tvaRestante = max(0, $tvaCollectee - $tvaPayee);
+        return [
+            'collectee' => number_format($tvaCollectee, 2, ',', ' ') . ' €',
+            'payee' => number_format($tvaPayee, 2, ',', ' ') . ' €',
+            'restante' => number_format($tvaRestante, 2, ',', ' ') . ' €'
+        ];
+    }
+
 }
