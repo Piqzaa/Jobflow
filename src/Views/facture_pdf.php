@@ -130,6 +130,14 @@
                         Échéance : <span class="pdf-text--bold"><?= date('d/m/Y', strtotime($facture['date_echeance'])) ?></span>
                     </p>
                 </div>
+                            </br>
+                <div class="pdf-infos__section">
+                    <h4 class="pdf-infos__title">Mentions Légales (Retard de paiement)</h4>
+                    <p class="pdf-infos__text">
+                        En cas de retard de paiement, des pénalités de retard au taux légal en vigueur seront appliquées sur le montant TTC. 
+                        De plus, une indemnité forfaitaire pour frais de recouvrement de 40 € sera due (Art. L. 441-10 du Code de commerce).
+                    </p>
+                </div>
 
                 <?php if (!empty($facture['notes'])): ?>
                 <div class="pdf-infos__section">
