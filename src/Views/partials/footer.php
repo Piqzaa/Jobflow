@@ -20,7 +20,10 @@
 
         <div class="footer__bottom">
             <p class="footer__copyright">
-                &copy; <?= date('Y') ?> Jobflow. Tout droit réservé.
+                &copy; <?= date('Y') ?> Jobflow. Tout droit réservé. | 
+                <a href="<?= url('/mentions-legales') ?>">Mentions Légales</a> | 
+                <a href="<?= url('/cgu') ?>">CGU</a> | 
+                <a href="<?= url('/rgpd') ?>">Confidentialité</a>
             </p>
         </div>
     </div>
