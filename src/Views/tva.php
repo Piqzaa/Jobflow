@@ -97,7 +97,7 @@
                                 <td data-label="Montant"><strong><?= number_format($payment['montant'], 2, ',', ' ') ?> €</strong></td>
                                 <td>
                                     <div class="table-actions">
-                                        <form action="<?= url('/tva/delete') ?>" method="POST" onsubmit="return confirm('Supprimer ce versement ?');">
+                                        <form action="<?= url('/tva/delete') ?>" method="POST" class="delete-tva">
                                             <?= csrf_field() ?>
                                             <input type="hidden" name="id" value="<?= $payment['id'] ?>">
                                             <button type="submit" class="btn-action btn-action--danger" title="Supprimer">
