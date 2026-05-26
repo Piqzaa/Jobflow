@@ -687,6 +687,73 @@ small,
   text-transform: none;
 }
 
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+.card--stats {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+.card--stats:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+.card__title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.card__title i {
+  color: #4f46e5;
+  font-size: 1.25rem;
+}
+.card__stat-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+.card__stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 4px;
+}
+.card__stat-subtitle {
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 24px;
+}
+@media (max-width: 992px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 576px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .form-group {
   margin-bottom: 20px;
 }
@@ -1473,6 +1540,20 @@ small,
   margin-bottom: 10px;
 }
 
+.pdf-signature__text {
+  font-size: 0.75rem;
+  margin: 4px 0;
+}
+
+.pdf-signature__text--small {
+  font-size: 0.7rem;
+}
+
+.pdf-signature__text--italic {
+  font-style: italic;
+  color: #4b5563;
+}
+
 .pdf-signature__area {
   height: 60px;
   margin-top: 10px;
@@ -1492,6 +1573,33 @@ small,
 .pdf-footer__text {
   font-size: 0.7rem;
   color: #4b5563;
+}
+
+.tva-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+@media (max-width: 1024px) {
+  .tva-layout {
+    grid-template-columns: 1fr;
+  }
+}
+.tva-table__col-actions {
+  width: 80px;
+  text-align: center;
+}
+.tva-table__empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: #9ca3af;
+}
+.tva-table__empty-state i {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 1rem;
+  color: #d1d5db;
 }
 
 .is-hidden {

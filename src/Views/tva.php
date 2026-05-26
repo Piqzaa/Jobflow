@@ -1,79 +1,116 @@
-<main class="container">
-    <h1>Gestion de la TVA</h1>
-    <p>Suivez vos versements de TVA effectués à l'État.</p>
-
-    <div class="stats-summary">
-        <div class="stats-item">
-            <h3>TVA Collectée (<?= date('Y') ?>)</h3>
-            <p><?= number_format($tvaCollectee, 2, ',', ' ') ?> €</p>
-        </div>
-        <div class="stats-item">
-            <h3>TVA Déjà Payée</h3>
-            <p><?= number_format($tvaPayee, 2, ',', ' ') ?> €</p>
-        </div>
-        <div class="stats-item">
-            <h3>Reste à reverser</h3>
-            <p><?= number_format($tvaRestante, 2, ',', ' ') ?> €</p>
-        </div>
+<div class="stats-grid">
+    <div class="card card--stats">
+        <h3 class="card__stat-label">TVA Collectée (<?= date('Y') ?>)</h3>
+        <p class="card__stat-value"><?= number_format($tvaCollectee, 2, ',', ' ') ?> €</p>
+        <p class="card__stat-subtitle">Total facturé aux clients</p>
     </div>
 
-    <?php if (isset($error)): ?>
-        <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
-    <?php endif; ?>
+    <div class="card card--stats">
+        <h3 class="card__stat-label">TVA Déjà Payée</h3>
+        <p class="card__stat-value"><?= number_format($tvaPayee, 2, ',', ' ') ?> €</p>
+        <p class="card__stat-subtitle">Total reversé à l'État</p>
+    </div>
 
-    <section class="card">
-        <h2>Enregistrer un nouveau versement</h2>
-        <form action="<?= url('/tva/add') ?>" method="POST">
-            <?= csrf_field() ?>
-            <div class="form-group">
-                <label for="montant">Montant versé (€)</label>
-                <input type="number" step="0.01" name="montant" id="montant" required>
-            </div>
-            <div class="form-group">
-                <label for="date_paiement">Date du paiement</label>
-                <input type="date" name="date_paiement" id="date_paiement" value="<?= date('Y-m-d') ?>" required>
-            </div>
-            <div class="form-group">
-                <label for="periode">Période concernée (ex: Trimestre 1 2026)</label>
-                <input type="text" name="periode" id="periode" placeholder="Ex: Q1 2026">
-            </div>
-            <button type="submit" class="btn btn-primary">Enregistrer le paiement</button>
-        </form>
-    </section>
+    <div class="card card--stats">
+        <h3 class="card__stat-label">Reste à reverser</h3>
+        <p class="card__stat-value"><?= number_format($tvaRestante, 2, ',', ' ') ?> €</p>
+        <p class="card__stat-subtitle">Montant en attente</p>
+    </div>
+</div>
 
-    <section class="card" style="margin-top: 20px;">
-        <h2>Historique des versements</h2>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Période</th>
-                    <th>Montant</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if (empty($payments)): ?>
+<?php if (isset($error)): ?>
+    <div class="alert alert--danger">
+        <i class="ri-error-warning-line"></i>
+        <?= htmlspecialchars($error) ?>
+    </div>
+<?php endif; ?>
+
+<div class="tva-layout">
+    <aside class="tva-layout__sidebar">
+        <section class="card">
+            <h2 class="card__title">
+                <i class="ri-add-circle-line"></i>
+                Enregistrer un versement
+            </h2>
+            
+            <form action="<?= url('/tva/add') ?>" method="POST">
+                <?= csrf_field() ?>
+                
+                <div class="form-group">
+                    <label for="montant" class="form-label">Montant versé (€)</label>
+                    <div class="input-group has-icon">
+                        <i class="ri-money-euro-circle-line"></i>
+                        <input type="number" step="0.01" name="montant" id="montant" class="form-control" placeholder="0.00" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="date_paiement" class="form-label">Date du paiement</label>
+                    <div class="input-group has-icon">
+                        <i class="ri-calendar-line"></i>
+                        <input type="date" name="date_paiement" id="date_paiement" class="form-control" value="<?= date('Y-m-d') ?>" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="periode" class="form-label">Période concernée</label>
+                    <div class="input-group has-icon">
+                        <i class="ri-time-line"></i>
+                        <input type="text" name="periode" id="periode" class="form-control" placeholder="Ex: Trimestre 1 2026">
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-primary btn-block">
+                    <i class="ri-save-line"></i>
+                    Enregistrer le paiement
+                </button>
+            </form>
+        </section>
+    </aside>
+
+    <main class="tva-layout__main">
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
                     <tr>
-                        <td colspan="4">Aucun versement enregistré.</td>
+                        <th>Date</th>
+                        <th>Période</th>
+                        <th>Montant</th>
+                        <th class="tva-table__col-actions">Actions</th>
                     </tr>
-                <?php else: ?>
-                    <?php foreach ($payments as $payment): ?>
+                </thead>
+                <tbody>
+                    <?php if (empty($payments)): ?>
                         <tr>
-                            <td><?= date('d/m/Y', strtotime($payment['date_paiement'])) ?></td>
-                            <td><?= htmlspecialchars($payment['periode'] ?? '-') ?></td>
-                            <td><?= number_format($payment['montant'], 2, ',', ' ') ?> €</td>
-                            <td>
-                                <form action="<?= url('/tva/delete') ?>" method="POST" onsubmit="return confirm('Supprimer ce versement ?');">
-                                    <?= csrf_field() ?>
-                                    <input type="hidden" name="id" value="<?= $payment['id'] ?>">
-                                    <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-                                </form>
+                            <td colspan="4">
+                                <div class="tva-table__empty-state">
+                                    <i class="ri-information-line"></i>
+                                    Aucun versement enregistré pour le moment.
+                                </div>
                             </td>
                         </tr>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </tbody>
-        </table>
-    </section>
-</main>
+                    <?php else: ?>
+                        <?php foreach ($payments as $payment): ?>
+                            <tr>
+                                <td data-label="Date"><?= date('d/m/Y', strtotime($payment['date_paiement'])) ?></td>
+                                <td data-label="Période" class="c-nom"><?= htmlspecialchars($payment['periode'] ?? '-') ?></td>
+                                <td data-label="Montant"><strong><?= number_format($payment['montant'], 2, ',', ' ') ?> €</strong></td>
+                                <td>
+                                    <div class="table-actions">
+                                        <form action="<?= url('/tva/delete') ?>" method="POST" onsubmit="return confirm('Supprimer ce versement ?');">
+                                            <?= csrf_field() ?>
+                                            <input type="hidden" name="id" value="<?= $payment['id'] ?>">
+                                            <button type="submit" class="btn-action btn-action--danger" title="Supprimer">
+                                                <i class="ri-delete-bin-line"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>
