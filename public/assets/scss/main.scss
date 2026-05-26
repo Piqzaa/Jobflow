@@ -13,6 +13,7 @@
 // Components
 @use "components/buttons";
 @use "components/badges";
+@use "components/cards";
 @use "components/forms";
 @use "components/tables";
 @use "components/modal";
@@ -20,6 +21,7 @@
 // Pages
 @use "pages/auth";
 @use "pages/documents-pdf";
+@use "pages/tva";
 
 // Utilities
 @use "utilities/helpers";
