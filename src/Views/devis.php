@@ -13,6 +13,7 @@
         data-get-url="<?= url('/devis/get') ?>"
         data-update-url="<?= url('/devis/update') ?>"
         data-status-url="<?= url('/devis/status') ?>"
+        data-convert-url="<?= url('/facture/convert') ?>"
     >
         <thead>
             <tr>
@@ -58,10 +59,10 @@
                                 <i class="ri-exchange-funds-line"></i>
                             </button>
                         <?php endif; ?>
-                        <button class="btn-action edit-btn" data-id="<?= $d['id'] ?>" title="Modifier">
+                        <button class="btn-action edit-btn <?= $d['statut'] !== 'brouillon' ? 'is-hidden' : '' ?>" data-id="<?= $d['id'] ?>" title="Modifier">
                             <i class="ri-pencil-line"></i>
                         </button>
-                        <button class="btn-action btn-action--danger delete-btn" data-id="<?= $d['id'] ?>" title="Supprimer">
+                        <button class="btn-action btn-action--danger delete-btn <?= $d['statut'] !== 'brouillon' ? 'is-hidden' : '' ?>" data-id="<?= $d['id'] ?>" title="Supprimer">
                             <i class="ri-delete-bin-line"></i>
                         </button>
                     </div>

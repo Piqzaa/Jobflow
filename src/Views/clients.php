@@ -63,18 +63,18 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="client-nom" class="form-label">Nom / Entreprise</label>
-                    <input type="text" name="nom" id="client-nom" class="form-control" required>
+                    <input type="text" name="nom" id="client-nom" placeholder="Dupont" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label for="client-email" class="form-label">Email</label>
-                    <input type="email" name="email" id="client-email" class="form-control" required>
+                    <input type="email" name="email" id="client-email" placeholder="dupont@example.com" class="form-control" required>
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label for="client-siret" class="form-label">SIRET</label>
-                    <input type="text" name="siret" id="client-siret" class="form-control" required>
+                    <input type="text" name="siret" id="client-siret" placeholder="123 456 789 00012" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label for="client-tel" class="form-label">Téléphone</label>
@@ -84,23 +84,23 @@
 
             <div class="form-group">
                 <label for="client-adresse" class="form-label">Adresse</label>
-                <input type="text" name="adresse" id="client-adresse" class="form-control" required>
+                <input type="text" name="adresse" id="client-adresse" placeholder="123 Rue de Paris" class="form-control" required>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label for="client-code-postal" class="form-label">Code Postal</label>
-                    <input type="text" name="code_postal" id="client-code-postal" class="form-control" required>
+                    <input type="text" name="code_postal" id="client-code-postal" placeholder="75000" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label for="client-ville" class="form-label">Ville</label>
-                    <input type="text" name="ville" id="client-ville" class="form-control" required>
+                    <input type="text" name="ville" id="client-ville" placeholder="Paris" class="form-control" required>
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="client-notes" class="form-label">Notes</label>
-                <textarea name="notes" id="client-notes" class="form-control" rows="2"></textarea>
+                <textarea name="notes" id="client-notes" class="form-control" placeholder="Informations complémentaires..." rows="2" ></textarea>
             </div>
         </div>
 

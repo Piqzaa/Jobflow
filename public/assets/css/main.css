@@ -638,19 +638,22 @@ small,
   border-color: #e5e7eb;
 }
 
-.badge--envoye {
+.badge--envoye,
+.badge--envoyee {
   background: #eff6ff;
   color: #3b82f6;
   border-color: rgba(59, 130, 246, 0.2);
 }
 
-.badge--accepte {
+.badge--accepte,
+.badge--payee {
   background: #ecfdf5;
   color: #10b981;
   border-color: rgba(16, 185, 129, 0.2);
 }
 
-.badge--refuse {
+.badge--refuse,
+.badge--annulee {
   background: #fef2f2;
   color: #ef4444;
   border-color: rgba(239, 68, 68, 0.2);
@@ -684,8 +687,80 @@ small,
   text-transform: none;
 }
 
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+.card--stats {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+.card--stats:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+.card__title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.card__title i {
+  color: #4f46e5;
+  font-size: 1.25rem;
+}
+.card__stat-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+.card__stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 4px;
+}
+.card__stat-subtitle {
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 24px;
+}
+@media (max-width: 992px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 576px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .form-group {
   margin-bottom: 20px;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
 }
 
 .form-row {
@@ -1096,6 +1171,50 @@ small,
   color: #111827;
 }
 
+.modal-item-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.modal-item-row__designation {
+  flex: 3;
+}
+
+.modal-item-row__qty {
+  flex: 1;
+}
+
+.modal-item-row__price {
+  flex: 1.5;
+}
+
+.remove-item-row {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #9ca3af;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  align-self: center;
+}
+.remove-item-row:hover {
+  background: #fef2f2;
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.remove-item-row i {
+  font-size: 1rem;
+}
+
 @keyframes modalIn {
   from {
     opacity: 0;
@@ -1168,21 +1287,321 @@ small,
   color: #4b5563;
 }
 
-.devis-item-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 12px;
+.pdf-body {
+  margin: 0;
+  padding: 0;
+  font-family: "Helvetica", "Arial", sans-serif;
+  color: #111827;
+  line-height: 1.5;
+  background: #ffffff;
 }
 
-.devis-item-row__field--designation {
-  flex: 3;
+.pdf-document {
+  padding: 10mm;
 }
 
-.devis-item-row__field--qty {
-  flex: 1;
+.pdf-header {
+  margin-bottom: 40px;
 }
 
-.devis-item-row__field--price {
-  flex: 1.5;
+.pdf-header__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.pdf-header__company {
+  width: 50%;
+  vertical-align: top;
+}
+
+.pdf-header__logo {
+  max-width: 150px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.pdf-header__company-name {
+  margin: 0;
+  color: #000;
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.pdf-header__company-details {
+  font-size: 0.85rem;
+  color: #4b5563;
+  margin-top: 5px;
+}
+
+.pdf-header__company-details p {
+  margin: 2px 0;
+}
+
+.pdf-header__client {
+  width: 50%;
+  vertical-align: top;
+}
+
+.pdf-header__client-box {
+  background: #fff;
+  padding: 20px;
+  border: 1px solid #d1d5db;
+  margin-left: 40px;
+}
+
+.pdf-header__client-label {
+  font-size: 0.7rem;
+  color: #4b5563;
+  text-transform: uppercase;
+  margin: 0 0 8px 0;
+  font-weight: 700;
+  border-bottom: 1px solid #d1d5db;
+  display: inline-block;
+}
+
+.pdf-header__client-name {
+  margin: 5px 0 8px 0;
+  font-size: 1.1rem;
+  color: #000;
+  font-weight: 700;
+}
+
+.pdf-header__client-details {
+  font-size: 0.9rem;
+  color: #111827;
+  margin: 0;
+}
+
+.pdf-title-box {
+  margin-bottom: 30px;
+  border-top: 2px solid #000;
+  border-bottom: 1px solid #d1d5db;
+  padding: 15px 0;
+}
+
+.pdf-title-box__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.pdf-title-box__title {
+  margin: 0;
+  font-size: 2rem;
+  color: #000;
+  font-weight: 800;
+}
+
+.pdf-title-box__number {
+  margin: 0;
+  font-size: 1rem;
+  color: #4b5563;
+}
+
+.pdf-title-box__meta {
+  text-align: right;
+  font-size: 0.85rem;
+}
+
+.pdf-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+}
+
+.pdf-table__th {
+  background: #f3f4f6;
+  color: #000;
+  text-align: left;
+  padding: 10px 12px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  border-bottom: 2px solid #000;
+}
+
+.pdf-table__th--qty {
+  width: 50px;
+  text-align: center;
+}
+
+.pdf-table__th--price {
+  width: 110px;
+  text-align: right;
+}
+
+.pdf-table__th--total {
+  width: 110px;
+  text-align: right;
+}
+
+.pdf-table__tr--even {
+  background: #fafafa;
+}
+
+.pdf-table__td {
+  padding: 12px;
+  border-bottom: 1px solid #d1d5db;
+  font-size: 0.85rem;
+  color: #111827;
+  vertical-align: top;
+}
+
+.pdf-table__td--center {
+  text-align: center;
+}
+
+.pdf-table__td--right {
+  text-align: right;
+}
+
+.pdf-totals-container {
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.pdf-totals-table {
+  width: 300px;
+  margin-left: auto;
+  border-collapse: collapse;
+}
+
+.pdf-totals__label {
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 0.85rem;
+  border-bottom: 1px solid #d1d5db;
+}
+
+.pdf-totals__value {
+  padding: 8px 12px;
+  text-align: right;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-bottom: 1px solid #d1d5db;
+}
+
+.pdf-totals__row--grand-total {
+  background: #fff;
+}
+
+.pdf-totals__row--grand-total .pdf-totals__label,
+.pdf-totals__row--grand-total .pdf-totals__value {
+  color: #000;
+  font-weight: 800;
+  font-size: 1.2rem;
+  border-top: 2px solid #000;
+  border-bottom: 2px solid #000;
+  padding: 15px 12px;
+  text-transform: uppercase;
+}
+
+.pdf-legal {
+  font-size: 0.75rem;
+  color: #4b5563;
+  font-style: italic;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.pdf-infos {
+  margin-bottom: 40px;
+}
+
+.pdf-infos__title {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 5px;
+  border-bottom: 1px solid #d1d5db;
+}
+
+.pdf-infos__text {
+  font-size: 0.8rem;
+  color: #4b5563;
+  margin: 0;
+}
+
+.pdf-signature-table {
+  width: 100%;
+  margin-top: 50px;
+}
+
+.pdf-signature-box {
+  width: 250px;
+  border: 1px solid #d1d5db;
+  padding: 15px;
+}
+
+.pdf-signature__title {
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.pdf-signature__text {
+  font-size: 0.75rem;
+  margin: 4px 0;
+}
+
+.pdf-signature__text--small {
+  font-size: 0.7rem;
+}
+
+.pdf-signature__text--italic {
+  font-style: italic;
+  color: #4b5563;
+}
+
+.pdf-signature__area {
+  height: 60px;
+  margin-top: 10px;
+  border-bottom: 1px dotted #d1d5db;
+}
+
+.pdf-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  border-top: 1px solid #d1d5db;
+  padding: 15px 0;
+}
+
+.pdf-footer__text {
+  font-size: 0.7rem;
+  color: #4b5563;
+}
+
+.tva-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+@media (max-width: 1024px) {
+  .tva-layout {
+    grid-template-columns: 1fr;
+  }
+}
+.tva-table__col-actions {
+  width: 80px;
+  text-align: center;
+}
+.tva-table__empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: #9ca3af;
+}
+.tva-table__empty-state i {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 1rem;
+  color: #d1d5db;
+}
+
+.is-hidden {
+  display: none !important;
 }

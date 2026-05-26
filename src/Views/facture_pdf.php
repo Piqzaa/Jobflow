@@ -3,100 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <title>Facture <?= htmlspecialchars($facture['numero']) ?></title>
+    <style>
+        <?= file_get_contents(__DIR__ . '/../../public/assets/css/main.css') ?>
+    </style>
 </head>
-<body>
+<body class="pdf-body">
 
-    <div class="header">
-        <div class="company-info">
-            <?php if (!empty($userProfile['logo_filename'])): ?>
-                <?php $logoPath = realpath(__DIR__ . '/../../public/uploads/logos/' . $userProfile['logo_filename']); ?>
-                <?php if ($logoPath): ?>
-                    <img src="<?= $logoPath ?>" width="150"><br>
+    <div class="pdf-document">
+        <!-- HEADER -->
+        <header class="pdf-header">
+            <table class="pdf-header__table">
+                <tr>
+                    <td class="pdf-header__company">
+                        <?php if (!empty($userProfile['logo_filename'])): ?>
+                            <?php $logoPath = realpath(__DIR__ . '/../../public/uploads/logos/' . $userProfile['logo_filename']); ?>
+                            <?php if ($logoPath): ?>
+                                <img src="<?= $logoPath ?>" class="pdf-header__logo">
+                            <?php endif; ?>
+                        <?php endif; ?>
+                        <div class="pdf-header__company-details">
+                            <h2 class="pdf-header__company-name"><?= htmlspecialchars($userProfile['entreprise'] ?? 'Mon Entreprise') ?></h2>
+                            <p>
+                                <strong><?= htmlspecialchars($userProfile['prenom'] ?? '') ?> <?= htmlspecialchars($userProfile['nom'] ?? '') ?></strong><br>
+                                <?= nl2br(htmlspecialchars($userProfile['adresse'] ?? '')) ?><br>
+                                <?= htmlspecialchars($userProfile['code_postal'] ?? '') ?> <?= htmlspecialchars($userProfile['ville'] ?? '') ?>
+                            </p>
+                            <p>
+                                SIRET : <?= htmlspecialchars($userProfile['siret'] ?? '') ?>
+                                <?php if ($facture['montant_tva'] > 0 && !empty($userProfile['tva_intra'])): ?>
+                                    <br>TVA Intra : <?= htmlspecialchars($userProfile['tva_intra']) ?>
+                                <?php endif; ?>
+                            </p>
+                        </div>
+                    </td>
+                    <td class="pdf-header__client">
+                        <div class="pdf-header__client-box">
+                            <p class="pdf-header__client-label">Facturé à</p>
+                            <h3 class="pdf-header__client-name"><?= htmlspecialchars($facture['client_nom']) ?></h3>
+                            <div class="pdf-header__client-details">
+                                <?= nl2br(htmlspecialchars($facture['client_adresse'] ?? '')) ?><br>
+                                <?= htmlspecialchars($facture['client_code_postal'] ?? '') ?> <?= htmlspecialchars($facture['client_ville'] ?? '') ?>
+                                <?php if (!empty($facture['client_siret'])): ?>
+                                    <br>SIRET : <?= htmlspecialchars($facture['client_siret']) ?>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </header>
+
+        <!-- TITLE BOX -->
+        <section class="pdf-title-box">
+            <table class="pdf-title-box__table">
+                <tr>
+                    <td>
+                        <h1 class="pdf-title-box__title">FACTURE</h1>
+                        <p class="pdf-title-box__number">N° <?= htmlspecialchars($facture['numero']) ?></p>
+                    </td>
+                    <td class="pdf-title-box__meta">
+                        <p>Date d'émission : <?= date('d/m/Y', strtotime($facture['date_emission'])) ?></p>
+                        <p>Date d'échéance : <strong class="pdf-text--danger"><?= date('d/m/Y', strtotime($facture['date_echeance'])) ?></strong></p>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- ARTICLES TABLE -->
+        <main class="pdf-content">
+            <table class="pdf-table">
+                <thead>
+                    <tr>
+                        <th class="pdf-table__th">Désignation</th>
+                        <th class="pdf-table__th pdf-table__th--qty">Qté</th>
+                        <th class="pdf-table__th pdf-table__th--price">PU HT</th>
+                        <th class="pdf-table__th pdf-table__th--total">Total HT</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($items as $index => $item): ?>
+                    <tr class="pdf-table__tr <?= $index % 2 === 1 ? 'pdf-table__tr--even' : '' ?>">
+                        <td class="pdf-table__td"><?= htmlspecialchars($item['designation']) ?></td>
+                        <td class="pdf-table__td pdf-table__td--center"><?= number_format($item['quantite'], 2, ',', ' ') ?></td>
+                        <td class="pdf-table__td pdf-table__td--right"><?= number_format($item['prix_unitaire'], 2, ',', ' ') ?> €</td>
+                        <td class="pdf-table__td pdf-table__td--right"><?= number_format($item['total_ht'], 2, ',', ' ') ?> €</td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+
+            <!-- TOTALS -->
+            <div class="pdf-totals-container">
+                <table class="pdf-totals-table">
+                    <tr>
+                        <td class="pdf-totals__label">Total HT</td>
+                        <td class="pdf-totals__value"><?= number_format($facture['montant_ht'], 2, ',', ' ') ?> €</td>
+                    </tr>
+                    <?php if ($facture['montant_tva'] > 0): ?>
+                    <tr>
+                        <td class="pdf-totals__label">TVA (20%)</td>
+                        <td class="pdf-totals__value"><?= number_format($facture['montant_tva'], 2, ',', ' ') ?> €</td>
+                    </tr>
+                    <?php endif; ?>
+                    <tr class="pdf-totals__row--grand-total">
+                        <td class="pdf-totals__label">NET À PAYER</td>
+                        <td class="pdf-totals__value"><?= number_format($facture['montant_ttc'], 2, ',', ' ') ?> €</td>
+                    </tr>
+                </table>
+            </div>
+
+            <?php if ($facture['montant_tva'] == 0): ?>
+                <p class="pdf-legal">TVA non applicable, art. 293 B du CGI</p>
+            <?php endif; ?>
+
+            <div class="pdf-infos">
+                <div class="pdf-infos__section">
+                    <h4 class="pdf-infos__title">Informations de paiement</h4>
+                    <p class="pdf-infos__text">
+                        Mode de règlement : Virement bancaire ou Chèque.<br>
+                        <?php if (!empty($userProfile['iban'])): ?>
+                            <strong>IBAN :</strong> <?= htmlspecialchars($userProfile['iban']) ?><br>
+                        <?php endif; ?>
+                        <?php if (!empty($userProfile['bic'])): ?>
+                            <strong>BIC :</strong> <?= htmlspecialchars($userProfile['bic']) ?><br>
+                        <?php endif; ?>
+                        Échéance : <span class="pdf-text--bold"><?= date('d/m/Y', strtotime($facture['date_echeance'])) ?></span>
+                    </p>
+                </div>
+                            </br>
+                <div class="pdf-infos__section">
+                    <h4 class="pdf-infos__title">Mentions Légales (Retard de paiement)</h4>
+                    <p class="pdf-infos__text">
+                        En cas de retard de paiement, des pénalités de retard au taux légal en vigueur seront appliquées sur le montant TTC. 
+                        De plus, une indemnité forfaitaire pour frais de recouvrement de 40 € sera due (Art. L. 441-10 du Code de commerce).
+                    </p>
+                </div>
+
+                <?php if (!empty($facture['notes'])): ?>
+                <div class="pdf-infos__section">
+                    <h4 class="pdf-infos__title">Notes</h4>
+                    <p class="pdf-infos__text"><?= nl2br(htmlspecialchars($facture['notes'])) ?></p>
+                </div>
                 <?php endif; ?>
-            <?php endif; ?>
-            <strong><?= htmlspecialchars($userProfile['entreprise'] ?? 'Mon Entreprise') ?></strong><br>
-            <?= htmlspecialchars($userProfile['prenom'] ?? '') ?> <?= htmlspecialchars($userProfile['nom'] ?? '') ?><br>
-            <?= nl2br(htmlspecialchars($userProfile['adresse'] ?? '')) ?><br>
-            <?= htmlspecialchars($userProfile['code_postal'] ?? '') ?> <?= htmlspecialchars($userProfile['ville'] ?? '') ?><br>
-            SIRET : <?= htmlspecialchars($userProfile['siret'] ?? '') ?><br>
-            <?php if ($facture['montant_tva'] > 0 && !empty($userProfile['tva_intra'])): ?>
-                TVA Intra : <?= htmlspecialchars($userProfile['tva_intra']) ?><br>
-            <?php endif; ?>
-        </div>
+            </div>
+        </main>
 
-        <div class="client-info">
-            <strong>À l'attention de :</strong><br>
-            <?= htmlspecialchars($facture['client_nom']) ?><br>
-            <?= nl2br(htmlspecialchars($facture['client_adresse'] ?? '')) ?><br>
-            <?= htmlspecialchars($facture['client_code_postal'] ?? '') ?> <?= htmlspecialchars($facture['client_ville'] ?? '') ?><br>
-            <?php if (!empty($facture['client_siret'])): ?>
-                SIRET : <?= htmlspecialchars($facture['client_siret']) ?>
-            <?php endif; ?>
-        </div>
-    </div>
-
-    <h1>FACTURE n° <?= htmlspecialchars($facture['numero']) ?></h1>
-    <p>
-        Date de facturation : <?= date('d/m/Y', strtotime($facture['date_emission'])) ?><br>
-        Date d'échéance : <strong><?= date('d/m/Y', strtotime($facture['date_echeance'])) ?></strong>
-    </p>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Désignation</th>
-                <th>Qté</th>
-                <th>Prix Unitaire HT</th>
-                <th>Total HT</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($items as $item): ?>
-            <tr>
-                <td><?= htmlspecialchars($item['designation']) ?></td>
-                <td><?= number_format($item['quantite'], 2, ',', ' ') ?></td>
-                <td><?= number_format($item['prix_unitaire'], 2, ',', ' ') ?> €</td>
-                <td><?= number_format($item['total_ht'], 2, ',', ' ') ?> €</td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-
-    <div class="totals">
-        <div>Total HT : <?= number_format($facture['montant_ht'], 2, ',', ' ') ?> €</div>
-        <?php if ($facture['montant_tva'] > 0): ?>
-            <div>TVA (20%) : <?= number_format($facture['montant_tva'], 2, ',', ' ') ?> €</div>
-        <?php endif; ?>
-        <div><strong>TOTAL TTC : <?= number_format($facture['montant_ttc'], 2, ',', ' ') ?> €</strong></div>
-    </div>
-
-    <?php if ($facture['montant_tva'] == 0): ?>
-        <p class="legal">TVA non applicable, art. 293 B du CGI</p>
-    <?php endif; ?>
-
-    <div class="payment-terms">
-        <strong>Conditions de paiement :</strong><br>
-        - Mode de règlement : Virement bancaire ou Chèque<br>
-        <?php if (!empty($userProfile['iban'])): ?>
-            - IBAN : <?= htmlspecialchars($userProfile['iban']) ?><br>
-        <?php endif; ?>
-        <?php if (!empty($userProfile['bic'])): ?>
-            - BIC : <?= htmlspecialchars($userProfile['bic']) ?><br>
-        <?php endif; ?>
-        - Échéance : Le <?= date('d/m/Y', strtotime($facture['date_echeance'])) ?><br>
-        - Tout retard de paiement donnera lieu à l'application de pénalités de retard au taux légal en vigueur, ainsi qu'à une indemnité forfaitaire pour frais de recouvrement de 40 € (Art. L. 441-6 du Code de commerce).
-    </div>
-
-    <?php if (!empty($facture['notes'])): ?>
-    <div class="notes">
-        <strong>Notes :</strong><br>
-        <?= nl2br(htmlspecialchars($facture['notes'])) ?>
-    </div>
-    <?php endif; ?>
-
-    <div class="footer">
-        <?= htmlspecialchars($userProfile['entreprise'] ?? '') ?> - SIRET : <?= htmlspecialchars($userProfile['siret'] ?? '') ?> - <?= htmlspecialchars($userProfile['ville'] ?? '') ?><br>
-        Merci de votre confiance.
+        <footer class="pdf-footer">
+            <p class="pdf-footer__text">
+                <?= htmlspecialchars($userProfile['entreprise'] ?? '') ?> - SIRET : <?= htmlspecialchars($userProfile['siret'] ?? '') ?><br>
+                <?= htmlspecialchars($userProfile['adresse'] ?? '') ?> <?= htmlspecialchars($userProfile['code_postal'] ?? '') ?> <?= htmlspecialchars($userProfile['ville'] ?? '') ?>
+            </p>
+        </footer>
     </div>
 
 </body>

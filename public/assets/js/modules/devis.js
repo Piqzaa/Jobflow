@@ -32,9 +32,9 @@ export function initDevis() {
 
   container.addEventListener("click", (e) => {
     if (!e.target.closest(".remove-item-row")) return;
-    const rows = container.querySelectorAll(".devis-item-row");
+    const rows = container.querySelectorAll(".modal-item-row");
     if (rows.length > 1) {
-      e.target.closest(".devis-item-row").remove();
+      e.target.closest(".modal-item-row").remove();
       calculateTotals();
     } else {
       alert("Au moins une ligne requise.");
@@ -60,13 +60,13 @@ export function initDevis() {
     }
 
     const editBtn = e.target.closest(".edit-btn");
-    if (editBtn) {
+    if (editBtn && !editBtn.classList.contains("is-hidden")) {
       await handleEdit(editBtn);
       return;
     }
 
     const deleteBtn = e.target.closest(".delete-btn");
-    if (deleteBtn) {
+    if (deleteBtn && !deleteBtn.classList.contains("is-hidden")) {
       await handleDelete(deleteBtn);
       return;
     }
@@ -117,7 +117,7 @@ export function initDevis() {
   function calculateTotals() {
     let totalHt = 0;
 
-    container.querySelectorAll(".devis-item-row").forEach((row) => {
+    container.querySelectorAll(".modal-item-row").forEach((row) => {
       const qty = parseFloat(row.querySelector(".item-qty").value) || 0;
       const price = parseFloat(row.querySelector(".item-price").value) || 0;
       totalHt += qty * price;
@@ -135,22 +135,22 @@ export function initDevis() {
 
   function createItemRow() {
     const row = document.createElement("div");
-    row.className = "devis-item-row";
+    row.className = "modal-item-row";
 
     row.innerHTML = `
-      <div class="devis-item-row__field devis-item-row__field--designation">
-        <input type="text" name="item_designation[]" placeholder="Désignation" class="form-control" required>
-      </div>
-      <div class="devis-item-row__field devis-item-row__field--qty">
-        <input type="number" name="item_quantite[]" placeholder="Qté" class="form-control item-qty" value="1" step="0.01" required>
-      </div>
-      <div class="devis-item-row__field devis-item-row__field--price">
-        <input type="number" name="item_prix[]" placeholder="Prix HT" class="form-control item-price" step="0.01" required>
-      </div>
-      <button type="button" class="btn-action btn-action--danger remove-item-row">
-        <i class="ri-close-line"></i>
-      </button>
-    `;
+    <div class="modal-item-row__designation">
+      <input type="text" name="item_designation[]" placeholder="Désignation" class="form-control item-designation" required>
+    </div>
+    <div class="modal-item-row__qty">
+      <input type="number" name="item_quantite[]" placeholder="Qté" class="form-control item-qty" value="1" step="0.01" required>
+    </div>
+    <div class="modal-item-row__price">
+      <input type="number" name="item_prix[]" placeholder="Prix HT" class="form-control item-price" step="0.01" required>
+    </div>
+    <button type="button" class="btn-action btn-action--danger remove-item-row" title="Supprimer">
+      <i class="ri-delete-bin-line"></i>
+    </button>
+  `;
 
     return row;
   }
@@ -317,6 +317,10 @@ export function initDevis() {
       const actionsDiv = select.closest("tr").querySelector(".table-actions");
       const existingConvertBtn = actionsDiv.querySelector(".convert-btn");
 
+      const tr = select.closest("tr");
+      const editBtn = tr.querySelector(".edit-btn");
+      const deleteBtn = tr.querySelector(".delete-btn");
+
       if (select.value === "accepte" && !existingConvertBtn) {
         const btn = document.createElement("button");
         btn.className = "btn-action convert-btn";
@@ -330,13 +334,48 @@ export function initDevis() {
       if (select.value !== "accepte" && existingConvertBtn) {
         existingConvertBtn.remove();
       }
+
+      if (select.value === "brouillon") {
+        editBtn?.classList.remove("is-hidden");
+        deleteBtn?.classList.remove("is-hidden");
+      } else {
+        editBtn?.classList.add("is-hidden");
+        deleteBtn?.classList.add("is-hidden");
+      }
     } catch (err) {
       console.error(err);
     }
   }
 
-  function handleConvert(btn) {
+  async function handleConvert(btn) {
     if (!confirm("Convertir ce devis en facture ?")) return;
-    window.location.href = `/devis/convert?id=${btn.dataset.id}`;
+    const csrfToken = document.querySelector('input[name="csrf_token"]')?.value;
+
+    if (!csrfToken) {
+      alert("Token CSRF manquant. Impossible de convertir.");
+      return;
+    }
+
+    try {
+      const response = await fetch(table.dataset.convertUrl, {
+        method: "POST",
+        body: new URLSearchParams({
+          devis_id: btn.dataset.id,
+          csrf_token: csrfToken,
+        }),
+      });
+      const data = await response.json();
+      if (!data.success) {
+        alert(data.error || "Une erreur est survenue lors de la conversion.");
+        return;
+      }
+
+      alert("Devis converti en facture.");
+      window.location.href = `/factures`;
+    } catch (err) {
+      console.error(err);
+      alert("Une erreur est survenue lors de la conversion.");
+      return;
+    }
   }
 }

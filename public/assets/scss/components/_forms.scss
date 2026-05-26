@@ -4,6 +4,11 @@
   margin-bottom: 20px;
 }
 
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
