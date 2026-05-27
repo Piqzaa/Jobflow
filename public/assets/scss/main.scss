@@ -17,6 +17,8 @@
 @use "components/forms";
 @use "components/tables";
 @use "components/modal";
+@use "components/charts";
+@use "components/alerts";
 
 // Pages
 @use "pages/auth";
@@ -24,6 +26,7 @@
 @use "pages/tva";
 @use "pages/legal";
 @use "pages/profile";
+@use "pages/dashboard";
 
 // Utilities
 @use "utilities/helpers";

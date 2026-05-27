@@ -810,6 +810,12 @@ small,
   transition: all 0.3s ease;
 }
 
+.form-control:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+}
+
 .form-control--readonly {
   background-color: #f9fafb;
   cursor: not-allowed;
@@ -823,17 +829,6 @@ small,
   font-size: 0.9rem;
   color: #374151;
 }
-.form-checkbox::-moz-placeholder {
-  color: #9ca3af;
-}
-.form-checkbox::placeholder {
-  color: #9ca3af;
-}
-.form-checkbox:focus {
-  outline: none;
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
-}
 
 .form-checkbox input {
   width: 18px;
@@ -843,33 +838,6 @@ small,
 
 .has-icon .form-control {
   padding-left: 42px;
-}
-
-.alert {
-  padding: 12px 16px;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  border: 1px solid transparent;
-}
-.alert i {
-  font-size: 1.1rem;
-  flex-shrink: 0;
-}
-
-.alert--danger {
-  background: #fef2f2;
-  color: #b91c1c;
-  border-color: rgba(239, 68, 68, 0.2);
-}
-
-.alert--success {
-  background: #ecfdf5;
-  color: #047857;
-  border-color: rgba(16, 185, 129, 0.2);
 }
 
 @media (max-width: 576px) {
@@ -1232,6 +1200,96 @@ small,
     transform: translateY(0);
   }
 }
+.chart-card {
+  padding: 32px;
+  border: none;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.chart-card__header {
+  margin-bottom: 32px;
+}
+
+.chart-card__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+.chart-card__subtitle {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.chart-card__container {
+  height: 380px;
+  width: 100%;
+  position: relative;
+}
+
+.alert {
+  position: relative;
+  padding: 16px 40px 16px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  border: 1px solid transparent;
+}
+
+.alert i {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.alert__text {
+  flex: 1;
+}
+
+.alert__close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: inherit;
+  opacity: 0.5;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.alert__close:hover {
+  opacity: 1;
+}
+
+.alert--warning {
+  background: #fffbeb;
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.alert--danger {
+  background: #fef2f2;
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.alert--success {
+  background: #ecfdf5;
+  color: #10b981;
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
 .auth-page {
   min-height: calc(100vh - 70px);
   display: flex;
@@ -1757,6 +1815,77 @@ small,
   .profile__logo-preview {
     width: 100%;
     height: 150px;
+  }
+}
+.dashboard__progress {
+  margin-top: 24px;
+}
+
+.dashboard__progress-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+
+.dashboard__progress-label {
+  color: #4b5563;
+}
+
+.dashboard__progress-percent {
+  font-weight: 700;
+  color: #4f46e5;
+}
+
+.dashboard__progress-bar {
+  height: 8px;
+  background: #f3f4f6;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.dashboard__progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4f46e5, #818cf8);
+  border-radius: 9999px;
+  transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.dashboard__progress-help {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 8px;
+}
+
+.dashboard__tva-details {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.dashboard__tva-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+}
+
+.dashboard__tva-label {
+  color: #4b5563;
+}
+
+.dashboard__tva-value {
+  color: #111827;
+}
+
+.dashboard__tva-value--paid {
+  color: #10b981;
+}
+
+@media (max-width: 576px) {
+  .dashboard__header {
+    flex-direction: column;
+    gap: 16px;
   }
 }
 .is-hidden {
