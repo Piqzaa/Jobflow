@@ -33,7 +33,7 @@
                 Enregistrer un versement
             </h2>
             
-            <form action="<?= url('/tva/add') ?>" method="POST">
+            <form action="<?= url('/tva/add') ?>" method="POST" class="tva-form">
                 <?= csrf_field() ?>
                 
                 <div class="form-group">
@@ -70,7 +70,7 @@
 
     <main class="tva-layout__main">
         <div class="table-container">
-            <table class="data-table">
+            <table class="data-table" id="tva-table">
                 <thead>
                     <tr>
                         <th>Date</th>
@@ -97,7 +97,7 @@
                                 <td data-label="Montant"><strong><?= number_format($payment['montant'], 2, ',', ' ') ?> €</strong></td>
                                 <td>
                                     <div class="table-actions">
-                                        <form action="<?= url('/tva/delete') ?>" method="POST" onsubmit="return confirm('Supprimer ce versement ?');">
+                                        <form action="<?= url('/tva/delete') ?>" method="POST" class="delete-tva">
                                             <?= csrf_field() ?>
                                             <input type="hidden" name="id" value="<?= $payment['id'] ?>">
                                             <button type="submit" class="btn-action btn-action--danger" title="Supprimer">

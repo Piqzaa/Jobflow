@@ -695,16 +695,19 @@ small,
   padding: 24px;
   margin-bottom: 24px;
 }
+
 .card--stats {
   display: flex;
   flex-direction: column;
   justify-content: center;
   transition: all 0.3s ease;
 }
+
 .card--stats:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
+
 .card__title {
   font-size: 1.15rem;
   font-weight: 700;
@@ -714,10 +717,12 @@ small,
   align-items: center;
   gap: 10px;
 }
+
 .card__title i {
   color: #4f46e5;
   font-size: 1.25rem;
 }
+
 .card__stat-label {
   font-size: 0.85rem;
   font-weight: 600;
@@ -726,12 +731,14 @@ small,
   letter-spacing: 0.05em;
   margin-bottom: 8px;
 }
+
 .card__stat-value {
   font-size: 1.75rem;
   font-weight: 700;
   color: #111827;
   margin-bottom: 4px;
 }
+
 .card__stat-subtitle {
   font-size: 0.85rem;
   color: #9ca3af;
@@ -743,6 +750,7 @@ small,
   gap: 24px;
   margin-bottom: 24px;
 }
+
 @media (max-width: 992px) {
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -753,7 +761,6 @@ small,
     grid-template-columns: 1fr;
   }
 }
-
 .form-group {
   margin-bottom: 20px;
 }
@@ -1581,25 +1588,68 @@ small,
   gap: 1.5rem;
   align-items: start;
 }
+
 @media (max-width: 1024px) {
   .tva-layout {
     grid-template-columns: 1fr;
   }
 }
+.tva-layout__sidebar {
+  display: block;
+}
+
+.tva-layout__main {
+  display: block;
+}
+
 .tva-table__col-actions {
   width: 80px;
   text-align: center;
 }
+
 .tva-table__empty-state {
   text-align: center;
   padding: 3rem;
   color: #9ca3af;
 }
+
 .tva-table__empty-state i {
   font-size: 2.5rem;
   display: block;
   margin-bottom: 1rem;
   color: #d1d5db;
+}
+
+.legal-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.legal-page__title {
+  font-size: 2.25rem;
+  margin-bottom: 32px;
+  color: #111827;
+}
+
+.legal-page__section-title {
+  font-size: 1.4rem;
+  margin: 40px 0 20px;
+  color: #111827;
+  font-weight: 700;
+}
+
+.legal-page__text {
+  margin-bottom: 20px;
+}
+
+.legal-page__card ul {
+  margin: 0 0 20px 24px;
+  padding: 0;
+}
+
+.legal-page__card li {
+  margin-bottom: 12px;
 }
 
 .is-hidden {

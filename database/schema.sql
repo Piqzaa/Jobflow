@@ -183,7 +183,9 @@ CREATE TABLE tva_payments (
     date_paiement DATE NOT NULL,
     periode VARCHAR(50), -- Ex: "Trimestre 1 2026"
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP NULL DEFAULT NULL,
     
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    INDEX idx_user_id (user_id)
+    INDEX idx_user_id (user_id),
+    INDEX idx_deleted_at (deleted_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

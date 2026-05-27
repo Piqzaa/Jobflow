@@ -213,6 +213,18 @@ switch ($uri) {
         $tvaController = new \App\Controllers\TvaController();
         $tvaController->delete();
         break;
+
+    case '/mentions-legales':
+        render('legal/mentions', ['title' => 'Mentions Légales']);
+        break;
+
+    case '/cgu':
+        render('legal/cgu', ['title' => 'CGU']);
+        break;
+    
+    case '/rgpd':
+        render('legal/rgpd', ['title' => 'Politique de Confidentialité']);
+        break;
         
     default:
         http_response_code(404);

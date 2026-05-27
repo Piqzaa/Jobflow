@@ -4,6 +4,7 @@ import { initDevis } from "./modules/devis.js";
 import { initFactures } from "./modules/factures.js";
 import { initDashboard } from "./modules/dashboard.js";
 import { initMenu } from "./modules/menu.js";
+import { initTva } from "./modules/tva.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   initMenu();
@@ -12,4 +13,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initDevis();
   initFactures();
   initDashboard();
+  initTva();
 });
