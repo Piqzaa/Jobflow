@@ -1,64 +1,74 @@
-<main class="container">
-    <div class="dashboard-header">
-        <h1>Tableau de bord - <?= date('Y') ?></h1>
-        <p>Résumé de votre activité Chiffre d'Affaires et TVA.</p>
-    </div>
-
-    <!-- Alertes TVA -->
+<div class="dashboard">
     <?php if ($tvaStatus === 'obligatoire_immediat'): ?>
-        <div class="alert alert-danger">
-            <strong>⚠️ Seuil de TVA dépassé (41 250 €) !</strong><br>
-            Vous devez facturer la TVA sur vos prochaines factures dès maintenant.
+        <div class="alert alert--danger" id="alert-tva-danger">
+            <div class="alert__text">
+                <strong>Seuil de TVA dépassé (41 250 €) !</strong><br>
+                Facturez la TVA dès maintenant.
+            </div>
+            <button type="button" class="alert__close">
+                &times;
+            </button>
         </div>
     <?php elseif ($tvaStatus === 'alerte_prochaine_annee'): ?>
-        <div class="alert alert-warning">
-            <strong>ℹ️ Seuil de franchise dépassé (37 500 €)</strong><br>
-            Vous restez en franchise cette année, mais vous devrez facturer la TVA dès le 1er janvier prochain si vous ne dépassez pas 41 250 €.
+        <div class="alert alert--warning" id="alert-tva-warning">
+            <div class="alert__text">
+                <strong>Seuil de franchise dépassé (37 500 €)</strong><br>
+                Facturation TVA obligatoire dès le 1er janvier prochain.
+            </div>
+            <button type="button" class="alert__close">
+                &times;
+            </button>
         </div>
     <?php endif; ?>
 
-    <div class="dashboard-grid">
-        <!-- Carte CA Global -->
-        <div class="card card-stats">
-            <h3>Chiffre d'Affaires HT</h3>
-            <p class="stat-value"><?= number_format($caTotal, 2, ',', ' ') ?> €</p>
-            
-            <div class="progress-container">
-                <div class="progress-label">
-                    <span>Limite Micro-Entreprise (<?= number_format($seuilMicro, 0, ',', ' ') ?> €)</span>
-                    <span><?= round($percentMicro) ?>%</span>
-                </div>
-                <div class="progress-bar-bg">
-                    <div class="progress-bar-fill" style="width: <?= $percentMicro ?>%;"></div>
-                </div>
+    <div class="stats-grid">
+        <article class="card card--stats">
+            <div class="card__title">
+                Chiffre d'Affaires HT
             </div>
-        </div>
+            <p class="card__stat-value"><?= number_format($caTotal, 2, ',', ' ') ?> €</p>
+            
+            <div class="dashboard__progress">
+                <div class="dashboard__progress-header">
+                    <span class="dashboard__progress-label">Limite Micro-Entreprise</span>
+                    <span class="dashboard__progress-percent"><?= round($percentMicro) ?>%</span>
+                </div>
+                <div class="dashboard__progress-bar">
+                    <div class="dashboard__progress-fill" style="width: <?= $percentMicro ?>%;"></div>
+                </div>
+                <p class="dashboard__progress-help">Plafond : <?= number_format($seuilMicro, 0, ',', ' ') ?> €</p>
+            </div>
+        </article>
 
-        <!-- Carte Situation TVA -->
-        <div class="card card-stats">
-            <h3>Situation TVA</h3>
-            <p class="stat-value"><?= number_format($tvaRestante, 2, ',', ' ') ?> €</p>
-            <p class="stat-subtitle">Reste à payer à l'État</p>
+
+        <article class="card card--stats">
+            <div class="card__title">
+                Situation TVA
+            </div>
+            <p class="card__stat-value"><?= number_format($tvaRestante, 2, ',', ' ') ?> €</p>
+            <p class="card__stat-subtitle">Reste à payer à l'État</p>
             
-            <div class="tva-details">
-                <div class="tva-row">
-                    <span>Collectée :</span>
-                    <span><?= number_format($tvaCollectee, 2, ',', ' ') ?> €</span>
+            <div class="dashboard__tva-details">
+                <div class="dashboard__tva-row">
+                    <span class="dashboard__tva-label">Collectée</span>
+                    <strong class="dashboard__tva-value"><?= number_format($tvaCollectee, 2, ',', ' ') ?> €</strong>
                 </div>
-                <div class="tva-row">
-                    <span>Déjà payée :</span>
-                    <span>- <?= number_format($tvaPayee, 2, ',', ' ') ?> €</span>
+                <div class="dashboard__tva-row">
+                    <span class="dashboard__tva-label">Déjà payée</span>
+                    <strong class="dashboard__tva-value dashboard__tva-value--paid"><?= number_format($tvaPayee, 2, ',', ' ') ?> €</strong>
                 </div>
             </div>
-        </div>
+        </article>
     </div>
 
-    <!-- Graphique -->
-    <div class="card chart-card">
-        <h3>Évolution du CA HT par mois</h3>
-        <div class="chart-container">
+
+    <section class="card chart-card">
+        <div class="chart-card__header">
+            <h3 class="chart-card__title">Performance Mensuelle</h3>
+            <p class="chart-card__subtitle">Évolution du Chiffre d'Affaires HT</p>
+        </div>
+        <div class="chart-card__container">
             <canvas id="caChart" data-monthly='<?= $monthlyCA ?>'></canvas>
         </div>
-    </div>
-
-</main>
+    </section>
+</div>
