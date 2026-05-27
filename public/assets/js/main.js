@@ -5,6 +5,7 @@ import { initFactures } from "./modules/factures.js";
 import { initDashboard } from "./modules/dashboard.js";
 import { initMenu } from "./modules/menu.js";
 import { initTva } from "./modules/tva.js";
+import { initAlerts } from "./modules/alerts.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   initMenu();
@@ -14,4 +15,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initFactures();
   initDashboard();
   initTva();
+  initAlerts();
 });
