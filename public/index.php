@@ -32,7 +32,8 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($uri) {
     case '/':
-        render('home', ['title' => 'Accueil']);
+        $home = new \App\Controllers\HomeController();
+        $home->index();
         break;
 
     case '/register':
@@ -228,6 +229,6 @@ switch ($uri) {
         
     default:
         http_response_code(404);
-        render('home', ['title' => '404 Non Trouvé', 'content' => '<h1>404 - Page non trouvée</h1>']);
+        render('404', ['title' => 'Page non trouvée']);
         break;
 }
