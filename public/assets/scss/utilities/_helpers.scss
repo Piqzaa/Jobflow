@@ -1,3 +1,12 @@
+@use "../abstracts/variables" as *;
+
 .is-hidden {
   display: none !important;
+}
+
+.text-gradient {
+  background: linear-gradient(90deg, $primary, $primary-light);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
 }

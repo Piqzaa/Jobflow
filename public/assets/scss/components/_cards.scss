@@ -9,6 +9,46 @@
   margin-bottom: 24px;
 }
 
+.card--feature {
+  text-align: center;
+  transition: $transition;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+
+  &:hover {
+    transform: translateY(-0.3rem);
+    box-shadow: $shadow-lg;
+    border-color: $primary-soft;
+  }
+}
+
+.card--feature__icon {
+  width: 4rem;
+  height: 4rem;
+  background: $primary-soft;
+  color: $primary;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
+
+.card--feature__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: $gray-900;
+  margin-bottom: 1rem;
+}
+
+.card--feature__text {
+  color: $gray-600;
+  line-height: 1.6;
+}
+
 .card--stats {
   display: flex;
   flex-direction: column;

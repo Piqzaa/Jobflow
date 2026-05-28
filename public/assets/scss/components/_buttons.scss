@@ -56,3 +56,21 @@
 .btn-lg {
   padding: 12px;
 }
+
+.btn-hero {
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+}
+
+.btn-outline {
+  @extend .btn;
+  background: transparent;
+  color: $primary;
+  border-color: $primary;
+
+  &:hover {
+    background: $primary-soft;
+    border-color: $primary-dark;
+    color: $primary-dark;
+  }
+}
