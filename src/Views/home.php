@@ -10,7 +10,7 @@
             Simple, rapide et conçu pour votre quotidien.
         </p>
         <div class="home-hero__actions">
-            <a href="<?= url('/register') ?>" class="btn-primary btn-hero">Démarrer gratuitement</a>
+            <a href="<?= url('/register') ?>" class="btn-primary btn-hero">S'inscrire gratuitement</a>
             <a href="<?= url('/login') ?>" class="btn-outline btn-hero">Se connecter</a>
         </div>
     </div>
