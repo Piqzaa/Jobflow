@@ -36,3 +36,8 @@ COPY composer.json composer.lock* ./
 
 # 8. Installation des dépendances
 RUN composer install --no-interaction --optimize-autoloader
+
+# 9. Entrypoint
+COPY docker/php/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
