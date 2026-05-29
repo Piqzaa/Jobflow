@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+
 class Validator {
     public static function email($email) {
         return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
@@ -18,6 +19,10 @@ class Validator {
         if (!preg_match('/[a-z]/', $password)) return false;
         if (!preg_match('/[0-9]/', $password)) return false;
         return true;
+    }
+
+    public static function phone($phone) {
+        return preg_match('/^[0-9+ .]{10,20}$/', $phone) === 1;
     }
 
     public static function required($value) {

@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\User;
+use App\Helpers\Validator;
 use App\Helpers\MongoLogger;
 
 class ProfileController {
@@ -40,13 +41,15 @@ class ProfileController {
             'logo_filename' => $_POST['current_logo'] ?? null
         ];
 
-        if (!empty($data['siret']) && !preg_match('/^[0-9]{14}$/', $data['siret'])) {
+        // Validation via Helper Validator
+        if (!empty($data['siret']) && !Validator::siret($data['siret'])) {
             $errors[] = "Le numéro SIRET doit contenir exactement 14 chiffres.";
         }
 
-        if (!empty($data['telephone']) && !preg_match('/^[0-9+ .]{10,20}$/', $data['telephone'])) {
+        if (!empty($data['telephone']) && !Validator::phone($data['telephone'])) {
             $errors[] = "Le numéro de téléphone n'est pas valide.";
         }
+
         $newLogo = $this->handleLogoUpload($_FILES['logo'] ?? null, $errors);
         if ($newLogo) {
             $data['logo_filename'] = $newLogo;
