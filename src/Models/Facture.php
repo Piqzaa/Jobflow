@@ -5,12 +5,7 @@ namespace App\Models;
 use App\Config\Database;
 use PDO;
 
-class Facture {
-    private $db;
-
-    public function __construct() {
-        $this->db = Database::getInstance();
-    }
+class Facture extends BaseModel {
 
     public function getAllByUser($userId) {
         $sql = "SELECT f.*, c.nom as client_nom 

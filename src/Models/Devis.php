@@ -5,12 +5,7 @@ namespace App\Models;
 use App\Config\Database;
 use PDO;
 
-class Devis {
-    private $db;
-
-    public function __construct() {
-        $this->db = Database::getInstance();
-    }
+class Devis extends BaseModel {
 
     public function getItems($devisId) {
         $stmt = $this->db->prepare("SELECT * FROM devis_items WHERE devis_id = :devis_id ORDER BY position ASC");

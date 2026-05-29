@@ -4,12 +4,7 @@ namespace App\Models;
 
 use App\Config\Database;
 
-class TvaPayment {
-    private $db;
-
-    public function __construct() {
-        $this->db = Database::getInstance();
-    }
+class TvaPayment extends BaseModel {
 
     public function getAllByUser($userId) {
         $stmt = $this->db->prepare("SELECT * FROM tva_payments WHERE user_id = ? AND deleted_at IS NULL ORDER BY date_paiement DESC");
