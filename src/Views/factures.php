@@ -29,10 +29,10 @@
             <?php foreach ($factures as $f): ?>
             <tr data-id="<?= $f['id'] ?>">
                 <td class="f-numero" data-label="Numéro">
-                    <span class="text-main"><?= htmlspecialchars($f['numero']) ?></span>
+                    <span class="text-main"><?= e($f['numero']) ?></span>
                 </td>
                 <td class="f-client" data-label="Client">
-                    <span class="text-main"><?= htmlspecialchars($f['client_nom']) ?></span>
+                    <span class="text-main"><?= e($f['client_nom']) ?></span>
                 </td>
                 <td class="f-date-echeance" data-label="Échéance">
                     <span class="text-sub"><?= date('d/m/Y', strtotime($f['date_echeance'])) ?></span>
@@ -157,8 +157,5 @@
                 <span>Enregistrer</span>
             </button>
         </div>
-    </div>
-</form>
-/div>
     </div>
 </form>
