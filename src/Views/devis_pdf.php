@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Devis <?= htmlspecialchars($devis['numero']) ?></title>
+    <title>Devis <?= e($devis['numero']) ?></title>
     <style>
         <?= file_get_contents(__DIR__ . '/../../public/assets/css/main.css') ?>
     </style>

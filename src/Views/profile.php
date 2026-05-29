@@ -93,7 +93,7 @@
                 </div>
                 <div class="form-group">
                     <label for="bic" class="form-label">BIC / SWIFT</label>
-                    <input type="text" name="bic" id="bic" value="<?= htmlspecialchars($user['bic'] ?? '') ?>" class="form-control" placeholder="XXXXXXXX">
+                    <input type="text" name="bic" id="bic" value="<?= e($user['bic']) ?>" class="form-control" placeholder="XXXXXXXX">
                 </div>
             </div>
             

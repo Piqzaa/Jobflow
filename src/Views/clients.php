@@ -25,10 +25,10 @@
         <tbody>
             <?php foreach ($clients as $client): ?>
             <tr data-id="<?= $client['id'] ?>">
-                <td class="c-nom" data-label="Nom"><?= htmlspecialchars($client['nom'] ?? '') ?></td>
-                <td class="c-email" data-label="Email"><?= htmlspecialchars($client['email'] ?? '') ?></td>
-                <td class="c-ville" data-label="Ville"><?= htmlspecialchars($client['ville'] ?? '') ?></td>
-                <td class="c-telephone" data-label="Tel"><?= htmlspecialchars($client['telephone'] ?? '') ?></td>
+                <td class="c-nom" data-label="Nom"><?= e($client['nom']) ?></td>
+                <td class="c-email" data-label="Email"><?= e($client['email']) ?></td>
+                <td class="c-ville" data-label="Ville"><?= e($client['ville']) ?></td>
+                <td class="c-telephone" data-label="Tel"><?= e($client['telephone']) ?></td>
                 <td data-label="Actions">
                     <div class="table-actions">
                         <button class="btn-action edit-btn" data-id="<?= $client['id'] ?>" title="Modifier">
