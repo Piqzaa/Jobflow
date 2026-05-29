@@ -88,7 +88,7 @@
                     <select name="client_id" id="facture-client-id" class="form-control" required>
                         <option value="">-- Sélectionner un client --</option>
                         <?php foreach ($clients as $client): ?>
-                            <option value="<?= $client['id'] ?>"><?= htmlspecialchars($client['nom']) ?></option>
+                            <option value="<?= $client['id'] ?>"><?= e($client['nom']) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -157,5 +157,8 @@
                 <span>Enregistrer</span>
             </button>
         </div>
+    </div>
+</form>
+/div>
     </div>
 </form>

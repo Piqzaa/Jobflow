@@ -29,13 +29,13 @@
             <?php foreach ($devis as $d): ?>
             <tr data-id="<?= $d['id'] ?>">
                 <td class="d-numero" data-label="Numéro">
-                    <span class="text-main"><?= htmlspecialchars($d['numero'] ?? '') ?></span>
+                    <span class="text-main"><?= e($d['numero']) ?></span>
                 </td>
                 <td class="d-client" data-label="Client">
-                    <span class="text-main"><?= htmlspecialchars($d['client_nom'] ?? '') ?></span>
+                    <span class="text-main"><?= e($d['client_nom']) ?></span>
                 </td>
                 <td class="d-date-validite" data-label="Validité">
-                    <span class="text-sub"><?= htmlspecialchars($d['date_validite'] ?? '') ?></span>
+                    <span class="text-sub"><?= e($d['date_validite']) ?></span>
                 </td>
                 <td class="d-montant-ttc" data-label="Montant TTC">
                     <span class="text-main"><?= number_format($d['montant_ttc'] ?? 0, 2, ',', ' ') ?> €</span>
@@ -94,7 +94,7 @@
                     <select name="client_id" id="devis-client-id" class="form-control" required>
                         <option value="">-- Sélectionner un client --</option>
                         <?php foreach ($clients as $client): ?>
-                            <option value="<?= $client['id'] ?>"><?= htmlspecialchars($client['nom']) ?></option>
+                            <option value="<?= $client['id'] ?>"><?= e($client['nom']) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>

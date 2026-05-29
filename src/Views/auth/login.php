@@ -8,14 +8,14 @@
         <?php if (isset($error)): ?>
             <div class="alert alert--danger">
                 <i class="ri-error-warning-line"></i>
-                <?= htmlspecialchars($error) ?>
+                <?= e($error) ?>
             </div>
         <?php endif; ?>
 
         <?php if (isset($_SESSION['success'])): ?>
             <div class="alert alert--success">
                 <i class="ri-checkbox-circle-line"></i>
-                <?= htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?>
+                <?= e($_SESSION['success']); unset($_SESSION['success']); ?>
             </div>
         <?php endif; ?>
 

@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\User;
+use App\Helpers\Validator;
 use App\Helpers\MongoLogger;
 use App\Services\EmailService;
 
@@ -43,23 +44,23 @@ class AuthController {
             return;
         }
 
-        if (strlen($password) < 8) {
+        if (!Validator::email($email)) {
             render('auth/register', [
                 'title' => 'Inscription',
-                'error' => 'Le mot de passe doit contenir au moins 8 caractères.'
+                'error' => 'Format d\'email invalide.'
             ]);
             return;
         }
 
-        if(!preg_match('/[A-Z]/', $password) || !preg_match('/[a-z]/', $password) || !preg_match('/[0-9]/', $password)) {
+        if (!Validator::password($password)) {
             render('auth/register', [
                 'title' => 'Inscription',
-                'error' => 'Le mot de passe doit contenir au moins une majuscule, une minuscule et un chiffre.'
+                'error' => 'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.'
             ]);
             return;
         }
         
-        if (!$profileData['nom'] || !$profileData['prenom']) {
+        if (!Validator::required($profileData['nom']) || !Validator::required($profileData['prenom'])) {
             render('auth/register', [
                 'title' => 'Inscription',
                 'error' => 'Le nom et le prénom sont requis.'
@@ -71,7 +72,7 @@ class AuthController {
         $success = $userModel->create($email, $password, $token);
 
         if ($success) {
-            $userId = $userModel->getLastInsertId();
+            $userId = $userModel->lastInsertId();
             $userModel->updateProfile($userId, $profileData);
 
             MongoLogger::write(
@@ -298,7 +299,7 @@ class AuthController {
             return;
         }
 
-        if (strlen($password) < 8 || !preg_match('/[A-Z]/', $password) || !preg_match('/[a-z]/', $password) || !preg_match('/[0-9]/', $password)) {
+        if (!Validator::password($password)) {
             render('auth/reset-password', [
                 'title' => 'Nouveau mot de passe',
                 'error' => 'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.',

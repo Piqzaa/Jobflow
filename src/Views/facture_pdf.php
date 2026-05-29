@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Facture <?= htmlspecialchars($facture['numero']) ?></title>
+    <title>Facture <?= e($facture['numero']) ?></title>
     <style>
         <?= file_get_contents(__DIR__ . '/../../public/assets/css/main.css') ?>
     </style>
@@ -22,16 +22,16 @@
                             <?php endif; ?>
                         <?php endif; ?>
                         <div class="pdf-header__company-details">
-                            <h2 class="pdf-header__company-name"><?= htmlspecialchars($userProfile['entreprise'] ?? 'Mon Entreprise') ?></h2>
+                            <h2 class="pdf-header__company-name"><?= e($userProfile['entreprise'] ?? 'Mon Entreprise') ?></h2>
                             <p>
-                                <strong><?= htmlspecialchars($userProfile['prenom'] ?? '') ?> <?= htmlspecialchars($userProfile['nom'] ?? '') ?></strong><br>
-                                <?= nl2br(htmlspecialchars($userProfile['adresse'] ?? '')) ?><br>
-                                <?= htmlspecialchars($userProfile['code_postal'] ?? '') ?> <?= htmlspecialchars($userProfile['ville'] ?? '') ?>
+                                <strong><?= e($userProfile['prenom'] ?? '') ?> <?= e($userProfile['nom'] ?? '') ?></strong><br>
+                                <?= nl2br(e($userProfile['adresse'] ?? '')) ?><br>
+                                <?= e($userProfile['code_postal'] ?? '') ?> <?= e($userProfile['ville'] ?? '') ?>
                             </p>
                             <p>
-                                SIRET : <?= htmlspecialchars($userProfile['siret'] ?? '') ?>
+                                SIRET : <?= e($userProfile['siret'] ?? '') ?>
                                 <?php if ($facture['montant_tva'] > 0 && !empty($userProfile['tva_intra'])): ?>
-                                    <br>TVA Intra : <?= htmlspecialchars($userProfile['tva_intra']) ?>
+                                    <br>TVA Intra : <?= e($userProfile['tva_intra']) ?>
                                 <?php endif; ?>
                             </p>
                         </div>
@@ -39,12 +39,12 @@
                     <td class="pdf-header__client">
                         <div class="pdf-header__client-box">
                             <p class="pdf-header__client-label">Facturé à</p>
-                            <h3 class="pdf-header__client-name"><?= htmlspecialchars($facture['client_nom']) ?></h3>
+                            <h3 class="pdf-header__client-name"><?= e($facture['client_nom']) ?></h3>
                             <div class="pdf-header__client-details">
-                                <?= nl2br(htmlspecialchars($facture['client_adresse'] ?? '')) ?><br>
-                                <?= htmlspecialchars($facture['client_code_postal'] ?? '') ?> <?= htmlspecialchars($facture['client_ville'] ?? '') ?>
+                                <?= nl2br(e($facture['client_adresse'] ?? '')) ?><br>
+                                <?= e($facture['client_code_postal'] ?? '') ?> <?= e($facture['client_ville'] ?? '') ?>
                                 <?php if (!empty($facture['client_siret'])): ?>
-                                    <br>SIRET : <?= htmlspecialchars($facture['client_siret']) ?>
+                                    <br>SIRET : <?= e($facture['client_siret']) ?>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -59,7 +59,7 @@
                 <tr>
                     <td>
                         <h1 class="pdf-title-box__title">FACTURE</h1>
-                        <p class="pdf-title-box__number">N° <?= htmlspecialchars($facture['numero']) ?></p>
+                        <p class="pdf-title-box__number">N° <?= e($facture['numero']) ?></p>
                     </td>
                     <td class="pdf-title-box__meta">
                         <p>Date d'émission : <?= date('d/m/Y', strtotime($facture['date_emission'])) ?></p>
@@ -83,7 +83,7 @@
                 <tbody>
                     <?php foreach ($items as $index => $item): ?>
                     <tr class="pdf-table__tr <?= $index % 2 === 1 ? 'pdf-table__tr--even' : '' ?>">
-                        <td class="pdf-table__td"><?= htmlspecialchars($item['designation']) ?></td>
+                        <td class="pdf-table__td"><?= e($item['designation']) ?></td>
                         <td class="pdf-table__td pdf-table__td--center"><?= number_format($item['quantite'], 2, ',', ' ') ?></td>
                         <td class="pdf-table__td pdf-table__td--right"><?= number_format($item['prix_unitaire'], 2, ',', ' ') ?> €</td>
                         <td class="pdf-table__td pdf-table__td--right"><?= number_format($item['total_ht'], 2, ',', ' ') ?> €</td>
@@ -122,10 +122,10 @@
                     <p class="pdf-infos__text">
                         Mode de règlement : Virement bancaire ou Chèque.<br>
                         <?php if (!empty($userProfile['iban'])): ?>
-                            <strong>IBAN :</strong> <?= htmlspecialchars($userProfile['iban']) ?><br>
+                            <strong>IBAN :</strong> <?= e($userProfile['iban']) ?><br>
                         <?php endif; ?>
                         <?php if (!empty($userProfile['bic'])): ?>
-                            <strong>BIC :</strong> <?= htmlspecialchars($userProfile['bic']) ?><br>
+                            <strong>BIC :</strong> <?= e($userProfile['bic']) ?><br>
                         <?php endif; ?>
                         Échéance : <span class="pdf-text--bold"><?= date('d/m/Y', strtotime($facture['date_echeance'])) ?></span>
                     </p>
@@ -142,7 +142,7 @@
                 <?php if (!empty($facture['notes'])): ?>
                 <div class="pdf-infos__section">
                     <h4 class="pdf-infos__title">Notes</h4>
-                    <p class="pdf-infos__text"><?= nl2br(htmlspecialchars($facture['notes'])) ?></p>
+                    <p class="pdf-infos__text"><?= nl2br(e($facture['notes'])) ?></p>
                 </div>
                 <?php endif; ?>
             </div>
@@ -150,8 +150,8 @@
 
         <footer class="pdf-footer">
             <p class="pdf-footer__text">
-                <?= htmlspecialchars($userProfile['entreprise'] ?? '') ?> - SIRET : <?= htmlspecialchars($userProfile['siret'] ?? '') ?><br>
-                <?= htmlspecialchars($userProfile['adresse'] ?? '') ?> <?= htmlspecialchars($userProfile['code_postal'] ?? '') ?> <?= htmlspecialchars($userProfile['ville'] ?? '') ?>
+                <?= e($userProfile['entreprise'] ?? '') ?> - SIRET : <?= e($userProfile['siret'] ?? '') ?><br>
+                <?= e($userProfile['adresse'] ?? '') ?> <?= e($userProfile['code_postal'] ?? '') ?> <?= e($userProfile['ville'] ?? '') ?>
             </p>
         </footer>
     </div>

@@ -21,7 +21,7 @@
 <?php if (isset($error)): ?>
     <div class="alert alert--danger">
         <i class="ri-error-warning-line"></i>
-        <?= htmlspecialchars($error) ?>
+        <?= e($error) ?>
     </div>
 <?php endif; ?>
 

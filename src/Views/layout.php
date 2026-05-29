@@ -59,7 +59,7 @@
                             <?= strtoupper(substr($_SESSION['user_prenom'] ?? 'U', 0, 1)) ?>
                         </div>
                         <div class="sidebar__user-info">
-                            <span class="sidebar__user-name"><?= htmlspecialchars($_SESSION['user_prenom'] ?? 'U') ?></span>
+                            <span class="sidebar__user-name"><?= e($_SESSION['user_prenom']) ?></span>
                             <span class="sidebar__user-sub">Mon profil</span>
                         </div>
                         <i class="ri-arrow-right-s-line"></i>

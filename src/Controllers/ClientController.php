@@ -3,13 +3,13 @@
 namespace App\Controllers;
 
 use App\Models\Client;
-use App\Config\Database;
+use App\Helpers\Validator;
 
 class ClientController {
   
   public function index() {
     if (!isset($_SESSION['user_id'])) {
-      header('Location: /login');
+      header('Location: ' . url('/login'));
       exit;
     }
 
@@ -58,11 +58,11 @@ class ClientController {
     $inputs = array_map('trim', $_POST);
     $siret = str_replace(' ', '', $inputs['siret'] ?? '');
     
-    // Validation simple
+    // Validation via Helper Validator
     $errors = [];
-    if (empty($inputs['nom'])) $errors[] = 'Nom requis.';
-    if (empty($inputs['email']) || !filter_var($inputs['email'], FILTER_VALIDATE_EMAIL)) $errors[] = 'Email invalide.';
-    if (strlen($siret) !== 14) $errors[] = 'SIRET invalide (14 chiffres).';
+    if (!Validator::required($inputs['nom'])) $errors[] = 'Nom requis.';
+    if (!Validator::email($inputs['email'])) $errors[] = 'Email invalide.';
+    if (!Validator::siret($siret)) $errors[] = 'SIRET invalide (14 chiffres).';
 
     if (!empty($errors)) {
       header('Content-Type: application/json');
@@ -104,9 +104,9 @@ class ClientController {
     $inputs = array_map('trim', $_POST);
     $siret = str_replace(' ', '', $inputs['siret'] ?? '');
     
-    if (empty($inputs['nom']) || strlen($siret) !== 14) {
+    if (!Validator::required($inputs['nom']) || !Validator::siret($siret)) {
       header('Content-Type: application/json');
-      echo json_encode(['success' => false, 'error' => 'Données invalides']);
+      echo json_encode(['success' => false, 'error' => 'Données invalides (Nom requis et SIRET à 14 chiffres)']);
       exit;
     }
 
@@ -123,7 +123,7 @@ class ClientController {
     ]);
 
     header('Content-Type: application/json');
-    echo json_encode(['success' => $result]);
+    echo json_encode(['success' => (bool)$result]);
     exit;
   }
 
@@ -141,7 +141,7 @@ class ClientController {
     $result = $clientModel->deleteClient($clientId, $_SESSION['user_id']);
 
     header('Content-Type: application/json');
-    echo json_encode(['success' => $result]);
+    echo json_encode(['success' => (bool)$result]);
     exit;
   }
 }

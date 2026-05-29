@@ -4,12 +4,7 @@ namespace App\Models;
 
 use App\Config\Database;
 
-class Client {
-  private $db;
-
-  public function __construct() {
-    $this->db = Database::getInstance();
-  }
+class Client extends BaseModel {
 
   public function getClients($userId) {
     $stmt = $this->db->prepare("SELECT * FROM clients WHERE user_id = :user_id AND deleted_at IS NULL ORDER BY created_at DESC");

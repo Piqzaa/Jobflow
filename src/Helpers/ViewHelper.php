@@ -21,6 +21,13 @@ function render($view, $data = []) {
 }
 
 /**
+ * Sécurise l'affichage HTML (protection XSS)
+ */
+function e($value) {
+    return htmlspecialchars($value ?? '', ENT_QUOTES, 'UTF-8');
+}
+
+/**
  * Génère une URL absolue pour le projet
  */
 function url($path = '') {
