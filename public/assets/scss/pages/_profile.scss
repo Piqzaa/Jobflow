@@ -94,7 +94,7 @@
   border-top: 1px solid $gray-100;
 }
 
-@media (max-width: 768px) {
+@media (max-width: $bp-md) {
   .profile__form {
     padding: 20px;
   }

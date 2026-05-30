@@ -79,7 +79,7 @@
   padding-left: 42px;
 }
 
-@media (max-width: 576px) {
+@media (max-width: $bp-sm) {
   .form-row {
     grid-template-columns: 1fr;
     gap: 0;

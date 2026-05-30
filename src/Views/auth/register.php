@@ -7,7 +7,7 @@
 
         <?php if (isset($error)): ?>
             <div class="alert alert--danger">
-                <i class="ri-error-warning-line"></i>
+                <i class="ri-error-warning-line" aria-hidden="true"></i>
                 <?= e($error) ?>
             </div>
         <?php endif; ?>
@@ -33,7 +33,7 @@
             <div class="form-group">
                 <label for="email" class="form-label">Adresse email</label>
                 <div class="input-group has-icon">
-                    <i class="ri-mail-line"></i>
+                    <i class="ri-mail-line" aria-hidden="true"></i>
                     <input type="email" name="email" id="email" class="form-control" placeholder="exemple@domaine.com" required>
                 </div>
             </div>
@@ -41,7 +41,7 @@
             <div class="form-group">
                 <label for="password" class="form-label">Mot de passe</label>
                 <div class="input-group has-icon">
-                    <i class="ri-lock-2-line"></i>
+                    <i class="ri-lock-2-line" aria-hidden="true"></i>
                     <input type="password" name="password" id="password" class="form-control" placeholder="••••••••" required>
                 </div>
             </div>
@@ -49,14 +49,14 @@
             <div class="form-group">
                 <label for="password_confirmation" class="form-label">Confirmation</label>
                 <div class="input-group has-icon">
-                    <i class="ri-lock-check-line"></i>
+                    <i class="ri-lock-check-line" aria-hidden="true"></i>
                     <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="••••••••" required>
                 </div>
             </div>
 
             <button type="submit" class="btn--primary btn--block btn--lg">
                 <span>Créer mon compte</span>
-                <i class="ri-user-add-line"></i>
+                <i class="ri-user-add-line" aria-hidden="true"></i>
             </button>
         </form>
 
@@ -65,3 +65,5 @@
         </div>
     </div>
 </div>
+
+

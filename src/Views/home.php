@@ -31,7 +31,7 @@
     <div class="home-features__grid">
         <div class="card card--feature">
             <div class="card--feature__icon">
-                <i class="ri-file-list-3-line"></i>
+                <i class="ri-file-list-3-line" aria-hidden="true"></i>
             </div>
             <h3 class="card--feature__title">Devis & Factures</h3>
             <p class="card--feature__text">Créez des documents professionnels en quelques secondes et suivez leur statut en temps réel.</p>
@@ -39,7 +39,7 @@
 
         <div class="card card--feature">
             <div class="card--feature__icon">
-                <i class="ri-line-chart-line"></i>
+                <i class="ri-line-chart-line" aria-hidden="true"></i>
             </div>
             <h3 class="card--feature__title">Suivi du CA</h3>
             <p class="card--feature__text">Visualisez votre progression par rapport aux seuils de la micro-entreprise et gérez votre TVA sereinement.</p>
@@ -47,7 +47,7 @@
 
         <div class="card card--feature">
             <div class="card--feature__icon">
-                <i class="ri-user-star-line"></i>
+                <i class="ri-user-star-line" aria-hidden="true"></i>
             </div>
             <h3 class="card--feature__title">Gestion Clients</h3>
             <p class="card--feature__text">Centralisez toutes les informations de vos clients et accédez à leur historique de documents.</p>
@@ -65,3 +65,5 @@
         <a href="<?= url('/register') ?>" class="btn--primary btn--hero">Créer mon compte maintenant</a>
     </div>
 </section>
+
+

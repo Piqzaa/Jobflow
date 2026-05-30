@@ -11,7 +11,7 @@
         </div>
 
         <button class="header__toggle" aria-label="Menu">
-            <i class="ri-menu-3-line"></i>
+            <i class="ri-menu-3-line" aria-hidden="true" aria-hidden="true"></i>
         </button>
 
         <nav class="header__nav">
@@ -22,3 +22,5 @@
         </nav>
     </div>
 </header>
+
+

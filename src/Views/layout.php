@@ -21,29 +21,29 @@
                     <ul class="sidebar__list">
                         <li class="sidebar__item">
                             <a href="<?= url('/dashboard') ?>" class="sidebar__link <?= $uri === '/dashboard' ? 'sidebar__link--active' : '' ?>">
-                                <i class="ri-dashboard-line"></i> Tableau de bord
+                                <i class="ri-dashboard-line" aria-hidden="true"></i> Tableau de bord
                             </a>
                         </li>
                         <li class="sidebar__item">
                             <a href="<?= url('/clients') ?>" class="sidebar__link <?= str_contains($uri, '/clients') ? 'sidebar__link--active' : '' ?>">
-                                <i class="ri-group-line"></i> Clients
+                                <i class="ri-group-line" aria-hidden="true"></i> Clients
                             </a>
                         </li>
                         <li class="sidebar__item">
                             <a href="<?= url('/devis') ?>" class="sidebar__link <?= str_contains($uri, '/devis') ? 'sidebar__link--active' : '' ?>">
-                                <i class="ri-file-text-line"></i> Devis
+                                <i class="ri-file-text-line" aria-hidden="true"></i> Devis
                             </a>
                         </li>
                         <li class="sidebar__item">
                             <a href="<?= url('/factures') ?>" class="sidebar__link <?= str_contains($uri, '/factures') ? 'sidebar__link--active' : '' ?>">
-                                <i class="ri-receipt-line"></i> Factures
+                                <i class="ri-receipt-line" aria-hidden="true"></i> Factures
                             </a>
                         </li>
                     </ul>
                     <ul class="sidebar__list">
                         <li class="sidebar__item">
                             <a href="<?= url('/tva') ?>" class="sidebar__link <?= $uri === '/tva' ? 'sidebar__link--active' : '' ?>">
-                                <i class="ri-percent-line"></i> Gestion TVA
+                                <i class="ri-percent-line" aria-hidden="true"></i> Gestion TVA
                             </a>
                         </li>
                     </ul>
@@ -51,7 +51,7 @@
 
                 <div class="sidebar__footer">
                     <a href="<?= url('/logout') ?>" class="sidebar__link sidebar__link--logout">
-                        <i class="ri-logout-circle-line"></i> Déconnexion
+                        <i class="ri-logout-circle-line" aria-hidden="true"></i> Déconnexion
                     </a>
 
                     <a href="<?= url('/profile') ?>" class="sidebar__user-card <?= $uri === '/profile' ? 'sidebar__user-card--active' : '' ?>">
@@ -62,7 +62,7 @@
                             <span class="sidebar__user-name"><?= e($_SESSION['user_prenom']) ?></span>
                             <span class="sidebar__user-sub">Mon profil</span>
                         </div>
-                        <i class="ri-arrow-right-s-line"></i>
+                        <i class="ri-arrow-right-s-line" aria-hidden="true"></i>
                     </a>
                 </div>
             </aside>
@@ -72,7 +72,7 @@
             <div class="app-main">
                 <header class="topbar">
                     <button class="topbar__toggle" aria-label="Ouvrir le menu">
-                        <i class="ri-menu-2-line"></i>
+                        <i class="ri-menu-2-line" aria-hidden="true"></i>
                     </button>
                     <h1 class="topbar__title"><?= $title ?? 'Jobflow' ?></h1>
                 </header>
@@ -93,3 +93,5 @@
     <?php require __DIR__ . '/partials/footer.php'; ?>
 </body>
 </html>
+
+

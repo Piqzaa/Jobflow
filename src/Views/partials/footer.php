@@ -13,8 +13,8 @@
             </div>
 
             <div class="footer__socials">
-                <a target="_blank" href="https://www.linkedin.com/in/alex-berrel-8b800a399/" class="footer__social-link" aria-label="LinkedIn"><i class="ri-linkedin-box-line"></i></a>
-                <a target="_blank" href="https://github.com/piqzaa" class="footer__social-link" aria-label="GitHub"><i class="ri-github-line"></i></a>
+                <a target="_blank" href="https://www.linkedin.com/in/alex-berrel-8b800a399/" class="footer__social-link" aria-label="LinkedIn"><i class="ri-linkedin-box-line" aria-hidden="true"></i></a>
+                <a target="_blank" href="https://github.com/piqzaa" class="footer__social-link" aria-label="GitHub"><i class="ri-github-line" aria-hidden="true"></i></a>
             </div>
         </div>
 
@@ -28,3 +28,5 @@
         </div>
     </div>
 </footer>
+
+
