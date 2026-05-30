@@ -105,8 +105,17 @@ class DevisController {
         $totalHt = 0;
 
         foreach ($designations as $i => $designation) {
-            $qty  = floatval($quantites[$i] ?? 0);
-            $p    = floatval($prix[$i] ?? 0);
+            $qty  = $quantites[$i] ?? 0;
+            $p    = $prix[$i] ?? 0;
+
+            if (!\App\Helpers\Validator::positiveNumber($qty) || !\App\Helpers\Validator::positiveNumber($p)) {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'error' => 'Les quantités et les prix doivent être des nombres positifs.']);
+                exit;
+            }
+
+            $qty  = floatval($qty);
+            $p    = floatval($p);
             $tht  = $qty * $p;
             $tttc = $tht * (1 + ($tvaRate / 100));
 
@@ -178,8 +187,17 @@ class DevisController {
         $totalHt = 0;
 
         foreach ($designations as $i => $designation) {
-            $qty  = floatval($quantites[$i] ?? 0);
-            $p    = floatval($prix[$i] ?? 0);
+            $qty  = $quantites[$i] ?? 0;
+            $p    = $prix[$i] ?? 0;
+
+            if (!\App\Helpers\Validator::positiveNumber($qty) || !\App\Helpers\Validator::positiveNumber($p)) {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'error' => 'Les quantités et les prix doivent être des nombres positifs.']);
+                exit;
+            }
+
+            $qty  = floatval($qty);
+            $p    = floatval($p);
             $tht  = $qty * $p;
             $tttc = $tht * (1 + ($tvaRate / 100));
 
