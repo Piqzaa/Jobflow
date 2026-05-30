@@ -5,13 +5,13 @@ namespace App\Controllers;
 use App\Models\Client;
 use App\Helpers\Validator;
 
-class ClientController {
+/**
+ * Contrôleur pour la gestion des Clients
+ */
+class ClientController extends BaseController {
   
   public function index() {
-    if (!isset($_SESSION['user_id'])) {
-      header('Location: ' . url('/login'));
-      exit;
-    }
+    $this->checkAuth();
 
     $userId = $_SESSION['user_id'];
     $clientModel = new Client();
@@ -43,12 +43,7 @@ class ClientController {
   }
   
   public function create() {
-    if (!isset($_SESSION['user_id'])) {
-      header('Content-Type: application/json');
-      echo json_encode(['success' => false, 'error' => 'Session expirée']);
-      exit;
-    }
-    
+    $this->checkAuth();
     check_csrf($_POST['csrf_token'] ?? '');
 
     $inputs = array_map('trim', $_POST);
@@ -88,12 +83,7 @@ class ClientController {
   }
 
   public function update() {
-    if (!isset($_SESSION['user_id'])) {
-      header('Content-Type: application/json');
-      echo json_encode(['success' => false, 'error' => 'Session expirée']);
-      exit;
-    }
-    
+    $this->checkAuth();
     check_csrf($_POST['csrf_token'] ?? '');
 
     $clientId = $_POST['id'] ?? null;
@@ -124,12 +114,7 @@ class ClientController {
   }
 
   public function delete() {
-    if (!isset($_SESSION['user_id'])) {
-      header('Content-Type: application/json');
-      echo json_encode(['success' => false, 'error' => 'Session expirée']);
-      exit;
-    }
-    
+    $this->checkAuth();
     check_csrf($_POST['csrf_token'] ?? '');
     
     $clientId = $_POST['id'] ?? null;
@@ -137,11 +122,6 @@ class ClientController {
     $result = $clientModel->deleteClient($clientId, $_SESSION['user_id']);
 
     header('Content-Type: application/json');
-    echo json_encode(['success' => (bool)$result]);
-    exit;
-  }
-}
-ntent-Type: application/json');
     echo json_encode(['success' => (bool)$result]);
     exit;
   }

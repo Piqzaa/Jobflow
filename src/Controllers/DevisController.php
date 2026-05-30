@@ -4,14 +4,15 @@ namespace App\Controllers;
 
 use App\Models\Devis;
 use App\Models\Client;
+use App\Helpers\Validator;
 
-class DevisController {
+/**
+ * Contrôleur pour la gestion des Devis
+ */
+class DevisController extends BaseController {
     
     public function index() {
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: ' . url('/login'));
-            exit;
-        }
+        $this->checkAuth();
 
         $userId = $_SESSION['user_id'];
         $devisModel = new Devis();
@@ -30,11 +31,7 @@ class DevisController {
     }
 
     public function get() {
-        if (!isset($_SESSION['user_id'])) {
-            header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'error' => 'Session expirée']);
-            exit;
-        }
+        $this->checkAuth();
 
         $devisId = $_GET['id'] ?? null;
         $devisModel = new Devis();
@@ -57,13 +54,9 @@ class DevisController {
         ]);
         exit;
     }
+
     public function create() {
-        if (!isset($_SESSION['user_id'])) {
-            header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'error' => 'Session expirée']);
-            exit;
-        }
-        
+        $this->checkAuth();
         check_csrf($_POST['csrf_token'] ?? '');
 
         $userId = $_SESSION['user_id'];
@@ -108,7 +101,8 @@ class DevisController {
             $qty  = $quantites[$i] ?? 0;
             $p    = $prix[$i] ?? 0;
 
-            if (!\App\Helpers\Validator::positiveNumber($qty) || !\App\Helpers\Validator::positiveNumber($p)) {
+            // Utilisation du nouveau validateur pour les nombres positifs
+            if (!Validator::positiveNumber($qty) || !Validator::positiveNumber($p)) {
                 header('Content-Type: application/json');
                 echo json_encode(['success' => false, 'error' => 'Les quantités et les prix doivent être des nombres positifs.']);
                 exit;
@@ -156,11 +150,7 @@ class DevisController {
     }
 
     public function update() {
-        if (!isset($_SESSION['user_id'])) {
-            header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'error' => 'Session expirée']);
-            exit;
-        }
+        $this->checkAuth();
         check_csrf($_POST['csrf_token'] ?? '');
 
         $userId = $_SESSION['user_id'];
@@ -190,7 +180,7 @@ class DevisController {
             $qty  = $quantites[$i] ?? 0;
             $p    = $prix[$i] ?? 0;
 
-            if (!\App\Helpers\Validator::positiveNumber($qty) || !\App\Helpers\Validator::positiveNumber($p)) {
+            if (!Validator::positiveNumber($qty) || !Validator::positiveNumber($p)) {
                 header('Content-Type: application/json');
                 echo json_encode(['success' => false, 'error' => 'Les quantités et les prix doivent être des nombres positifs.']);
                 exit;
@@ -236,12 +226,7 @@ class DevisController {
     }
 
     public function delete() {
-        if (!isset($_SESSION['user_id'])) {
-            header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'error' => 'Session expirée']);
-            exit;
-        }
-
+        $this->checkAuth();
         check_csrf($_POST['csrf_token'] ?? '');
 
         $userId = $_SESSION['user_id'];
@@ -290,12 +275,7 @@ class DevisController {
     }
 
     public function updateStatus() {
-        if (!isset($_SESSION['user_id'])) {
-            header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'error' => 'Session expirée']);
-            exit;
-        }
-
+        $this->checkAuth();
         check_csrf($_POST['csrf_token'] ?? '');
 
         $userId = $_SESSION['user_id'];
@@ -317,8 +297,5 @@ class DevisController {
             'error'   => $result ? null : 'Erreur lors de la mise à jour du statut'
         ]);
         exit;
-    }
-}
-      exit;
     }
 }

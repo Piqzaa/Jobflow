@@ -6,14 +6,15 @@ use App\Models\Facture;
 use App\Models\Devis;
 use App\Models\User;
 use App\Helpers\MongoLogger;
+use App\Helpers\Validator;
 
-class FactureController {
+/**
+ * Contrôleur pour la gestion des Factures
+ */
+class FactureController extends BaseController {
 
     public function index() {
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: ' . url('/login'));
-            exit;
-        }
+        $this->checkAuth();
 
         $userId = $_SESSION['user_id'];
         $factureModel = new Facture();
@@ -32,11 +33,7 @@ class FactureController {
     }
 
     public function get() {
-        if (!isset($_SESSION['user_id'])) {
-            header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'error' => 'Session expirée']);
-            exit;
-        }
+        $this->checkAuth();
 
         $factureId = $_GET['id'] ?? null;
         $factureModel = new Facture();
@@ -61,12 +58,7 @@ class FactureController {
     }
 
     public function create() {
-        if (!isset($_SESSION['user_id'])) {
-            header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'error' => 'Session expirée']);
-            exit;
-        }
-        
+        $this->checkAuth();
         check_csrf($_POST['csrf_token'] ?? '');
 
         $userId = $_SESSION['user_id'];
@@ -104,8 +96,17 @@ class FactureController {
         $totalHt = 0;
 
         foreach ($designations as $i => $designation) {
-            $qty  = floatval($quantites[$i] ?? 0);
-            $p    = floatval($prix[$i] ?? 0);
+            $qty  = $quantites[$i] ?? 0;
+            $p    = $prix[$i] ?? 0;
+
+            if (!Validator::positiveNumber($qty) || !Validator::positiveNumber($p)) {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'error' => 'Les quantités et les prix doivent être des nombres positifs.']);
+                exit;
+            }
+
+            $qty  = floatval($qty);
+            $p    = floatval($p);
             $tht  = $qty * $p;
             $tttc = $tht * (1 + ($tvaRate / 100));
 
@@ -146,11 +147,7 @@ class FactureController {
     }
 
     public function update() {
-        if (!isset($_SESSION['user_id'])) {
-            header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'error' => 'Session expirée']);
-            exit;
-        }
+        $this->checkAuth();
         check_csrf($_POST['csrf_token'] ?? '');
 
         $userId = $_SESSION['user_id'];
@@ -188,8 +185,17 @@ class FactureController {
         $totalHt = 0;
 
         foreach ($designations as $i => $designation) {
-            $qty  = floatval($quantites[$i] ?? 0);
-            $p    = floatval($prix[$i] ?? 0);
+            $qty  = $quantites[$i] ?? 0;
+            $p    = $prix[$i] ?? 0;
+
+            if (!Validator::positiveNumber($qty) || !Validator::positiveNumber($p)) {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'error' => 'Les quantités et les prix doivent être des nombres positifs.']);
+                exit;
+            }
+
+            $qty  = floatval($qty);
+            $p    = floatval($p);
             $tht  = $qty * $p;
             $tttc = $tht * (1 + ($tvaRate / 100));
 
@@ -228,12 +234,7 @@ class FactureController {
     }
 
     public function delete() {
-        if (!isset($_SESSION['user_id'])) {
-            header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'error' => 'Session expirée']);
-            exit;
-        }
-
+        $this->checkAuth();
         check_csrf($_POST['csrf_token'] ?? '');
 
         $userId = $_SESSION['user_id'];
@@ -251,12 +252,7 @@ class FactureController {
     }
 
     public function updateStatus() {
-        if (!isset($_SESSION['user_id'])) {
-            header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'error' => 'Session expirée']);
-            exit;
-        }
-
+        $this->checkAuth();
         check_csrf($_POST['csrf_token'] ?? '');
 
         $userId = $_SESSION['user_id'];
@@ -275,12 +271,7 @@ class FactureController {
     }
 
     public function createFromDevis() {
-        if (!isset($_SESSION['user_id'])) {
-            header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'error' => 'Session expirée']);
-            exit;
-        }
-
+        $this->checkAuth();
         check_csrf($_POST['csrf_token'] ?? '');
 
         $userId = $_SESSION['user_id'];
@@ -349,8 +340,5 @@ class FactureController {
         $pdfService = new \App\Services\PdfService();
         $filename = "Facture_{$facture['numero']}.pdf";
         $pdfService->generatePdf($html, $filename);
-    }
-}
-$filename);
     }
 }
