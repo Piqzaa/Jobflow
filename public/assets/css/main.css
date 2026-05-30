@@ -976,6 +976,12 @@ small,
   justify-content: flex-end;
 }
 
+.table-empty-message {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
+}
+
 .btn-action {
   width: 32px;
   height: 32px;
@@ -1074,6 +1080,14 @@ small,
     justify-content: flex-end;
   }
   .data-table td:last-child::before {
+    display: none;
+  }
+  td.table-empty-message {
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+  td.table-empty-message::before {
     display: none;
   }
 }

@@ -75,6 +75,12 @@
   justify-content: flex-end;
 }
 
+.table-empty-message {
+  text-align: center;
+  padding: 2rem;
+  color: $gray-500;
+}
+
 .btn-action {
   width: 32px;
   height: 32px;
@@ -183,6 +189,14 @@
     border-top: 1px solid $gray-100;
     justify-content: flex-end;
 
+    &::before {
+      display: none;
+    }
+  }
+  td.table-empty-message {
+    display: block;
+    width: 100%;
+    text-align: center;
     &::before {
       display: none;
     }
