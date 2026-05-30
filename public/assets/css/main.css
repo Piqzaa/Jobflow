@@ -807,7 +807,7 @@ small,
   margin-bottom: 24px;
 }
 
-@media (max-width: 992px) {
+@media (max-width: 1024px) {
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1006,7 +1006,7 @@ small,
   font-size: 1.1rem;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   .table-container {
     overflow-x: visible;
     border: none;
@@ -1391,7 +1391,7 @@ small,
   justify-content: center;
   gap: 1rem;
 }
-@media (max-width: 640px) {
+@media (max-width: 576px) {
   .home-hero__actions {
     flex-direction: column;
     align-items: stretch;

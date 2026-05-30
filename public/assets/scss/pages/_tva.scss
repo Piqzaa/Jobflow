@@ -1,40 +1,40 @@
-@use "../abstracts/variables" as v;
+@use "../abstracts/variables" as *;
 
 .tva-layout {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 1.5rem;
-    align-items: start;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1.5rem;
+  align-items: start;
 }
 
-@media (max-width: 1024px) {
-    .tva-layout {
-        grid-template-columns: 1fr;
-    }
+@media (max-width: $bp-lg) {
+  .tva-layout {
+    grid-template-columns: 1fr;
+  }
 }
 
 .tva-layout__sidebar {
-    display: block;
+  display: block;
 }
 
 .tva-layout__main {
-    display: block;
+  display: block;
 }
 
 .tva-table__col-actions {
-    width: 80px;
-    text-align: center;
+  width: 80px;
+  text-align: center;
 }
 
 .tva-table__empty-state {
-    text-align: center;
-    padding: 3rem;
-    color: v.$gray-400;
+  text-align: center;
+  padding: 3rem;
+  color: $gray-400;
 }
 
 .tva-table__empty-state i {
-    font-size: 2.5rem;
-    display: block;
-    margin-bottom: 1rem;
-    color: v.$gray-300;
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 1rem;
+  color: $gray-300;
 }

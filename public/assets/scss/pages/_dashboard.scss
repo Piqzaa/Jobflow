@@ -65,7 +65,7 @@
   color: v.$success;
 }
 
-@media (max-width: 576px) {
+@media (max-width: v.$bp-sm) {
   .dashboard__header {
     flex-direction: column;
     gap: 16px;

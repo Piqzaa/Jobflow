@@ -107,7 +107,7 @@
   font-size: 1.1rem;
 }
 
-@media (max-width: 767px) {
+@media (max-width: $bp-md) {
   .table-container {
     overflow-x: visible;
     border: none;

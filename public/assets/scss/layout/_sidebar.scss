@@ -200,7 +200,7 @@
 
 // Mobile
 
-@media (max-width: 768px) {
+@media (max-width: $bp-md) {
   .sidebar {
     position: fixed;
     inset: 0;

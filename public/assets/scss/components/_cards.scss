@@ -104,14 +104,14 @@
   margin-bottom: 24px;
 }
 
-@media (max-width: 992px) {
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
+@media (max-width: $bp-lg) {
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
-}
 
-@media (max-width: 576px) {
-  .stats-grid {
-    grid-template-columns: 1fr;
+  @media (max-width: $bp-sm) {
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
   }
-}
