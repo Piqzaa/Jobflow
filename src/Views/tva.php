@@ -60,7 +60,7 @@
                     </div>
                 </div>
                 
-                <button type="submit" class="btn-primary btn-block">
+                <button type="submit" class="btn--primary btn--block">
                     <i class="ri-save-line"></i>
                     Enregistrer le paiement
                 </button>

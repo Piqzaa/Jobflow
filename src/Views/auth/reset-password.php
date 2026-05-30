@@ -40,7 +40,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn-primary btn-block btn-lg">
+            <button type="submit" class="btn--primary btn--block btn--lg">
                 <span>Enregistrer le mot de passe</span>
                 <i class="ri-checkbox-circle-line"></i>
             </button>

@@ -2,10 +2,6 @@
 
 namespace App\Controllers;
 
-/**
- * Classe de base pour tous les contrôleurs.
- * Permet de centraliser les fonctionnalités communes (authentification, helpers, etc.).
- */
 abstract class BaseController {
     
     /**
@@ -22,7 +18,6 @@ abstract class BaseController {
                 exit;
             }
 
-            // Sinon, redirection classique
             header('Location: ' . url('/login'));
             exit;
         }

@@ -16,8 +16,8 @@
 
         <nav class="header__nav">
             <div class="header__auth">
-                <a href="<?= url('/login') ?>" class="btn-light">Connexion</a>
-                <a href="<?= url('/register') ?>" class="btn-primary">Inscription</a>
+                <a href="<?= url('/login') ?>" class="btn--light">Connexion</a>
+                <a href="<?= url('/register') ?>" class="btn--primary">Inscription</a>
             </div>
         </nav>
     </div>

@@ -30,7 +30,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn-primary btn-block btn-lg">
+            <button type="submit" class="btn--primary btn--block btn--lg">
                 <span>Envoyer le lien</span>
                 <i class="ri-mail-send-line"></i>
             </button>

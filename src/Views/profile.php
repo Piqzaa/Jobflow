@@ -115,7 +115,7 @@
         </section>
 
         <div class="profile__footer">
-            <button type="submit" class="btn-primary">
+            <button type="submit" class="btn--primary">
                 <i class="fas fa-save"></i>
                 Enregistrer les modifications
             </button>

@@ -10,8 +10,8 @@
             Simple, rapide et conçu pour votre quotidien.
         </p>
         <div class="home-hero__actions">
-            <a href="<?= url('/register') ?>" class="btn-primary btn-hero">S'inscrire gratuitement</a>
-            <a href="<?= url('/login') ?>" class="btn-outline btn-hero">Se connecter</a>
+            <a href="<?= url('/register') ?>" class="btn--primary btn--hero">S'inscrire gratuitement</a>
+            <a href="<?= url('/login') ?>" class="btn--outline btn--hero">Se connecter</a>
         </div>
     </div>
 </section>
@@ -62,6 +62,6 @@
             <span class="text-gradient">votre gestion ?</span>
         </h2>
         <p class="home-cta__text">Rejoignez les freelances qui utilisent Jobflow pour gagner du temps chaque jour.</p>
-        <a href="<?= url('/register') ?>" class="btn-primary btn-hero">Créer mon compte maintenant</a>
+        <a href="<?= url('/register') ?>" class="btn--primary btn--hero">Créer mon compte maintenant</a>
     </div>
 </section>
