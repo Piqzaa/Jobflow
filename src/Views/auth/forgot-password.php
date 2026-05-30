@@ -7,14 +7,14 @@
 
         <?php if (isset($error)): ?>
             <div class="alert alert--danger">
-                <i class="ri-error-warning-line"></i>
+                <i class="ri-error-warning-line" aria-hidden="true"></i>
                 <?= e($error) ?>
             </div>
         <?php endif; ?>
 
         <?php if (isset($success)): ?>
             <div class="alert alert--success">
-                <i class="ri-checkbox-circle-line"></i>
+                <i class="ri-checkbox-circle-line" aria-hidden="true"></i>
                 <?= e($success) ?>
             </div>
         <?php endif; ?>
@@ -25,14 +25,14 @@
             <div class="form-group">
                 <label for="email" class="form-label">Adresse email</label>
                 <div class="input-group has-icon">
-                    <i class="ri-mail-line"></i>
+                    <i class="ri-mail-line" aria-hidden="true"></i>
                     <input type="email" name="email" id="email" class="form-control" placeholder="exemple@domaine.com" required autofocus>
                 </div>
             </div>
 
             <button type="submit" class="btn--primary btn--block btn--lg">
                 <span>Envoyer le lien</span>
-                <i class="ri-mail-send-line"></i>
+                <i class="ri-mail-send-line" aria-hidden="true"></i>
             </button>
         </form>
 
@@ -41,3 +41,5 @@
         </div>
     </div>
 </div>
+
+

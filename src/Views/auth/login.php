@@ -7,14 +7,14 @@
 
         <?php if (isset($error)): ?>
             <div class="alert alert--danger">
-                <i class="ri-error-warning-line"></i>
+                <i class="ri-error-warning-line" aria-hidden="true"></i>
                 <?= e($error) ?>
             </div>
         <?php endif; ?>
 
         <?php if (isset($_SESSION['success'])): ?>
             <div class="alert alert--success">
-                <i class="ri-checkbox-circle-line"></i>
+                <i class="ri-checkbox-circle-line" aria-hidden="true"></i>
                 <?= e($_SESSION['success']); unset($_SESSION['success']); ?>
             </div>
         <?php endif; ?>
@@ -25,7 +25,7 @@
             <div class="form-group">
                 <label for="email" class="form-label">Adresse email</label>
                 <div class="input-group has-icon">
-                    <i class="ri-mail-line"></i>
+                    <i class="ri-mail-line" aria-hidden="true"></i>
                     <input type="email" name="email" id="email" class="form-control" placeholder="exemple@domaine.com" required autofocus>
                 </div>
             </div>
@@ -33,7 +33,7 @@
             <div class="form-group">
                 <label for="password" class="form-label">Mot de passe</label>
                 <div class="input-group has-icon">
-                    <i class="ri-lock-2-line"></i>
+                    <i class="ri-lock-2-line" aria-hidden="true"></i>
                     <input type="password" name="password" id="password" class="form-control" placeholder="••••••••" required>
                 </div>
             </div>
@@ -44,7 +44,7 @@
 
             <button type="submit" class="btn--primary btn--block btn--lg">
                 <span>Se connecter</span>
-                <i class="ri-arrow-right-line"></i>
+                <i class="ri-arrow-right-line" aria-hidden="true"></i>
             </button>
         </form>
 
@@ -53,3 +53,5 @@
         </div>
     </div>
 </div>
+
+

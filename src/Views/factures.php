@@ -1,7 +1,7 @@
 <header class="page-header">
     <div class="page-actions">
         <button class="btn--primary" id="add-facture" data-modal-target="#modal-facture">
-            <i class="ri-add-line"></i>
+            <i class="ri-add-line" aria-hidden="true"></i>
             <span>Nouvelle facture</span>
         </button>
     </div>
@@ -50,14 +50,14 @@
                 </td>
                 <td>
                     <div class="table-actions">
-                        <button class="btn-action view-pdf-btn" data-id="<?= $f['id'] ?>" title="Voir PDF">
-                            <i class="ri-file-pdf-line"></i>
+                        <button class="btn-action view-pdf-btn" data-id="<?= $f['id'] ?>" title="Voir PDF" aria-label="Voir PDF">
+                            <i class="ri-file-pdf-line" aria-hidden="true" aria-hidden="true"></i>
                         </button>
-                        <button class="btn-action edit-btn <?= $f['statut'] !== 'brouillon' ? 'is-hidden' : '' ?>" data-id="<?= $f['id'] ?>" title="Modifier">
-                            <i class="ri-pencil-line"></i>
+                        <button class="btn-action edit-btn <?= $f['statut'] !== 'brouillon' ? 'is-hidden' : '' ?>" data-id="<?= $f['id'] ?>" title="Modifier" aria-label="Modifier">
+                            <i class="ri-pencil-line" aria-hidden="true" aria-hidden="true"></i>
                         </button>
-                        <button class="btn-action btn-action--danger delete-btn <?= $f['statut'] !== 'brouillon' ? 'is-hidden' : '' ?>" data-id="<?= $f['id'] ?>" title="Supprimer">
-                            <i class="ri-delete-bin-line"></i>
+                        <button class="btn-action btn-action--danger delete-btn <?= $f['statut'] !== 'brouillon' ? 'is-hidden' : '' ?>" data-id="<?= $f['id'] ?>" title="Supprimer" aria-label="Supprimer">
+                            <i class="ri-delete-bin-line" aria-hidden="true" aria-hidden="true"></i>
                         </button>
                     </div>
                 </td>
@@ -77,7 +77,7 @@
         <div class="modal__header">
             <h3 class="modal__title">Informations Facture</h3>
             <button class="modal__close" data-modal-close type="button">
-                <i class="ri-close-line"></i>
+                <i class="ri-close-line" aria-hidden="true"></i>
             </button>
         </div>
 
@@ -114,7 +114,7 @@
             <div class="modal__section-header">
                 <h4 class="modal__subtitle">Articles / Services</h4>
                 <button type="button" id="add-item-row" class="btn--light btn--light--sm">
-                    <i class="ri-add-line"></i> Ajouter une ligne
+                    <i class="ri-add-line" aria-hidden="true"></i> Ajouter une ligne
                 </button>
             </div>
 
@@ -153,9 +153,11 @@
         <div class="modal__footer">
             <button class="btn--light" data-modal-close type="button">Annuler</button>
             <button class="btn--primary" id="modal-save-facture-btn" type="submit">
-                <i class="ri-save-line"></i>
+                <i class="ri-save-line" aria-hidden="true"></i>
                 <span>Enregistrer</span>
             </button>
         </div>
     </div>
 </form>
+
+

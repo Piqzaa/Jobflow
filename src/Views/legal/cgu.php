@@ -141,3 +141,5 @@
             Pour toute question relative aux présentes CGU : <a href="mailto:alex.berrel@gmail.com">alex.berrel@gmail.com</a>
         </p>
 </section>
+
+

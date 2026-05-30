@@ -7,14 +7,14 @@
 
         <?php if (isset($error)): ?>
             <div class="alert alert--danger">
-                <i class="ri-error-warning-line"></i>
+                <i class="ri-error-warning-line" aria-hidden="true"></i>
                 <?= e($error) ?>
             </div>
         <?php endif; ?>
 
         <?php if (isset($success)): ?>
             <div class="alert alert--success">
-                <i class="ri-checkbox-circle-line"></i>
+                <i class="ri-checkbox-circle-line" aria-hidden="true"></i>
                 <?= e($success) ?>
             </div>
         <?php endif; ?>
@@ -27,7 +27,7 @@
             <div class="form-group">
                 <label for="password" class="form-label">Nouveau mot de passe</label>
                 <div class="input-group has-icon">
-                    <i class="ri-lock-2-line"></i>
+                    <i class="ri-lock-2-line" aria-hidden="true"></i>
                     <input type="password" name="password" id="password" class="form-control" placeholder="••••••••" required autofocus>
                 </div>
             </div>
@@ -35,14 +35,14 @@
             <div class="form-group">
                 <label for="password_confirmation" class="form-label">Confirmation</label>
                 <div class="input-group has-icon">
-                    <i class="ri-lock-check-line"></i>
+                    <i class="ri-lock-check-line" aria-hidden="true"></i>
                     <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="••••••••" required>
                 </div>
             </div>
 
             <button type="submit" class="btn--primary btn--block btn--lg">
                 <span>Enregistrer le mot de passe</span>
-                <i class="ri-checkbox-circle-line"></i>
+                <i class="ri-checkbox-circle-line" aria-hidden="true"></i>
             </button>
         </form>
 
@@ -51,3 +51,5 @@
         </div>
     </div>
 </div>
+
+

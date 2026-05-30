@@ -1,7 +1,7 @@
 <header class="page-header">
     <div class="page-actions">
         <button class="btn--primary" id="add-client" data-modal-target="#modal-client">
-            <i class="ri-user-add-line"></i>
+            <i class="ri-user-add-line" aria-hidden="true"></i>
             <span>Nouveau client</span>
         </button>
     </div>
@@ -31,11 +31,11 @@
                 <td class="c-telephone" data-label="Tel"><?= e($client['telephone']) ?></td>
                 <td data-label="Actions">
                     <div class="table-actions">
-                        <button class="btn-action edit-btn" data-id="<?= $client['id'] ?>" title="Modifier">
-                            <i class="ri-pencil-line"></i>
+                        <button class="btn-action edit-client-btn" data-id="<?= $client['id'] ?>" title="Modifier" aria-label="Modifier">
+                            <i class="ri-pencil-line" aria-hidden="true" aria-hidden="true"></i>
                         </button>
-                        <button class="btn-action btn-action--danger delete-btn" data-id="<?= $client['id'] ?>" title="Supprimer">
-                            <i class="ri-delete-bin-line"></i>
+                        <button class="btn-action btn-action--danger delete-client-btn" data-id="<?= $client['id'] ?>" title="Supprimer" aria-label="Supprimer">
+                            <i class="ri-delete-bin-line" aria-hidden="true" aria-hidden="true"></i>
                         </button>
                     </div>
                 </td>
@@ -55,7 +55,7 @@
         <div class="modal__header">
             <h3 class="modal__title">Informations Client</h3>
             <button class="modal__close" data-modal-close type="button">
-                <i class="ri-close-line"></i>
+                <i class="ri-close-line" aria-hidden="true"></i>
             </button>
         </div>
 
@@ -110,3 +110,5 @@
         </div>
     </div>
 </form>
+
+

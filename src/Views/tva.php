@@ -20,7 +20,7 @@
 
 <?php if (isset($error)): ?>
     <div class="alert alert--danger">
-        <i class="ri-error-warning-line"></i>
+        <i class="ri-error-warning-line" aria-hidden="true"></i>
         <?= e($error) ?>
     </div>
 <?php endif; ?>
@@ -29,7 +29,7 @@
     <aside class="tva-layout__sidebar">
         <section class="card">
             <h2 class="card__title">
-                <i class="ri-add-circle-line"></i>
+                <i class="ri-add-circle-line" aria-hidden="true"></i>
                 Enregistrer un versement
             </h2>
             
@@ -39,7 +39,7 @@
                 <div class="form-group">
                     <label for="montant" class="form-label">Montant versé (€)</label>
                     <div class="input-group has-icon">
-                        <i class="ri-money-euro-circle-line"></i>
+                        <i class="ri-money-euro-circle-line" aria-hidden="true"></i>
                         <input type="number" step="0.01" name="montant" id="montant" class="form-control" placeholder="0.00" required>
                     </div>
                 </div>
@@ -47,7 +47,7 @@
                 <div class="form-group">
                     <label for="date_paiement" class="form-label">Date du paiement</label>
                     <div class="input-group has-icon">
-                        <i class="ri-calendar-line"></i>
+                        <i class="ri-calendar-line" aria-hidden="true"></i>
                         <input type="date" name="date_paiement" id="date_paiement" class="form-control" value="<?= date('Y-m-d') ?>" required>
                     </div>
                 </div>
@@ -55,13 +55,13 @@
                 <div class="form-group">
                     <label for="periode" class="form-label">Période concernée</label>
                     <div class="input-group has-icon">
-                        <i class="ri-time-line"></i>
+                        <i class="ri-time-line" aria-hidden="true"></i>
                         <input type="text" name="periode" id="periode" class="form-control" placeholder="Ex: Trimestre 1 2026">
                     </div>
                 </div>
                 
                 <button type="submit" class="btn--primary btn--block">
-                    <i class="ri-save-line"></i>
+                    <i class="ri-save-line" aria-hidden="true"></i>
                     Enregistrer le paiement
                 </button>
             </form>
@@ -84,7 +84,7 @@
                         <tr>
                             <td colspan="4">
                                 <div class="tva-table__empty-state">
-                                    <i class="ri-information-line"></i>
+                                    <i class="ri-information-line" aria-hidden="true"></i>
                                     Aucun versement enregistré pour le moment.
                                 </div>
                             </td>
@@ -101,7 +101,7 @@
                                             <?= csrf_field() ?>
                                             <input type="hidden" name="id" value="<?= $payment['id'] ?>">
                                             <button type="submit" class="btn-action btn-action--danger" title="Supprimer">
-                                                <i class="ri-delete-bin-line"></i>
+                                                <i class="ri-delete-bin-line" aria-hidden="true"></i>
                                             </button>
                                         </form>
                                     </div>
@@ -114,3 +114,5 @@
         </div>
     </main>
 </div>
+
+
