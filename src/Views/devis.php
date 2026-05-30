@@ -70,6 +70,11 @@
             </tr>
             <?php endforeach; ?>
         </tbody>
+        <tr id="no-devis-message" class="is-hidden">
+            <td colspan="6" class="table-empty-message">
+                Aucun devis enregistré pour le moment.
+            </td>
+        </tr>
     </table>
 </div>
 
