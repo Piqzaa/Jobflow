@@ -64,6 +64,11 @@
             </tr>
             <?php endforeach; ?>
         </tbody>
+        <tr id="no-facture-message" class="is-hidden">
+            <td colspan="6" class="table-empty-message">
+                Aucune facture enregistrée pour le moment.
+            </td>
+        </tr>
     </table>
 </div>
 
