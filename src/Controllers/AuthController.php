@@ -243,14 +243,13 @@ class AuthController {
             $token = bin2hex(random_bytes(16));
             $userModel->createPasswordResetToken($user['id'], $token);
             $resetLink = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]" . url("/reset-password?token=$token");
-            $subject = "Réinitialisation de votre mot de passe - JobFlow";
-            $body = "<h1>Réinitialisation de votre mot de passe</h1>";
-            $body .= "<p>Bonjour " . htmlspecialchars($user['email']) . ",</p>";
-            $body .= "<p>Vous avez demandé une réinitialisation de votre mot de passe. Cliquez sur le bouton ci-dessous pour le réinitialiser :</p>";
-            $body .= "<a href='$resetLink' style='background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Réinitialiser mon mot de passe</a>";
-            $body .= "<p>Si vous n'avez pas demandé cette réinitialisation, ignorez cet email.</p>";
             
-            EmailService::send($email, $subject, $body);
+            $subject = "Réinitialisation de votre mot de passe - JobFlow";
+            $message = view_content('emails/reset_password', [
+                'resetLink' => $resetLink
+            ]);
+            
+            EmailService::send($email, $subject, $message);
 
              // Log de la demande de réinitialisation
              MongoLogger::write(
@@ -303,6 +302,20 @@ class AuthController {
             render('auth/reset-password', [
                 'title' => 'Nouveau mot de passe',
                 'error' => 'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.',
+                'token' => $token
+            ]);
+            return;
+        }
+
+        $userModel->updatePassword($resetRequest['user_id'], $password);
+        $userModel->deleteResetToken($token);
+        render('auth/login', [
+            'title' => 'Connexion',
+            'success' => 'Votre mot de passe a été mis à jour.'
+        ]);
+    }
+}
+         'error' => 'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.',
                 'token' => $token
             ]);
             return;
