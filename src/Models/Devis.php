@@ -160,7 +160,7 @@ class Devis extends BaseModel {
         } catch (\Exception $e) {
             $this->db->rollBack();
             error_log("[DevisModel] Erreur transaction : " . $e->getMessage());
-            return $e->getMessage();
+            return false;
         }
     }
 
