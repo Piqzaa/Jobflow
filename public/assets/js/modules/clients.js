@@ -24,6 +24,21 @@ export function initClients() {
   }
 
   /**
+   * Met à jour l'affichage du message "aucun client"
+   */
+  function updateEmptyView() {
+    const tbody = table.querySelector("tbody");
+    const msgRow = document.getElementById("no-client-message");
+    const rows = tbody.querySelectorAll("tr:not(#no-client-message)");
+
+    if (rows.length === 0) {
+      msgRow.classList.remove("is-hidden");
+    } else {
+      msgRow.classList.add("is-hidden");
+    }
+  }
+
+  /**
    * Met à jour une ligne du tableau de manière sécurisée.
    * On vérifie si l'élément existe avant de modifier son texte.
    */
@@ -59,8 +74,7 @@ export function initClients() {
     const row = document.createElement("tr");
     row.dataset.id = id;
 
-    // On construit le HTML dynamiquement en fonction des données reçues
-    // Note: On n'ajoute que les colonnes présentes dans ton nouveau design (Nom, Email, Ville, Tel)
+    // On construit le HTML dynamiquement
     row.innerHTML = `
       <td class="c-nom" data-label="Nom"></td>
       <td class="c-email" data-label="Email"></td>
@@ -68,17 +82,17 @@ export function initClients() {
       <td class="c-telephone" data-label="Tel"></td>
       <td data-label="Actions">
           <div class="table-actions">
-              <button class="btn-action edit-btn" data-id="${id}" title="Modifier">
-                  <i class="ri-pencil-line"></i>
+              <button class="btn-action edit-client-btn" data-id="${id}" title="Modifier" aria-label="Modifier">
+                  <i class="ri-pencil-line" aria-hidden="true"></i>
               </button>
-              <button class="btn-action btn-action--danger delete-btn" data-id="${id}" title="Supprimer">
-                  <i class="ri-delete-bin-line"></i>
+              <button class="btn-action btn-action--danger delete-client-btn" data-id="${id}" title="Supprimer" aria-label="Supprimer">
+                  <i class="ri-delete-bin-line" aria-hidden="true"></i>
               </button>
           </div>
       </td>
     `;
 
-    // Remplissage sécurisé (XSS)
+    // Remplissage sécurisé
     const fieldsMapping = {
       ".c-nom": data.get("nom"),
       ".c-email": data.get("email"),
@@ -99,8 +113,8 @@ export function initClients() {
   });
 
   table.addEventListener("click", async (e) => {
-    const editBtn = e.target.closest(".edit-btn");
-    const deleteBtn = e.target.closest(".delete-btn");
+    const editBtn = e.target.closest(".edit-client-btn");
+    const deleteBtn = e.target.closest(".delete-client-btn");
 
     if (editBtn) {
       const clientId = editBtn.dataset.id;
@@ -157,6 +171,7 @@ export function initClients() {
         const data = await response.json();
         if (data.success) {
           deleteBtn.closest("tr").remove();
+          updateEmptyView();
         } else {
           alert(data.error || "Erreur lors de la suppression");
         }
@@ -184,6 +199,7 @@ export function initClients() {
         } else {
           addRowToTable(data.id, formData);
         }
+        updateEmptyView();
         closeModal(modal);
         form.reset();
       } else {
@@ -193,4 +209,6 @@ export function initClients() {
       console.error(err);
     }
   });
+
+  updateEmptyView();
 }
