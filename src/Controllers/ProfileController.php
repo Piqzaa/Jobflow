@@ -6,9 +6,14 @@ use App\Models\User;
 use App\Helpers\Validator;
 use App\Helpers\MongoLogger;
 
-class ProfileController {
+/**
+ * Contrôleur pour la gestion du profil utilisateur
+ */
+class ProfileController extends BaseController {
     
     public function show() {
+        $this->checkAuth();
+        
         $userId = $_SESSION['user_id'];
         $userModel = new User();
         $user = $userModel->findById($userId);
@@ -21,6 +26,7 @@ class ProfileController {
     }
 
     public function update() {
+        $this->checkAuth();
         check_csrf($_POST['csrf_token'] ?? '');
 
         $userId = $_SESSION['user_id'];
@@ -82,6 +88,9 @@ class ProfileController {
         exit;
     }
 
+    /**
+     * Gère l'upload du logo d'entreprise
+     */
     private function handleLogoUpload($file, &$errors) {
         if (!$file || $file['error'] !== UPLOAD_ERR_OK) {
             return null;

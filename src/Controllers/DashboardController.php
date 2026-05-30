@@ -7,15 +7,12 @@ use App\Models\User;
 use App\Models\TvaPayment;
 use App\Helpers\SecurityHelper;
 
-class DashboardController {
+class DashboardController extends BaseController {
     private $factureModel;
     private $tvaModel;
 
     public function __construct() {
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: ' . url('/login'));
-            exit;
-        }
+        $this->checkAuth();
         $this->factureModel = new Facture();
         $this->tvaModel = new TvaPayment();
     }

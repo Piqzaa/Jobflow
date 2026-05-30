@@ -33,8 +33,8 @@ class Database {
 
             $this->pdo = new PDO($dsn, $user, $pass, $options);
         } catch (PDOException $e) {
-            // En production, on ne devrait pas afficher $e->getMessage() car il contient des infos sensibles
-            die("Erreur de connexion à la base de données : " . $e->getMessage());
+            error_log("Erreur de connexion PDO : " . $e->getMessage());
+            die("Une erreur technique est survenue. Veuillez réessayer plus tard.");
         }
     }
 

@@ -42,12 +42,26 @@ class Facture extends BaseModel {
 
     public function getNextNumber($userId) {
         $year = date('Y');
-        $sql = "SELECT COUNT(*) as total FROM factures WHERE user_id = :user_id AND YEAR(created_at) = :year";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute(['user_id' => $userId, 'year' => $year]);
-        $count = $stmt->fetch()['total'] + 1;
+        $sql = "SELECT numero FROM factures 
+                WHERE user_id = :user_id AND numero LIKE :prefix 
+                ORDER BY numero DESC LIMIT 1";
         
-        return "FAC-" . $year . "-" . str_pad($count, 3, '0', STR_PAD_LEFT);
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            'user_id' => $userId, 
+            'prefix'  => "FAC-$year-%"
+        ]);
+        
+        $lastFacture = $stmt->fetch();
+
+        if ($lastFacture) {
+            $lastNumber = (int)substr($lastFacture['numero'], -3);
+            $nextNumber = $lastNumber + 1;
+        } else {
+            $nextNumber = 1;
+        }
+        
+        return "FAC-" . $year . "-" . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
     }
 
 

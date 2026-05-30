@@ -28,6 +28,20 @@ function e($value) {
 }
 
 /**
+ * Récupère le contenu d'une vue sous forme de chaîne de caractères
+ * (Utile pour les emails)
+ */
+function view_content($view, $data = []) {
+    extract($data);
+    ob_start();
+    $viewPath = __DIR__ . '/../Views/' . $view . '.php';
+    if (file_exists($viewPath)) {
+        require $viewPath;
+    }
+    return ob_get_clean();
+}
+
+/**
  * Génère une URL absolue pour le projet
  */
 function url($path = '') {

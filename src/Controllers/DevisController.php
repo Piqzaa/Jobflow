@@ -4,14 +4,15 @@ namespace App\Controllers;
 
 use App\Models\Devis;
 use App\Models\Client;
+use App\Helpers\Validator;
 
-class DevisController {
+/**
+ * Contrôleur pour la gestion des Devis
+ */
+class DevisController extends BaseController {
     
     public function index() {
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: ' . url('/login'));
-            exit;
-        }
+        $this->checkAuth();
 
         $userId = $_SESSION['user_id'];
         $devisModel = new Devis();
@@ -30,11 +31,7 @@ class DevisController {
     }
 
     public function get() {
-        if (!isset($_SESSION['user_id'])) {
-            header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'error' => 'Session expirée']);
-            exit;
-        }
+        $this->checkAuth();
 
         $devisId = $_GET['id'] ?? null;
         $devisModel = new Devis();
@@ -57,27 +54,27 @@ class DevisController {
         ]);
         exit;
     }
+
     public function create() {
-        if (!isset($_SESSION['user_id'])) {
-            header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'error' => 'Session expirée']);
-            exit;
-        }
-        
+        $this->checkAuth();
         check_csrf($_POST['csrf_token'] ?? '');
 
         $userId = $_SESSION['user_id'];
         $devisModel = new Devis();
         $userModel = new \App\Models\User();
 
-        $clientId     = $_POST['client_id'] ?? null;
-        $dateEmission = $_POST['date_emission'] ?? date('Y-m-d');
-        $dateValidite = $_POST['date_validite'] ?? null;
+        $clientId     = !empty($_POST['client_id']) ? $_POST['client_id'] : null;
+        $dateEmission = !empty($_POST['date_emission']) ? $_POST['date_emission'] : date('Y-m-d');
+        $dateValidite = !empty($_POST['date_validite']) ? $_POST['date_validite'] : null;
         $notes        = trim($_POST['notes'] ?? '');
+
+        if (!$clientId) {
+            echo json_encode(['success' => false, 'error' => 'Veuillez sélectionner un client.']);
+            exit;
+        }
         $tvaApp       = isset($_POST['tva_applicable']);
         $tvaRate      = $tvaApp ? 20.00 : 0.00;
 
-        // Vérification TVA Intracommunautaire si TVA applicable
         if ($tvaApp) {
             $userProfile = $userModel->findById($userId);
             if (empty($userProfile['tva_intra'])) {
@@ -91,7 +88,6 @@ class DevisController {
         }
 
         $numero = $devisModel->getNextNumber($userId);
-
         $designations = $_POST['item_designation'] ?? [];
         $quantites    = $_POST['item_quantite']    ?? [];
         $prix         = $_POST['item_prix']        ?? [];
@@ -105,8 +101,17 @@ class DevisController {
         $totalHt = 0;
 
         foreach ($designations as $i => $designation) {
-            $qty  = floatval($quantites[$i] ?? 0);
-            $p    = floatval($prix[$i] ?? 0);
+            $qty  = $quantites[$i] ?? 0;
+            $p    = $prix[$i] ?? 0;
+
+            if (!Validator::positiveNumber($qty) || !Validator::positiveNumber($p)) {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'error' => 'Les quantités et les prix doivent être des nombres positifs.']);
+                exit;
+            }
+
+            $qty  = floatval($qty);
+            $p    = floatval($p);
             $tht  = $qty * $p;
             $tttc = $tht * (1 + ($tvaRate / 100));
 
@@ -141,17 +146,13 @@ class DevisController {
         echo json_encode([
             'success' => (bool)$result,
             'id'      => $result,
-            'error'   => $result ? null : 'Erreur lors de la sauvegarde du devis'
+            'error'   => $result ? null : 'Erreur lors de la sauvegarde du devis. Le numéro est peut-être déjà utilisé.'
         ]);
         exit;
     }
 
     public function update() {
-        if (!isset($_SESSION['user_id'])) {
-            header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'error' => 'Session expirée']);
-            exit;
-        }
+        $this->checkAuth();
         check_csrf($_POST['csrf_token'] ?? '');
 
         $userId = $_SESSION['user_id'];
@@ -178,8 +179,17 @@ class DevisController {
         $totalHt = 0;
 
         foreach ($designations as $i => $designation) {
-            $qty  = floatval($quantites[$i] ?? 0);
-            $p    = floatval($prix[$i] ?? 0);
+            $qty  = $quantites[$i] ?? 0;
+            $p    = $prix[$i] ?? 0;
+
+            if (!Validator::positiveNumber($qty) || !Validator::positiveNumber($p)) {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'error' => 'Les quantités et les prix doivent être des nombres positifs.']);
+                exit;
+            }
+
+            $qty  = floatval($qty);
+            $p    = floatval($p);
             $tht  = $qty * $p;
             $tttc = $tht * (1 + ($tvaRate / 100));
 
@@ -218,12 +228,7 @@ class DevisController {
     }
 
     public function delete() {
-        if (!isset($_SESSION['user_id'])) {
-            header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'error' => 'Session expirée']);
-            exit;
-        }
-
+        $this->checkAuth();
         check_csrf($_POST['csrf_token'] ?? '');
 
         $userId = $_SESSION['user_id'];
@@ -246,10 +251,7 @@ class DevisController {
     }
 
     public function pdf() {
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: ' . url('/login'));
-            exit;
-        }
+        $this->checkAuth();
 
         $devisId = $_GET['id'] ?? null;
         $userId = $_SESSION['user_id'];
@@ -263,7 +265,6 @@ class DevisController {
         }
 
         $items = $devisModel->getItems($devisId);
-        $userProfile = $userModel->findById($userId);
 
         ob_start();
         require __DIR__ . '/../Views/devis_pdf.php';
@@ -275,12 +276,7 @@ class DevisController {
     }
 
     public function updateStatus() {
-        if (!isset($_SESSION['user_id'])) {
-            header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'error' => 'Session expirée']);
-            exit;
-        }
-
+        $this->checkAuth();
         check_csrf($_POST['csrf_token'] ?? '');
 
         $userId = $_SESSION['user_id'];

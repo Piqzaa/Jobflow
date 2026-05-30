@@ -83,7 +83,7 @@ CREATE TABLE devis (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     user_id INT UNSIGNED NOT NULL,
     client_id INT UNSIGNED NOT NULL,
-    numero VARCHAR(50) NOT NULL UNIQUE,
+    numero VARCHAR(50) NOT NULL,
     statut ENUM('brouillon', 'envoye', 'accepte', 'refuse', 'expire') DEFAULT 'brouillon',
     date_emission DATE NOT NULL,
     date_validite DATE,
@@ -97,6 +97,7 @@ CREATE TABLE devis (
     
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE RESTRICT,
+    UNIQUE KEY devis_user_numero (user_id, numero),
     INDEX idx_user_id (user_id),
     INDEX idx_client_id (client_id),
     INDEX idx_statut (statut),
@@ -130,7 +131,7 @@ CREATE TABLE factures (
     user_id INT UNSIGNED NOT NULL,
     client_id INT UNSIGNED NOT NULL,
     devis_id INT UNSIGNED NULL,  -- Nullable : facture directe possible
-    numero VARCHAR(50) NOT NULL UNIQUE,
+    numero VARCHAR(50) NOT NULL,
     statut ENUM('brouillon', 'envoyee', 'payee', 'en_retard', 'annulee') DEFAULT 'brouillon',
     date_emission DATE NOT NULL,
     date_echeance DATE NOT NULL,  -- Ex: +30 jours pour paiement
@@ -148,6 +149,7 @@ CREATE TABLE factures (
     FOREIGN KEY (devis_id) REFERENCES devis(id) ON DELETE SET NULL,
     -- SET NULL : si devis supprimé, facture reste mais perd la référence
     
+    UNIQUE KEY facture_user_numero (user_id, numero),
     INDEX idx_user_id (user_id),
     INDEX idx_client_id (client_id),
     INDEX idx_devis_id (devis_id),
