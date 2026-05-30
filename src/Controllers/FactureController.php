@@ -65,10 +65,15 @@ class FactureController extends BaseController {
         $factureModel = new Facture();
         $userModel = new User();
 
-        $clientId      = $_POST['client_id'] ?? null;
-        $dateEmission  = $_POST['date_emission'] ?? date('Y-m-d');
-        $dateEcheance  = $_POST['date_echeance'] ?? date('Y-m-d', strtotime('+30 days'));
+        $clientId      = !empty($_POST['client_id']) ? $_POST['client_id'] : null;
+        $dateEmission  = !empty($_POST['date_emission']) ? $_POST['date_emission'] : date('Y-m-d');
+        $dateEcheance  = !empty($_POST['date_echeance']) ? $_POST['date_echeance'] : date('Y-m-d', strtotime('+30 days'));
         $notes         = trim($_POST['notes'] ?? '');
+
+        if (!$clientId) {
+            echo json_encode(['success' => false, 'error' => 'Veuillez sélectionner un client.']);
+            exit;
+        }
         $tvaApp        = isset($_POST['tva_applicable']);
         $tvaRate       = $tvaApp ? 20.00 : 0.00;
 
@@ -82,7 +87,6 @@ class FactureController extends BaseController {
         }
 
         $numero = $factureModel->getNextNumber($userId);
-
         $designations = $_POST['item_designation'] ?? [];
         $quantites    = $_POST['item_quantite']    ?? [];
         $prix         = $_POST['item_prix']        ?? [];
@@ -153,7 +157,7 @@ class FactureController extends BaseController {
         $userId = $_SESSION['user_id'];
         $factureModel = new Facture();
         $factureId = $_POST['id'] ?? null;
-        $userModel = new \App\Models\User();
+        $userModel = new User();
 
         // Vérification statut
         $existing = $factureModel->getById($factureId, $userId);
@@ -177,6 +181,7 @@ class FactureController extends BaseController {
                 exit;
             }
         }
+
         $designations = $_POST['item_designation'] ?? [];
         $quantites    = $_POST['item_quantite']    ?? [];
         $prix         = $_POST['item_prix']        ?? [];

@@ -63,14 +63,18 @@ class DevisController extends BaseController {
         $devisModel = new Devis();
         $userModel = new \App\Models\User();
 
-        $clientId     = $_POST['client_id'] ?? null;
-        $dateEmission = $_POST['date_emission'] ?? date('Y-m-d');
-        $dateValidite = $_POST['date_validite'] ?? null;
+        $clientId     = !empty($_POST['client_id']) ? $_POST['client_id'] : null;
+        $dateEmission = !empty($_POST['date_emission']) ? $_POST['date_emission'] : date('Y-m-d');
+        $dateValidite = !empty($_POST['date_validite']) ? $_POST['date_validite'] : null;
         $notes        = trim($_POST['notes'] ?? '');
+
+        if (!$clientId) {
+            echo json_encode(['success' => false, 'error' => 'Veuillez sélectionner un client.']);
+            exit;
+        }
         $tvaApp       = isset($_POST['tva_applicable']);
         $tvaRate      = $tvaApp ? 20.00 : 0.00;
 
-        // Vérification TVA Intracommunautaire si TVA applicable
         if ($tvaApp) {
             $userProfile = $userModel->findById($userId);
             if (empty($userProfile['tva_intra'])) {
@@ -84,7 +88,6 @@ class DevisController extends BaseController {
         }
 
         $numero = $devisModel->getNextNumber($userId);
-
         $designations = $_POST['item_designation'] ?? [];
         $quantites    = $_POST['item_quantite']    ?? [];
         $prix         = $_POST['item_prix']        ?? [];
@@ -101,7 +104,6 @@ class DevisController extends BaseController {
             $qty  = $quantites[$i] ?? 0;
             $p    = $prix[$i] ?? 0;
 
-            // Utilisation du nouveau validateur pour les nombres positifs
             if (!Validator::positiveNumber($qty) || !Validator::positiveNumber($p)) {
                 header('Content-Type: application/json');
                 echo json_encode(['success' => false, 'error' => 'Les quantités et les prix doivent être des nombres positifs.']);
@@ -144,7 +146,7 @@ class DevisController extends BaseController {
         echo json_encode([
             'success' => (bool)$result,
             'id'      => $result,
-            'error'   => $result ? null : 'Erreur lors de la sauvegarde du devis'
+            'error'   => $result ? null : 'Erreur lors de la sauvegarde du devis. Le numéro est peut-être déjà utilisé.'
         ]);
         exit;
     }
@@ -263,7 +265,6 @@ class DevisController extends BaseController {
         }
 
         $items = $devisModel->getItems($devisId);
-        $userProfile = $userModel->findById($userId);
 
         ob_start();
         require __DIR__ . '/../Views/devis_pdf.php';
