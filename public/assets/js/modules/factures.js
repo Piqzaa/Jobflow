@@ -19,6 +19,21 @@ export function initFactures() {
   const container = document.getElementById("facture-items-container");
   const addItemBtn = document.getElementById("add-item-row");
 
+  /**
+   * Met à jour l'affichage du message "aucune facture"
+   */
+  function updateEmptyView() {
+    const tbody = table.querySelector("tbody");
+    const msgRow = document.getElementById("no-facture-message");
+    const rows = tbody.querySelectorAll("tr:not(#no-facture-message)");
+
+    if (rows.length === 0) {
+      msgRow.classList.remove("is-hidden");
+    } else {
+      msgRow.classList.add("is-hidden");
+    }
+  }
+
   // event listeners
 
   addBtn?.addEventListener("click", () => {
@@ -98,6 +113,7 @@ export function initFactures() {
         } else {
           addFactureToTable(formData, data.id);
         }
+        updateEmptyView();
         closeModal(modal);
         form.reset();
       } else {
@@ -108,6 +124,8 @@ export function initFactures() {
       alert("Une erreur est survenue lors de l'enregistrement.");
     }
   });
+
+  updateEmptyView();
 
   // functions
 
@@ -255,6 +273,7 @@ export function initFactures() {
       const data = await response.json();
       if (data.success) {
         btn.closest("tr").remove();
+        updateEmptyView();
       } else {
         alert(data.error || "Erreur lors de la suppression");
       }
