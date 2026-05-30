@@ -18,6 +18,21 @@ export function initDevis() {
   const container = document.getElementById("devis-items-container");
   const addItemBtn = document.getElementById("add-item-row");
 
+  /**
+   * Met à jour l'affichage du message "aucun devis"
+   */
+  function updateEmptyView() {
+    const tbody = table.querySelector("tbody");
+    const msgRow = document.getElementById("no-devis-message");
+    const rows = tbody.querySelectorAll("tr:not(#no-devis-message)");
+
+    if (rows.length === 0) {
+      msgRow.classList.remove("is-hidden");
+    } else {
+      msgRow.classList.add("is-hidden");
+    }
+  }
+
   // --- Event listeners ---
 
   addBtn?.addEventListener("click", () => {
@@ -105,12 +120,15 @@ export function initDevis() {
       } else {
         addDevisToTable(formData, data.id);
       }
+      updateEmptyView();
       closeModal(modal);
     } catch (err) {
       console.error(err);
       alert("Une erreur est survenue lors de l'enregistrement.");
     }
   });
+
+  updateEmptyView();
 
   // --- Functions ---
 
@@ -252,6 +270,7 @@ export function initDevis() {
         return;
       }
       btn.closest("tr").remove();
+      updateEmptyView();
     } catch (err) {
       console.error(err);
     }
