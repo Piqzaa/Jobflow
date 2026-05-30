@@ -42,12 +42,27 @@ class Devis extends BaseModel {
 
     public function getNextNumber($userId) {
         $year = date('Y');
-        $sql = "SELECT COUNT(*) as total FROM devis WHERE user_id = :user_id AND YEAR(created_at) = :year";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute(['user_id' => $userId, 'year' => $year]);
-        $count = $stmt->fetch()['total'] + 1;
+        $sql = "SELECT numero FROM devis 
+                WHERE user_id = :user_id AND numero LIKE :prefix 
+                ORDER BY numero DESC LIMIT 1";
         
-        return "DEV-" . $year . "-" . str_pad($count, 3, '0', STR_PAD_LEFT);
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            'user_id' => $userId, 
+            'prefix'  => "DEV-$year-%"
+        ]);
+        
+        $lastDevis = $stmt->fetch();
+
+        if ($lastDevis) {
+            // On extrait le numéro (ex: DEV-2026-005 -> 005)
+            $lastNumber = (int)substr($lastDevis['numero'], -3);
+            $nextNumber = $lastNumber + 1;
+        } else {
+            $nextNumber = 1;
+        }
+        
+        return "DEV-" . $year . "-" . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
     }
 
     public function createWithItems($userId, $devisData, $items) {
@@ -145,7 +160,7 @@ class Devis extends BaseModel {
         } catch (\Exception $e) {
             $this->db->rollBack();
             error_log("[DevisModel] Erreur transaction : " . $e->getMessage());
-            return false;
+            return $e->getMessage();
         }
     }
 
