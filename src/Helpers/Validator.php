@@ -29,4 +29,8 @@ class Validator {
         if (is_array($value)) return !empty($value);
         return trim((string)$value) !== '';
     }
+
+    public static function positiveNumber($value) {
+        return is_numeric($value) && $value >= 0;
+    }
 }
