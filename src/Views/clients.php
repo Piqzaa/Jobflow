@@ -1,6 +1,6 @@
 <header class="page-header">
     <div class="page-actions">
-        <button class="btn-primary" id="add-client" data-modal-target="#modal-client">
+        <button class="btn--primary" id="add-client" data-modal-target="#modal-client">
             <i class="ri-user-add-line"></i>
             <span>Nouveau client</span>
         </button>
@@ -105,8 +105,8 @@
         </div>
 
         <div class="modal__footer">
-            <button class="btn-light" data-modal-close type="button">Annuler</button>
-            <button class="btn-primary" id="modal-addClient-btn" type="submit">✓ Enregistrer</button>
+            <button class="btn--light" data-modal-close type="button">Annuler</button>
+            <button class="btn--primary" id="modal-addClient-btn" type="submit">✓ Enregistrer</button>
         </div>
     </div>
 </form>

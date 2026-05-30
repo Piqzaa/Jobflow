@@ -1,6 +1,6 @@
 <header class="page-header">
     <div class="page-actions">
-        <button class="btn-primary" id="add-devis" data-modal-target="#modal-devis">
+        <button class="btn--primary" id="add-devis" data-modal-target="#modal-devis">
             <i class="ri-add-line"></i>
             <span>Nouveau devis</span>
         </button>
@@ -119,7 +119,7 @@
             
             <div class="modal__section-header">
                 <h4 class="modal__subtitle">Articles / Services</h4>
-                <button type="button" id="add-item-row" class="btn-light btn-light--sm">
+                <button type="button" id="add-item-row" class="btn--light btn--light--sm">
                     <i class="ri-add-line"></i> Ajouter une ligne
                 </button>
             </div>
@@ -157,8 +157,8 @@
         </div>
 
         <div class="modal__footer">
-            <button class="btn-light" data-modal-close type="button">Annuler</button>
-            <button class="btn-primary" id="modal-save-devis-btn" type="submit">
+            <button class="btn--light" data-modal-close type="button">Annuler</button>
+            <button class="btn--primary" id="modal-save-devis-btn" type="submit">
                 <i class="ri-save-line"></i>
                 <span>Enregistrer</span>
             </button>

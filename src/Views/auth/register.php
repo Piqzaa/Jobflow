@@ -54,7 +54,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn-primary btn-block btn-lg">
+            <button type="submit" class="btn--primary btn--block btn--lg">
                 <span>Créer mon compte</span>
                 <i class="ri-user-add-line"></i>
             </button>

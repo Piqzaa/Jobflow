@@ -42,7 +42,7 @@
                 <a href="<?= url('/forgot-password') ?>" class="auth-card__link">Mot de passe oublié ?</a>
             </div>
 
-            <button type="submit" class="btn-primary btn-block btn-lg">
+            <button type="submit" class="btn--primary btn--block btn--lg">
                 <span>Se connecter</span>
                 <i class="ri-arrow-right-line"></i>
             </button>

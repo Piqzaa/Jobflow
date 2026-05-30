@@ -19,7 +19,8 @@
   }
 }
 
-.btn-primary {
+// Modificateurs BEM
+.btn--primary {
   @extend .btn;
   background: $primary;
   color: $white;
@@ -33,7 +34,7 @@
   }
 }
 
-.btn-light {
+.btn--light {
   @extend .btn;
   background: transparent;
   color: $primary;
@@ -42,27 +43,23 @@
     background: $primary-soft;
     color: $primary-dark;
   }
-
-  &--sm {
-    padding: 6px 12px;
-    font-size: 0.85rem;
-  }
 }
 
-.btn-block {
-  width: 100%;
+.btn--sm {
+  padding: 6px 12px;
+  font-size: 0.85rem;
 }
 
-.btn-lg {
+.btn--lg {
   padding: 12px;
 }
 
-.btn-hero {
+.btn--hero {
   padding: 1rem 2.5rem;
   font-size: 1.1rem;
 }
 
-.btn-outline {
+.btn--outline {
   @extend .btn;
   background: transparent;
   color: $primary;
@@ -73,4 +70,8 @@
     border-color: $primary-dark;
     color: $primary-dark;
   }
+}
+
+.btn--block {
+  width: 100%;
 }
