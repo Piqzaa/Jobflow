@@ -4,14 +4,11 @@ namespace App\Controllers;
 
 use App\Models\TvaPayment;
 
-class TvaController {
+class TvaController extends BaseController {
     private $tvaModel;
 
     public function __construct() {
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: ' . url('/login'));
-            exit;
-        }
+        $this->checkAuth();
         $this->tvaModel = new TvaPayment();
     }
 

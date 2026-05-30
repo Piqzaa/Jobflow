@@ -264,10 +264,7 @@ class DevisController {
     }
 
     public function pdf() {
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: ' . url('/login'));
-            exit;
-        }
+        $this->checkAuth();
 
         $devisId = $_GET['id'] ?? null;
         $userId = $_SESSION['user_id'];
@@ -320,5 +317,8 @@ class DevisController {
             'error'   => $result ? null : 'Erreur lors de la mise à jour du statut'
         ]);
         exit;
+    }
+}
+      exit;
     }
 }

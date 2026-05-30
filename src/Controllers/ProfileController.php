@@ -21,6 +21,7 @@ class ProfileController {
     }
 
     public function update() {
+        $this->checkAuth();
         check_csrf($_POST['csrf_token'] ?? '');
 
         $userId = $_SESSION['user_id'];
@@ -113,5 +114,8 @@ class ProfileController {
 
         $errors[] = "Erreur lors de l'enregistrement du fichier.";
         return null;
+    }
+}
+eturn null;
     }
 }

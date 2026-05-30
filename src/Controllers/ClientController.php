@@ -25,11 +25,7 @@ class ClientController {
 
   // API : Récupère les données d'un client pour le modal
   public function get() {
-    if (!isset($_SESSION['user_id'])) {
-      header('Content-Type: application/json');
-      echo json_encode(['success' => false, 'error' => 'Session expirée']);
-      exit;
-    }
+    $this->checkAuth();
 
     $clientId = $_GET['id'] ?? null;
     $userId = $_SESSION['user_id'];
@@ -141,6 +137,11 @@ class ClientController {
     $result = $clientModel->deleteClient($clientId, $_SESSION['user_id']);
 
     header('Content-Type: application/json');
+    echo json_encode(['success' => (bool)$result]);
+    exit;
+  }
+}
+ntent-Type: application/json');
     echo json_encode(['success' => (bool)$result]);
     exit;
   }

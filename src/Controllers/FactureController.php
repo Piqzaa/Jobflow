@@ -325,10 +325,7 @@ class FactureController {
     }
 
     public function pdf() {
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: ' . url('/login'));
-            exit;
-        }
+        $this->checkAuth();
 
         $factureId = $_GET['id'] ?? null;
         $userId = $_SESSION['user_id'];
@@ -352,5 +349,8 @@ class FactureController {
         $pdfService = new \App\Services\PdfService();
         $filename = "Facture_{$facture['numero']}.pdf";
         $pdfService->generatePdf($html, $filename);
+    }
+}
+$filename);
     }
 }
