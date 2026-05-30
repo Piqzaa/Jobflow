@@ -41,6 +41,11 @@
                 </td>
             </tr>
             <?php endforeach; ?>
+        <tr id="no-client-message" class="is-hidden">
+            <td colspan="5" class="table-empty-message">
+                Aucun client enregistré pour le moment.
+            </td>
+        </tr>
         </tbody>
     </table>
 </div>
