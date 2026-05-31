@@ -15,6 +15,12 @@ class MongoLogger {
     ): void {
         try {
             $db = MongoDB::getInstance();
+            
+            // Si la DB est nulle (extension manquante ou erreur de connexion), on ignore silencieusement
+            if (!$db) {
+                return;
+            }
+
             $collection = $db->activity_logs;
 
             $collection->insertOne([

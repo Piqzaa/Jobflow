@@ -1,0 +1,8 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^\.env$ - [F,L]
+    RewriteRule ^composer\.(json|lock)$ - [F,L]
+    RewriteRule ^(src|vendor|database|storage)/ - [F,L]
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>

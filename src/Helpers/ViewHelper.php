@@ -46,5 +46,10 @@ function view_content($view, $data = []) {
  */
 function url($path = '') {
     $basePath = str_replace('/index.php', '', $_SERVER['SCRIPT_NAME']);
+    
+    // Sur certains hébergements comme InfinityFree, on redirige la racine vers /public.
+    // On nettoie donc le basePath pour éviter d'avoir '/public/' dans toutes nos URLs.
+    $basePath = str_replace('/public', '', $basePath);
+    
     return $basePath . '/' . ltrim($path, '/');
 }

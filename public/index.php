@@ -22,11 +22,17 @@ function loadEnv($path) {
 loadEnv(__DIR__ . '/../.env');
 session_start();
 
-$basePath = str_replace('/index.php', '', $_SERVER['SCRIPT_NAME']);
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$uri = str_replace($basePath, '', $requestUri);
+$uri = '/' . trim($requestUri, '/');
 
-if (empty($uri)) $uri = '/';
+// Gestion du préfixe /public sur certains hébergements
+if (strpos($uri, '/public/') === 0) {
+    $uri = substr($uri, 7);
+} elseif ($uri === '/public') {
+    $uri = '/';
+}
+
+if (empty($uri) || $uri === '//') $uri = '/';
 $method = $_SERVER['REQUEST_METHOD'];
 
 

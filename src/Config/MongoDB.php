@@ -10,15 +10,22 @@ class MongoDB {
     private $database;
 
     private function __construct() {
-        $host   = $_ENV['MONGO_HOST'] ?? 'localhost';
-        $port   = $_ENV['MONGO_PORT'] ?? '27017';
-        $dbname = $_ENV['MONGO_DB']   ?? 'jobflow_logs';
+        // VÉRIFICATION : L'extension 'mongodb' est-elle installée sur le serveur ?
+        if (!extension_loaded('mongodb')) {
+            error_log("[MongoDB] L'extension 'mongodb' n'est pas installée sur ce serveur.");
+            $this->database = null;
+            return;
+        }
+
+        $dsn    = $_ENV['MONGO_DSN'] ?? 'mongodb://localhost:27017';
+        $dbname = $_ENV['MONGO_DATABASE'] ?? 'jobflow_logs';
 
         try {
-            $client = new Client("mongodb://$host:$port");
+            $client = new \MongoDB\Client($dsn);
             $this->database = $client->$dbname;
         } catch (Exception $e) {
-            die("Erreur de connexion MongoDB : " . $e->getMessage());
+            error_log("Erreur de connexion MongoDB : " . $e->getMessage());
+            $this->database = null;
         }
     }
     public static function getInstance() {
