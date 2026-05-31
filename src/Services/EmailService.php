@@ -13,12 +13,14 @@ class EmailService {
             $mail->isSMTP();
             $mail->Host       = $_ENV['SMTP_HOST'] ?? 'mailpit';
             $mail->Port       = $_ENV['SMTP_PORT'] ?? 1025;
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             
             // Authentification
             if (!empty($_ENV['SMTP_USER'])) {
                 $mail->SMTPAuth = true;
                 $mail->Username = $_ENV['SMTP_USER'];
                 $mail->Password = $_ENV['SMTP_PASS'];
+                
             } else {
                 $mail->SMTPAuth = false;
             }
