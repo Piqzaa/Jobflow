@@ -86,14 +86,6 @@ class User extends BaseModel {
         return $stmt->execute([$userId, $token, $expireAt]);
     }
 
-    public function sendPasswordResetLink($email, $token) {
-        $resetLink = url('/reset-password?token=' . $token);
-        $subject = "Réinitialisation de votre mot de passe";
-        $message = "Bonjour,\n\nVous avez demandé une réinitialisation de votre mot de passe. Cliquez sur le lien ci-dessous pour le réinitialiser :\n\n" . $resetLink . "\n\nSi vous n'avez pas demandé cette réinitialisation, ignorez cet email.";
-        $headers = "From: Gestionnaire de compte\nContent-Type: text/plain; charset=UTF-8\n";
-        return mail($email, $subject, $message, $headers);
-    }
-
     public function findResetToken($token) {
         $sql = "SELECT * FROM password_resets WHERE token = ? AND expires_at > NOW()";
         $stmt = $this->db->prepare($sql);
