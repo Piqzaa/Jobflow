@@ -1,0 +1,7 @@
+.git/
+.gitignore
+vendor/
+.env
+*.md
+DOCUMENTATION_PROJET.md
+gemini.md
