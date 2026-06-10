@@ -31,13 +31,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# 7. Copie des fichiers composer pour installation des dépendances
-COPY composer.json composer.lock* ./
-
-# 8. Installation des dépendances
-RUN composer install --no-interaction --optimize-autoloader
-
-# 9. Entrypoint
+# 7. Entrypoint
 COPY docker/php/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
