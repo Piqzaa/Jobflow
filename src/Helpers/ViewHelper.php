@@ -7,6 +7,11 @@
  * @param array $data Tableau de données à transmettre à la vue
  */
 function render($view, $data = []) {
+    if (!isset($data['uri'])) {
+        $basePath = str_replace('/index.php', '', $_SERVER['SCRIPT_NAME']);
+        $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $data['uri'] = str_replace($basePath, '', $requestUri) ?: '/';
+    }
     extract($data);
     ob_start();
     
