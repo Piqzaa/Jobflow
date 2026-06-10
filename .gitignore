@@ -1,5 +1,8 @@
 # Environnement
 .env
+.env.laragon
+.env.docker
+.env.test
 
 # Dépendances
 /vendor/
@@ -20,3 +23,4 @@ Thumbs.db
 
 # Fichiers locaux
 gemini.md
+composer.phar

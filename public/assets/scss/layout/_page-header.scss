@@ -1,0 +1,13 @@
+@use "../abstracts/variables" as *;
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; // Alligné à droite car le titre est déjà en haut
+  margin-bottom: 24px;
+}
+
+.page-actions {
+  display: flex;
+  gap: 12px;
+}

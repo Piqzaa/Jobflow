@@ -1,0 +1,29 @@
+@use "../abstracts/variables" as v;
+
+.chart-card {
+  padding: 32px;
+  border: none;
+  box-shadow: v.$shadow-lg;
+}
+
+.chart-card__header {
+  margin-bottom: 32px;
+}
+
+.chart-card__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: v.$gray-900;
+  margin-bottom: 4px;
+}
+
+.chart-card__subtitle {
+  font-size: 0.9rem;
+  color: v.$gray-500;
+}
+
+.chart-card__container {
+  height: 380px;
+  width: 100%;
+  position: relative;
+}

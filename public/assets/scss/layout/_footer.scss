@@ -1,0 +1,90 @@
+@use "../abstracts/variables" as *;
+
+.footer {
+  background: $white;
+  border-top: 1px solid $gray-100;
+  padding: 40px 0 30px;
+}
+
+.footer__container {
+  max-width: $container-max-width;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.footer__content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.footer__brand-logo {
+  display: flex;
+  align-items: baseline;
+  line-height: 1;
+  text-decoration: none;
+  margin-bottom: 8px;
+}
+
+.footer__logo-job {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: $gray-900;
+}
+
+.footer__logo-flow {
+  font-size: 1.4rem;
+  font-weight: 300;
+  color: $primary;
+}
+
+.footer__logo-dot {
+  width: 5px;
+  height: 5px;
+  background: $primary;
+  border-radius: $radius-full;
+  margin-left: 2px;
+}
+
+.footer__description {
+  color: $gray-500;
+  font-size: 0.9rem;
+}
+
+.footer__socials {
+  display: flex;
+  gap: 12px;
+}
+
+.footer__social-link {
+  color: $gray-400;
+  font-size: 1.4rem;
+  transition: $transition;
+
+  &:hover {
+    color: $primary;
+  }
+}
+
+.footer__bottom {
+  border-top: 1px solid $gray-50;
+  padding-top: 20px;
+  text-align: center;
+}
+
+.footer__copyright {
+  font-size: 0.85rem;
+  color: $gray-400;
+}
+.app-logged-in .footer {
+  display: none;
+}
+
+@media (max-width: $bp-sm) {
+  .footer__content {
+    flex-direction: column;
+    text-align: center;
+    gap: 24px;
+  }
+}

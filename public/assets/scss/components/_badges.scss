@@ -1,0 +1,70 @@
+@use "../abstracts/variables" as *;
+
+// Status Badges
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: $radius-full;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid transparent;
+}
+
+.badge--brouillon {
+  background: $gray-100;
+  color: $gray-600;
+  border-color: $gray-200;
+}
+
+.badge--envoye,
+.badge--envoyee {
+  background: $info-soft;
+  color: $info;
+  border-color: rgba($info, 0.2);
+}
+
+.badge--accepte,
+.badge--payee {
+  background: $success-soft;
+  color: $success;
+  border-color: rgba($success, 0.2);
+}
+
+.badge--refuse,
+.badge--annulee {
+  background: $danger-soft;
+  color: $danger;
+  border-color: rgba($danger, 0.2);
+}
+
+.badge--expire {
+  background: $warning-soft;
+  color: $warning;
+  border-color: rgba($warning, 0.2);
+}
+
+.badge-select {
+  @extend .badge;
+  cursor: pointer;
+  appearance: none;
+  outline: none;
+  padding-right: 24px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M12 16L6 10H18L12 16Z'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 6px center;
+  background-size: 16px;
+  transition: $transition;
+
+  &:hover {
+    filter: brightness(0.95);
+  }
+
+  option {
+    background: $white;
+    color: $gray-900;
+    text-transform: none;
+  }
+}

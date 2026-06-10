@@ -1,0 +1,51 @@
+@use "../abstracts/variables" as *;
+
+.topbar {
+  height: $topbar-height;
+  background: $white;
+  border-bottom: 1px solid $gray-200;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.topbar .topbar__title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: $gray-900;
+  margin: 0;
+  line-height: 1;
+}
+
+.topbar__toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: $gray-600;
+  cursor: pointer;
+  padding: 8px;
+  margin-left: -8px;
+  margin-right: 12px;
+  border-radius: $radius;
+  transition: $transition;
+
+  &:hover {
+    background: $gray-100;
+    color: $primary;
+  }
+}
+
+@media (max-width: $bp-md) {
+  .topbar {
+    padding: 0 16px;
+  }
+
+  .topbar__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

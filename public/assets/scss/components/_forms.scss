@@ -1,0 +1,87 @@
+@use "../abstracts/variables" as *;
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: $gray-700;
+  margin-bottom: 6px;
+}
+
+.input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-group i {
+  position: absolute;
+  left: 14px;
+  color: $gray-400;
+  font-size: 18px;
+  pointer-events: none;
+  transition: $transition;
+}
+
+.form-control {
+  width: 100%;
+  padding: 11px 14px;
+  background: $white;
+  border: 1px solid $gray-300;
+  border-radius: $radius;
+  font-size: 0.95rem;
+  color: $gray-900;
+  transition: $transition;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: $primary;
+  box-shadow: 0 0 0 4px rgba($primary, 0.1);
+}
+
+.form-control--readonly {
+  background-color: $gray-50;
+  cursor: not-allowed;
+}
+
+.form-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: $gray-700;
+}
+
+.form-checkbox input {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.has-icon .form-control {
+  padding-left: 42px;
+}
+
+@media (max-width: $bp-sm) {
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}

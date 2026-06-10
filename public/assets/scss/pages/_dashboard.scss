@@ -1,0 +1,73 @@
+@use "../abstracts/variables" as v;
+
+.dashboard__progress {
+  margin-top: 24px;
+}
+
+.dashboard__progress-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+
+.dashboard__progress-label {
+  color: v.$gray-600;
+}
+
+.dashboard__progress-percent {
+  font-weight: 700;
+  color: v.$primary;
+}
+
+.dashboard__progress-bar {
+  height: 8px;
+  background: v.$gray-100;
+  border-radius: v.$radius-full;
+  overflow: hidden;
+}
+
+.dashboard__progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, v.$primary, v.$primary-light);
+  border-radius: v.$radius-full;
+  transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.dashboard__progress-help {
+  font-size: 0.75rem;
+  color: v.$gray-400;
+  margin-top: 8px;
+}
+
+.dashboard__tva-details {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid v.$gray-100;
+}
+
+.dashboard__tva-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+}
+
+.dashboard__tva-label {
+  color: v.$gray-600;
+}
+
+.dashboard__tva-value {
+  color: v.$gray-900;
+}
+
+.dashboard__tva-value--paid {
+  color: v.$success;
+}
+
+@media (max-width: v.$bp-sm) {
+  .dashboard__header {
+    flex-direction: column;
+    gap: 16px;
+  }
+}

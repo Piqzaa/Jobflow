@@ -12,5 +12,9 @@
             "name": "Alex B"
         }
     ],
-    "require": {}
+    "require": {
+        "mongodb/mongodb": "^2.3",
+        "phpmailer/phpmailer": "^7.1",
+        "dompdf/dompdf": "^3.1"
+    }
 }

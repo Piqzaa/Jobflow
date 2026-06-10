@@ -1,0 +1,253 @@
+<?php
+
+namespace App\Controllers;
+
+use App\Models\User;
+use App\Helpers\Validator;
+use App\Helpers\MongoLogger;
+use App\Services\EmailService;
+
+
+class AuthController extends BaseController {
+    
+    public function showRegister() {
+        render('auth/register', ['title' => 'Inscription']);
+    }
+
+    public function register() {
+        check_csrf($_POST['csrf_token'] ?? '');
+        
+        $profileData = [
+            'nom' => $_POST['nom'] ?? '',
+            'prenom' => $_POST['prenom'] ?? '',
+            'entreprise' => $_POST['entreprise'] ?? '',
+            'siret' => $_POST['siret'] ?? '',
+            'adresse' => $_POST['adresse'] ?? '',
+            'code_postal' => $_POST['code_postal'] ?? '',
+            'ville' => $_POST['ville'] ?? '',
+            'telephone' => $_POST['telephone'] ?? ''
+        ];
+        
+        $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+        $password = $_POST['password'] ?? '';
+        $password_confirmation = $_POST['password_confirmation'] ?? '';
+        $userModel = new User();
+
+        if ($password !== $password_confirmation) {
+            render('auth/register', ['title' => 'Inscription', 'error' => 'Les mots de passe ne correspondent pas.']);
+            return;
+        }
+
+        if ($userModel->findByEmail($email)) {
+            render('auth/register', ['title' => 'Inscription', 'error' => 'Email déjà utilisé.']);
+            return;
+        }
+
+        if (!Validator::email($email)) {
+            render('auth/register', ['title' => 'Inscription', 'error' => 'Format d\'email invalide.']);
+            return;
+        }
+
+        if (!Validator::password($password)) {
+            render('auth/register', ['title' => 'Inscription', 'error' => 'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.']);
+            return;
+        }
+        
+        if (!Validator::required($profileData['nom']) || !Validator::required($profileData['prenom'])) {
+            render('auth/register', ['title' => 'Inscription', 'error' => 'Le nom et le prénom sont requis.']);
+            return;
+        }
+
+        $token = bin2hex(random_bytes(32));
+        $success = $userModel->create($email, $password, $token);
+
+        if ($success) {
+            $userId = $userModel->lastInsertId();
+            $userModel->updateProfile($userId, $profileData);
+
+            MongoLogger::write(
+                userId: $userId,
+                action: 'register_pending_verification',
+                entity: 'user',
+                entityId: $userId,
+                data: ['email' => $email]
+            );
+
+            // Préparation de l'email via le système de template
+            $verifyUrl = url("/verify?token=$token");
+            $fullUrl = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]" . $verifyUrl;
+
+            $subject = "Activez votre compte JobFlow";
+            $message = view_content('emails/welcome', [
+                'prenom'  => $profileData['prenom'],
+                'fullUrl' => $fullUrl
+            ]);
+
+            EmailService::send($email, $subject, $message);
+
+            render('auth/login', [
+                'title' => 'Inscription',
+                'success' => 'Inscription réussie ! Un email de confirmation a été envoyé à ' . htmlspecialchars($email) . '. Merci de cliquer sur le lien pour activer votre compte.'
+            ]);
+        } else {
+            render('auth/register', ['title' => 'Inscription', 'error' => 'Une erreur est survenue lors de l\'inscription.']);
+        }
+    }
+
+    public function verify() {
+        $token = $_GET['token'] ?? '';
+        if (empty($token)) {
+            header('Location: ' . url('/login'));
+            exit;
+        }
+
+        $userModel = new User();
+        $success = $userModel->verifyEmail($token);
+
+        if ($success) {
+            render('auth/login', ['title' => 'Connexion', 'success' => 'Votre compte a été activé avec succès ! Vous pouvez maintenant vous connecter.']);
+        } else {
+            render('auth/login', ['title' => 'Connexion', 'error' => 'Le lien de validation est invalide ou a déjà été utilisé.']);
+        }
+    }
+
+    public function showLogin() {
+        render('auth/login', ['title' => 'Connexion']);
+    }
+
+    public function login() {
+        check_csrf($_POST['csrf_token'] ?? '');
+        $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+        $password = $_POST['password'] ?? '';
+        
+        $userModel = new User();
+        $user = $userModel->findByEmail($email);
+
+        if ($user && password_verify($password, $user['password'])) {
+            if (empty($user['email_verified_at'])) {
+                render('auth/login', ['title' => 'Connexion', 'error' => 'Votre compte n\'est pas encore activé. Merci de cliquer sur le lien envoyé par email.']);
+                return;
+            }
+        
+            $fullUser = $userModel->findById($user['id']);
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_email'] = $user['email'];
+            $_SESSION['user_prenom'] = $fullUser['prenom'];
+            session_regenerate_id(true);
+
+            MongoLogger::write(
+                userId: $user['id'],
+                action: 'login',
+                entity: 'user',
+                entityId: $user['id'],
+                data: ['email' => $user['email'], 'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'unknown']
+            );
+
+            header('Location: ' . url('/dashboard'));
+            exit;
+        }
+
+        MongoLogger::write(
+            userId: null,
+            action: 'failed_login',
+            entity: 'user',
+            entityId: null,
+            data: ['email' => $email, 'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'unknown']
+        );
+
+        render('auth/login', ['title' => 'Connexion', 'error' => 'Identifiants invalides.']);
+    }
+
+    public function logout() {
+        $_SESSION = [];
+        if (ini_get("session.use_cookies")) {
+            $params = session_get_cookie_params();
+            setcookie(session_name(), '', time() - 42000,
+                $params["path"], $params["domain"],
+                $params["secure"], $params["httponly"]
+            );
+        }
+        session_destroy();
+        header('Location: ' . url('/'));
+        exit;
+    }
+
+    public function showForgotPassword() {
+        render('auth/forgot-password', ['title' => 'Mot de passe oublié']);
+    }
+
+    public function forgotPassword() {
+        check_csrf($_POST['csrf_token'] ?? '');
+        $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+        $userModel = new User();
+        $user = $userModel->findByEmail($email);
+        $successMessage = 'Si un compte existe avec cet email, un lien de réinitialisation de mot de passe a été envoyé.';
+
+        if ($user) {
+            $token = bin2hex(random_bytes(16));
+            $userModel->createPasswordResetToken($user['id'], $token);
+            $resetLink = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]" . url("/reset-password?token=$token");
+            
+            $subject = "Réinitialisation de votre mot de passe - JobFlow";
+            $message = view_content('emails/reset_password', [
+                'resetLink' => $resetLink
+            ]);
+            
+            EmailService::send($email, $subject, $message);
+
+            MongoLogger::write(
+                userId: $user['id'],
+                action: 'password_reset_requested',
+                entity: 'user',
+                entityId: $user['id'],
+                data: ['email' => $user['email'], 'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'unknown']
+            );
+        }
+
+        render('auth/forgot-password', [
+            'title' => 'Mot de passe oublié',
+            'success' => $successMessage
+        ]);
+    }
+
+    public function showResetPassword() {
+        $token = $_GET['token'] ?? '';
+        $userModel = new User();
+        $resetRequest = $userModel->findResetToken($token);
+
+        if (!$resetRequest) {
+            render('auth/login', ['title' => 'Connexion', 'error' => 'Le lien de réinitialisation est invalide ou a déjà été utilisé.']);
+            return;
+        }
+
+        render('auth/reset-password', ['title' => 'Nouveau mot de passe', 'token' => $token]);
+    }
+
+    public function resetPassword() {
+        check_csrf($_POST['csrf_token'] ?? '');
+        $token = $_POST['token'] ?? '';
+        $password = $_POST['password'] ?? '';
+        $userModel = new User();
+        $resetRequest = $userModel->findResetToken($token);
+
+        if (!$resetRequest) {
+            render('auth/login', ['title' => 'Connexion', 'error' => 'Le lien est invalide ou expiré.']);
+            return;
+        }
+
+        if ($password !== ($_POST['password_confirmation'] ?? '')) {
+            render('auth/reset-password', ['title' => 'Nouveau mot de passe', 'error' => 'Les mots de passe ne correspondent pas.', 'token' => $token]);
+            return;
+        }
+
+        if (!Validator::password($password)) {
+            render('auth/reset-password', ['title' => 'Nouveau mot de passe', 'error' => 'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.', 'token' => $token]);
+            return;
+        }
+
+        $userModel->updatePassword($resetRequest['user_id'], $password);
+        $userModel->deleteResetToken($token);
+
+        render('auth/login', ['title' => 'Connexion', 'success' => 'Votre mot de passe a été mis à jour.']);
+    }
+}
