@@ -7,6 +7,7 @@ use App\Models\Devis;
 use App\Models\User;
 use App\Helpers\MongoLogger;
 use App\Helpers\Validator;
+use App\Services\TvaCalculator;
 
 /**
  * Contrôleur pour la gestion des Factures
@@ -109,23 +110,21 @@ class FactureController extends BaseController {
                 exit;
             }
 
-            $qty  = floatval($qty);
-            $p    = floatval($p);
-            $tht  = $qty * $p;
-            $tttc = $tht * (1 + ($tvaRate / 100));
+            $line = TvaCalculator::calculateLine($qty, $p, $tvaRate);
 
             $items[] = [
                 'designation' => trim($designation),
                 'qty'         => $qty,
                 'prix'        => $p,
-                'total_ht'    => $tht,
-                'total_ttc'   => $tttc
+                'total_ht'    => $line['total_ht'],
+                'total_ttc'   => $line['total_ttc']
             ];
-            $totalHt += $tht;
+            $totalHt += $line['total_ht'];
         }
 
-        $totalTva = $totalHt * ($tvaRate / 100);
-        $totalTtc = $totalHt + $totalTva;
+        $totals = TvaCalculator::calculateTotals($items, $tvaRate);
+        $totalTva = $totals['montant_tva'];
+        $totalTtc = $totals['montant_ttc'];
 
         $factureData = [
             'client_id'     => $clientId,
@@ -199,23 +198,21 @@ class FactureController extends BaseController {
                 exit;
             }
 
-            $qty  = floatval($qty);
-            $p    = floatval($p);
-            $tht  = $qty * $p;
-            $tttc = $tht * (1 + ($tvaRate / 100));
+            $line = TvaCalculator::calculateLine($qty, $p, $tvaRate);
 
             $items[] = [
                 'designation' => trim($designation),
                 'qty'         => $qty,
                 'prix'        => $p,
-                'total_ht'    => $tht,
-                'total_ttc'   => $tttc
+                'total_ht'    => $line['total_ht'],
+                'total_ttc'   => $line['total_ttc']
             ];
-            $totalHt += $tht;
+            $totalHt += $line['total_ht'];
         }
 
-        $totalTva = $totalHt * ($tvaRate / 100);
-        $totalTtc = $totalHt + $totalTva;
+        $totals = TvaCalculator::calculateTotals($items, $tvaRate);
+        $totalTva = $totals['montant_tva'];
+        $totalTtc = $totals['montant_ttc'];
 
         $factureData = [
             'client_id'     => $clientId,
