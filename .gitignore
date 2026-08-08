@@ -24,3 +24,5 @@ Thumbs.db
 # Fichiers locaux
 composer.phar
 
+# Tests
+/.phpunit.result.cache
