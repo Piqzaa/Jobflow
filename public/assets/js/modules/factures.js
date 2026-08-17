@@ -1,4 +1,5 @@
-import { openModal, closeModal } from "./modal.js";
+import { openModal, closeModal, confirmAction } from "./modal.js";
+import { showToast } from "./toasts.js";
 
 export function initFactures() {
   const table = document.getElementById("factures-table");
@@ -53,7 +54,7 @@ export function initFactures() {
         e.target.closest(".modal-item-row").remove();
         calculateTotals();
       } else {
-        alert("Au moins une ligne requise.");
+        showToast("Au moins une ligne requise.", "warning");
       }
     }
   });
@@ -116,12 +117,13 @@ export function initFactures() {
         updateEmptyView();
         closeModal(modal);
         form.reset();
+        showToast(isEditing ? "Facture modifiée." : "Facture créée.", "success");
       } else {
-        alert(data.error || "Erreur lors de la sauvegarde");
+        showToast(data.error || "Erreur lors de la sauvegarde", "error");
       }
     } catch (err) {
       console.error(err);
-      alert("Une erreur est survenue lors de l'enregistrement.");
+      showToast("Une erreur est survenue lors de l'enregistrement.", "error");
     }
   });
 
@@ -259,7 +261,7 @@ export function initFactures() {
   }
 
   async function handleDelete(btn) {
-    if (!confirm("Voulez-vous vraiment supprimer cette facture ?")) return;
+    if (!(await confirmAction("Voulez-vous vraiment supprimer cette facture ? Cette action est irréversible.", { danger: true, confirmText: "Supprimer" }))) return;
 
     const id = btn.dataset.id;
     const url = table.dataset.deleteUrl;
@@ -274,12 +276,13 @@ export function initFactures() {
       if (data.success) {
         btn.closest("tr").remove();
         updateEmptyView();
+        showToast("Facture supprimée.", "success");
       } else {
-        alert(data.error || "Erreur lors de la suppression");
+        showToast(data.error || "Erreur lors de la suppression", "error");
       }
     } catch (err) {
       console.error(err);
-      alert("Une erreur est survenue lors de la suppression.");
+      showToast("Une erreur est survenue lors de la suppression.", "error");
     }
   }
 
@@ -320,7 +323,7 @@ export function initFactures() {
       }
     } catch (err) {
       console.error(err);
-      alert("Erreur lors de la récupération de la facture.");
+      showToast("Erreur lors de la récupération de la facture.", "error");
     }
   }
 
@@ -354,12 +357,13 @@ export function initFactures() {
             btn.classList.add("is-hidden");
           }
         });
+        showToast("Statut de la facture mis à jour.", "success");
       } else {
-        alert(data.error || "Erreur lors de la mise à jour du statut");
+        showToast(data.error || "Erreur lors de la mise à jour du statut", "error");
       }
     } catch (err) {
       console.error(err);
-      alert("Une erreur est survenue lors de la mise à jour du statut.");
+      showToast("Une erreur est survenue lors de la mise à jour du statut.", "error");
     }
   }
 

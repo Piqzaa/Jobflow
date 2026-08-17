@@ -1,3 +1,6 @@
+import { confirmAction } from "./modal.js";
+import { showToast } from "./toasts.js";
+
 export function initTva() {
   const tvaForm = document.querySelector(".tva-form");
   const tvaTable = document.querySelector("#tva-table");
@@ -80,8 +83,9 @@ export function initTva() {
 
       tbody.prepend(tr);
       tvaForm.reset();
+      showToast("Versement TVA enregistré.", "success");
     } else {
-      alert(data.error);
+      showToast(data.error, "error");
     }
   });
 
@@ -90,7 +94,7 @@ export function initTva() {
     if (!e.target.classList.contains("delete-tva")) return;
 
     e.preventDefault();
-    if (!confirm("Voulez-vous vraiment supprimer ce versement ?")) return;
+    if (!(await confirmAction("Voulez-vous vraiment supprimer ce versement ? Cette action est irréversible.", { danger: true, confirmText: "Supprimer" }))) return;
 
     const form = e.target;
     const response = await fetch(form.action, {
@@ -103,8 +107,9 @@ export function initTva() {
       updateStats(data.stats);
       form.closest("tr").remove();
       updateEmptyState();
+      showToast("Versement supprimé.", "success");
     } else {
-      alert(data.error || "Erreur lors de la suppression");
+      showToast(data.error || "Erreur lors de la suppression", "error");
     }
   });
 }

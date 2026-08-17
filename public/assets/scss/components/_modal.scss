@@ -183,3 +183,56 @@
     transform: translateY(0);
   }
 }
+
+// Confirm dialog
+.modal--confirm .modal__dialog {
+  position: relative;
+  background: $white;
+  width: 100%;
+  max-width: 420px;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-lg;
+  padding: 32px 28px 24px;
+  text-align: center;
+  animation: modalIn 0.3s ease-out;
+  z-index: 1;
+}
+
+.modal--confirm .modal__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+.modal__confirm-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 16px;
+  border-radius: $radius-full;
+  background: $primary-soft;
+  color: $primary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+}
+
+.modal--confirm.is-danger .modal__confirm-icon {
+  background: $danger-soft;
+  color: $danger;
+}
+
+.modal__confirm-message {
+  color: $gray-600;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-top: 8px;
+}
+
+.modal__actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
