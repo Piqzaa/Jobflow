@@ -72,6 +72,20 @@
   }
 }
 
+.btn--danger {
+  @extend .btn;
+  background: $danger;
+  color: $white;
+  box-shadow: $shadow-sm;
+
+  &:hover {
+    background: $danger-dark;
+    transform: translateY(-1px);
+    box-shadow: $shadow;
+    color: $white;
+  }
+}
+
 .btn--block {
   width: 100%;
 }

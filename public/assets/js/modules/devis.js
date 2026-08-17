@@ -1,4 +1,6 @@
-import { openModal, closeModal } from "./modal.js";
+import { openModal, closeModal, confirmAction } from "./modal.js";
+import { showToast } from "./toasts.js";
+import { showLoading, hideLoading } from "./loading.js";
 
 export function initDevis() {
   const table = document.getElementById("devis-table");
@@ -52,7 +54,7 @@ export function initDevis() {
       e.target.closest(".modal-item-row").remove();
       calculateTotals();
     } else {
-      alert("Au moins une ligne requise.");
+      showToast("Au moins une ligne requise.", "warning");
     }
   });
 
@@ -111,7 +113,7 @@ export function initDevis() {
       const data = await response.json();
 
       if (!data.success) {
-        alert(data.error || "Erreur lors de la sauvegarde");
+        showToast(data.error || "Erreur lors de la sauvegarde", "error");
         return;
       }
 
@@ -122,9 +124,10 @@ export function initDevis() {
       }
       updateEmptyView();
       closeModal(modal);
+      showToast(isEditing ? "Devis modifié." : "Devis créé.", "success");
     } catch (err) {
       console.error(err);
-      alert("Une erreur est survenue lors de l'enregistrement.");
+      showToast("Une erreur est survenue lors de l'enregistrement.", "error");
     }
   });
 
@@ -251,7 +254,7 @@ export function initDevis() {
   }
 
   async function handleDelete(btn) {
-    if (!confirm("Voulez-vous vraiment supprimer ce devis ?")) return;
+    if (!(await confirmAction("Voulez-vous vraiment supprimer ce devis ? Cette action est irréversible.", { danger: true, confirmText: "Supprimer" }))) return;
 
     const csrfToken = document.querySelector('input[name="csrf_token"]').value;
 
@@ -266,11 +269,12 @@ export function initDevis() {
       const data = await response.json();
 
       if (!data.success) {
-        alert(data.error || "Erreur lors de la suppression");
+        showToast(data.error || "Erreur lors de la suppression", "error");
         return;
       }
       btn.closest("tr").remove();
       updateEmptyView();
+      showToast("Devis supprimé.", "success");
     } catch (err) {
       console.error(err);
     }
@@ -312,7 +316,7 @@ export function initDevis() {
       openModal(modal);
     } catch (err) {
       console.error(err);
-      alert("Erreur lors de la récupération du devis.");
+      showToast("Erreur lors de la récupération du devis.", "error");
     }
   }
 
@@ -367,13 +371,15 @@ export function initDevis() {
   }
 
   async function handleConvert(btn) {
-    if (!confirm("Convertir ce devis en facture ?")) return;
+    if (!(await confirmAction("Convertir ce devis en facture ? Le devis sera marqué comme converti.", { confirmText: "Convertir" }))) return;
     const csrfToken = document.querySelector('input[name="csrf_token"]')?.value;
 
     if (!csrfToken) {
-      alert("Token CSRF manquant. Impossible de convertir.");
+      showToast("Token CSRF manquant. Impossible de convertir.", "error");
       return;
     }
+
+    showLoading("Conversion en cours, veuillez patienter…");
 
     try {
       const response = await fetch(table.dataset.convertUrl, {
@@ -385,15 +391,18 @@ export function initDevis() {
       });
       const data = await response.json();
       if (!data.success) {
-        alert(data.error || "Une erreur est survenue lors de la conversion.");
+        hideLoading();
+        showToast(data.error || "Une erreur est survenue lors de la conversion.", "error");
         return;
       }
 
-      alert("Devis converti en facture.");
+      hideLoading();
+      showToast("Devis converti en facture.", "success");
       window.location.href = `/factures`;
     } catch (err) {
       console.error(err);
-      alert("Une erreur est survenue lors de la conversion.");
+      hideLoading();
+      showToast("Une erreur est survenue lors de la conversion.", "error");
       return;
     }
   }
