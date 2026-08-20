@@ -1,4 +1,5 @@
-import { openModal, closeModal } from "./modal.js";
+import { openModal, closeModal, confirmAction } from "./modal.js";
+import { showToast } from "./toasts.js";
 
 export function initClients() {
   const table = document.getElementById("clients-table");
@@ -149,7 +150,7 @@ export function initClients() {
 
           openModal(modal);
         } else {
-          alert(data.error || "Erreur de chargement");
+          showToast(data.error || "Erreur de chargement", "error");
         }
       } catch (err) {
         console.error(err);
@@ -157,7 +158,7 @@ export function initClients() {
     }
 
     if (deleteBtn) {
-      if (!confirm("Supprimer ce client ?")) return;
+      if (!(await confirmAction("Voulez-vous vraiment supprimer ce client ? Cette action est irréversible.", { danger: true, confirmText: "Supprimer" }))) return;
       const clientId = deleteBtn.dataset.id;
       const csrfToken = document.querySelector('[name="csrf_token"]').value;
 
@@ -172,8 +173,9 @@ export function initClients() {
         if (data.success) {
           deleteBtn.closest("tr").remove();
           updateEmptyView();
+          showToast("Client supprimé.", "success");
         } else {
-          alert(data.error || "Erreur lors de la suppression");
+          showToast(data.error || "Erreur lors de la suppression", "error");
         }
       } catch (err) {
         console.error(err);
@@ -202,8 +204,9 @@ export function initClients() {
         updateEmptyView();
         closeModal(modal);
         form.reset();
+        showToast(id ? "Client modifié." : "Client ajouté.", "success");
       } else {
-        alert(data.error || "Erreur lors de la sauvegarde");
+        showToast(data.error || "Erreur lors de la sauvegarde", "error");
       }
     } catch (err) {
       console.error(err);

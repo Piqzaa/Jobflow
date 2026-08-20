@@ -19,6 +19,8 @@
 @use "components/modal";
 @use "components/charts";
 @use "components/alerts";
+@use "components/toasts";
+@use "components/loading";
 
 // Pages
 @use "pages/home";

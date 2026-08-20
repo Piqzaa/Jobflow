@@ -1,0 +1,115 @@
+@use "../abstracts/variables" as *;
+
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: min(380px, calc(100vw - 32px));
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: $white;
+  color: $gray-800;
+  border: 1px solid $gray-200;
+  border-left-width: 4px;
+  border-radius: $radius;
+  box-shadow: $shadow-lg;
+  font-size: 0.9rem;
+  pointer-events: auto;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast.is-leaving {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.toast__icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.toast__text {
+  flex: 1;
+  line-height: 1.4;
+}
+
+.toast__close {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: $gray-400;
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius-sm;
+  transition: $transition;
+
+  &:hover {
+    color: $gray-700;
+    background: $gray-100;
+  }
+}
+
+.toast--success {
+  border-left-color: $success;
+
+  .toast__icon {
+    color: $success;
+  }
+}
+
+.toast--error {
+  border-left-color: $danger;
+
+  .toast__icon {
+    color: $danger;
+  }
+}
+
+.toast--warning {
+  border-left-color: $warning;
+
+  .toast__icon {
+    color: $warning;
+  }
+}
+
+.toast--info {
+  border-left-color: $info;
+
+  .toast__icon {
+    color: $info;
+  }
+}
+
+@media (max-width: $bp-sm) {
+  .toast-container {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    max-width: none;
+    align-items: stretch;
+  }
+}

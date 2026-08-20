@@ -98,4 +98,23 @@ Utilisez ces identifiants pour explorer l'interface :
 
 ---
 
+## 🧪 Tests
+
+La suite de tests **PHPUnit** couvre la logique métier et la validation.
+
+```bash
+composer install   # installe PHPUnit (une seule fois)
+composer test      # lance la suite
+```
+
+Couverture actuelle :
+
+- **`Validator`** : email, SIRET, mot de passe, téléphone, champs requis, nombres positifs.
+- **`TvaCalculator`** : calcul des montants HT / TVA / TTC (lignes et totaux globaux).
+- **`Devis::getNextNumber`** : numérotation annuelle des devis (isolée via des fakes PDO).
+
+> Les calculs TVA ont été extraits dans `src/Services/TvaCalculator.php` pour être testables, ce qui supprime la duplication entre les contrôleurs Devis et Facture.
+
+---
+
 Développé par Alexandre Berrel
