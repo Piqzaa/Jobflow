@@ -351,7 +351,6 @@ export function initDevis() {
         btn.title = "Convertir en Facture";
         btn.innerHTML = '<i class="ri-exchange-funds-line"></i>';
         actionsDiv.insertBefore(btn, actionsDiv.querySelector(".edit-btn"));
-        return;
       }
 
       if (select.value !== "accepte" && existingConvertBtn) {

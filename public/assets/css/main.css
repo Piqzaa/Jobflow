@@ -1436,7 +1436,7 @@ small,
   position: fixed;
   bottom: 24px;
   right: 24px;
-  z-index: 200;
+  z-index: 2000;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -2343,4 +2343,3 @@ small,
 .full-height {
   height: 80vh;
 }
-
