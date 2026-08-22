@@ -262,6 +262,7 @@ class DevisController extends BaseController {
         }
 
         $items = $devisModel->getItems($devisId);
+        $userProfile = $userModel->findById($userId);
 
         ob_start();
         require __DIR__ . '/../Views/devis_pdf.php';
